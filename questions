@@ -1,0 +1,9 @@
+Crawl efficiency:
+	1.how to utilize crawl delay: for QQ.com, keep busy waiting for no other hosts to come.
+	2.how to parse the html? To avoid parse error.
+	3.how to process a html is processed for too long.
+	4.how to merge crawl with indexing?
+	5.how to put the files? In w3c files system?
+	6.how long should LRU cache be? To avoid url duplicates.
+
+wikipedia
