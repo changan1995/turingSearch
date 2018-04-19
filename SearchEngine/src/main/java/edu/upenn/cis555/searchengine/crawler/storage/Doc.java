@@ -1,10 +1,11 @@
-package edu.upenn.cis455.storage;
+package edu.upenn.cis555.searchengine.crawler.storage;
 
 
 import org.w3c.dom.Document;
 
-import edu.upenn.cis455.crawler.info.URLInfo;
-import edu.upenn.cis455.hw1.HttpServer;
+import edu.upenn.cis555.searchengine.crawler.Utilities;
+import edu.upenn.cis555.searchengine.crawler.info.URLInfo;
+// import edu.upenn.cis455.hw1.HttpServer;
 
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
@@ -31,9 +32,9 @@ public class Doc {
         this.content = content;
 		this.docType = docType;
 		this.docLength = docLength;
-		this.crawledDate = HttpServer.convertTime(System.currentTimeMillis());
+		this.crawledDate = Utilities.convertTime(System.currentTimeMillis());
         if(lastModified==null){
-            this.lastModified=HttpServer.convertTime(0);
+            this.lastModified=Utilities.convertTime(0);
         }else{
             this.lastModified = lastModified;
         }
@@ -59,7 +60,7 @@ public class Doc {
     }
 
 	public void setcrawledDate() {
-		this.crawledDate = HttpServer.convertTime(System.currentTimeMillis());
+		this.crawledDate = Utilities.convertTime(System.currentTimeMillis());
 	}
 
 	/**

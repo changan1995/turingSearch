@@ -12,15 +12,17 @@ public class RobotsTxtInfo {
     private ArrayList<String> sitemapLinks;
     private String absoluteHost= null;
 	private ArrayList<String> userAgents;
+	private long nextCrawlDate = 0;
 	
-	public RobotsTxtInfo(){
-		disallowedLinks = new HashMap<String,ArrayList<String>>();
-		allowedLinks = new HashMap<String,ArrayList<String>>();
-		crawlDelays = new HashMap<String,Integer>();
-		sitemapLinks = new ArrayList<String>();
-		userAgents = new ArrayList<String>();
-    }
+	// public RobotsTxtInfo(){
+	// 	disallowedLinks = new HashMap<String,ArrayList<String>>();
+	// 	allowedLinks = new HashMap<String,ArrayList<String>>();
+	// 	crawlDelays = new HashMap<String,Integer>();
+	// 	sitemapLinks = new ArrayList<String>();
+	// 	userAgents = new ArrayList<String>();
+    // }
     public RobotsTxtInfo(String txt,String host){
+		nextCrawlDate = System.currentTimeMillis();
         absoluteHost=host;
 		disallowedLinks = new HashMap<String,ArrayList<String>>();
 		allowedLinks = new HashMap<String,ArrayList<String>>();
@@ -120,7 +122,7 @@ public class RobotsTxtInfo {
 	public int getCrawlDelay(String key){
         if(crawlDelays.get(key)==null){
             return 0;
-        }
+		}
 		return crawlDelays.get(key);
 	}
 	
@@ -148,5 +150,27 @@ public class RobotsTxtInfo {
 	
 	public boolean crawlContainAgent(String key){
 		return crawlDelays.containsKey(key);
+	}
+
+	/**
+	 * @return the nextCrawlDate
+	 */
+	public long getNextCrawlDate(String key) {
+		long current = System.currentTimeMillis();
+		if(nextCrawlDate<current){//if nextcrawled has passed , return current;
+			nextCrawlDate=current + getCrawlDelay(key);
+			return current;
+		}else{//if nextcrawled time not arrived, return next crawed time ,and add crawl time.
+			long temp = nextCrawlDate;
+			nextCrawlDate+= getCrawlDelay(key);
+			return temp;
+		}
+	}
+
+	/**
+	 * @param nextCrawlDate the nextCrawlDate to set
+	 */
+	public void setNextCrawlDate(long nextCrawlDate) {
+		this.nextCrawlDate = nextCrawlDate;
 	}
 }

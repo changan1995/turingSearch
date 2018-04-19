@@ -1,4 +1,4 @@
-package edu.upenn.cis455.storage;
+package edu.upenn.cis555.searchengine.crawler.storage;
 
 import java.io.File;
 
@@ -10,7 +10,8 @@ import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.StoreConfig;
 import com.sleepycat.persist.impl.Store;
 
-import edu.upenn.cis455.crawler.XPathCrawler;
+// import edu.upenn.cis455.crawler.CrawlerWorker;
+// import XPAThcra
 
 public class DBWrapper {
 	
@@ -20,31 +21,33 @@ public class DBWrapper {
 	private static EntityStore store;
 
 	private static DocDB docDB;
-	private static UserDB userDB;
+//	private static UserDB userDB;
 	
-	private DBWrapper(){
+	public DBWrapper(String envDir){
+		envDirectory=envDir;
 		try{
             setup();
             this.docDB = new DocDB(this.store);
-            this.userDB = new UserDB(this.store);
+//            this.userDB = new UserDB(this.store);
         }catch(Exception e){
             e.printStackTrace();
         }
     }
-    
-    private static class DBWrapperHolder {
-        private static final DBWrapper INSTANCE = new DBWrapper();
-    }
 
-    public static final DBWrapper getInstance(String envDir) {
-            envDirectory=envDir;
-            return DBWrapperHolder.INSTANCE;
-    }
+	// singleton
+    // private static class DBWrapperHolder {
+    //     private static final DBWrapper INSTANCE = new DBWrapper();
+    // }
+
+    // public static final DBWrapper getInstance(String envDir) {
+    //         envDirectory=envDir;
+    //         return DBWrapperHolder.INSTANCE;
+    // }
 	
 	public Environment getEnvironment() { return this.myEnv; }
 	public EntityStore getStore() { return this.store; }
 	public DocDB getDocDB() { return this.docDB; }
-	public UserDB getUserDB() { return this.userDB; }
+//	public UserDB getUserDB() { return this.userDB; }
 	
 	public void setup() {
 		

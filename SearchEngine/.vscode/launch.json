@@ -9,8 +9,8 @@
             "cwd": "${workspaceFolder}",
             "console":"externalTerminal",
             "stopOnEntry": false,
-            "mainClass": "edu.upenn.cis555.searchengine.crawler",
-            "projectName": "searchenigne",
+            "mainClass": "edu.upenn.cis555.searchengine.Crawler",
+            // "projectName": "searchengine",
             "args": ["http://crawltest.cis.upenn.edu:80/","./bdb","1","10000000"]
         }
     ]

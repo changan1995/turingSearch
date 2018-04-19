@@ -36,7 +36,7 @@ public class HttpClient {
     private boolean https; //whether https or not
     private String body; //string body
     private Map<String,List<String>> headers;// headers mapper
-
+    
     //content variable
     private int contentLength=0;
     private String contentType="null";
