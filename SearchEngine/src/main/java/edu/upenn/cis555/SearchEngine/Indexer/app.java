@@ -1,4 +1,4 @@
-package edu.upenn.cis555.SearchEngine.Indexer;
+package edu.upenn.cis555.searchengine.Indexer;
 
 public class app {
 

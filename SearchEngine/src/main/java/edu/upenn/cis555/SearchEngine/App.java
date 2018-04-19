@@ -1,4 +1,4 @@
-package edu.upenn.cis555.SearchEngine;
+package edu.upenn.cis555.searchengine;
 
 /**
  * Hello world!

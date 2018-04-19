@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>edu.upenn.cis555</groupId>
-  <artifactId>SearchEngine</artifactId>
+  <artifactId>searchengine</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>SearchEngine</name>
+  <name>searchengine</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -61,12 +61,21 @@
       <version>3.7</version>
     </dependency>
 
+<!-- crawler dependencies -->
 <!-- https://docs.aws.amazon.com/zh_cn/sdk-for-java/v1/developer-guide/setup-project-maven.html -->
     <dependency>
     <groupId>com.amazonaws</groupId>
     <artifactId>aws-java-sdk</artifactId>
     <version>1.11.106</version>
   </dependency>
+
+  <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+<dependency>
+    <groupId>org.jsoup</groupId>
+    <artifactId>jsoup</artifactId>
+    <version>1.8.3</version>
+</dependency>
+
 
     <!-- https://mvnrepository.com/artifact/com.sleepycat/je -->
     <dependency>

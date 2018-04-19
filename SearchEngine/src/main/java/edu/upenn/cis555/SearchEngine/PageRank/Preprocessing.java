@@ -1,4 +1,4 @@
-package edu.upenn.cis555.SearchEngine.PageRank;
+package edu.upenn.cis555.searchengine.PageRank;
 
 import java.io.IOException;
 

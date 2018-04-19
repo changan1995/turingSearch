@@ -1,4 +1,4 @@
-package edu.upenn.cis555.SearchEngine.Storage;
+package edu.upenn.cis555.searchengine.Storage;
 
 public class app {
 
