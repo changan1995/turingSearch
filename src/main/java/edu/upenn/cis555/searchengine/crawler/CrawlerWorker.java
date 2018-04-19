@@ -60,11 +60,11 @@ public class CrawlerWorker implements Runnable {
 		// 	}
         // }
         String url =urlEntry.getUrl().toString();
-        System.out.println("downloading " + url);
         HttpClient hc = new HttpClient();
         if (!hc.send("GET", urlEntry)) {
             return;
         }
+        System.out.println("downloading " + url);        
         Transaction txn;
         //put the file in to db. prepare for multiple value
         txn = dbWrapper.getTransaction();
@@ -90,7 +90,7 @@ public class CrawlerWorker implements Runnable {
         try {
             contentType = contentType.toLowerCase().trim();
             return (contentType.contains("text/html") || contentType.contains("application/xml")
-                    || contentType.endsWith("+xml") || contentType.endsWith("xml") || contentType.endsWith("html"));
+                    || contentType.endsWith("xml") || contentType.endsWith("xml") || contentType.endsWith("html"));
 
         } catch (NullPointerException e) {
             // System.out.println("")
@@ -103,11 +103,17 @@ public class CrawlerWorker implements Runnable {
         if (!doc.getDocType().toLowerCase().contains("html")) {
             return;
         }
-        String absHost = doc.getAbsHost();
-        Document document = Jsoup.parse(doc.getContent(), absHost);
-        Elements links = document.select("a[href]");
+        URL url2=null;
+		try {
+			url2 = new URL(doc.getUrl());
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+		}
+        String absHost = url2.getProtocol()+"://"+url2.getHost()+url2.getPath();
+        Document document = Jsoup.parse(doc.getContent(),absHost);
+        Elements links = document.select("a");
         for (Element link : links) {
-            String text = link.attr("abs:href");
+            String text = link.absUrl("abs:href");
             String pattern = "^.*\\.(png|jpg|pdf|docx|pptx)$";
             if (Pattern.matches(pattern, text) || text.contains("@")) {
                 continue;
@@ -209,6 +215,7 @@ public class CrawlerWorker implements Runnable {
             URL urlCurrent = urlEntry.getUrl();
             //Robot check
             if (!checkRobot(urlCurrent)) {
+                System.out.println("not allowed: "+urlCurrent.toString());
                 continue;
             }
 

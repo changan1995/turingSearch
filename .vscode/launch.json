@@ -21,7 +21,7 @@
             "stopOnEntry": false,
             "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
             // "projectName": "searchengine",
-            "args": "https://en.wikipedia.org/wiki/Main_Page ./bdb 1 10000000 1"
+            "args": "http://crawltest.cis.upenn.edu/. ./bdb 1 10000000 1"
         }
     ]
 }

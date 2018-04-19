@@ -50,7 +50,7 @@ public class HttpClient {
     }
 
     //both send from here
-    public boolean send(String method, URLEntry urlEntry) {
+    public boolean  send(String method, URLEntry urlEntry) {
         //url string testing
         String urlString = urlEntry.getUrl().toString();
         long toCrawlTime = urlEntry.getToCrawlDate();
@@ -58,7 +58,7 @@ public class HttpClient {
         long wait =(toCrawlTime-currentTime)/10;//TODO: some how 10 times??
         if(wait>0){
             try {
-                System.out.println(wait);
+                // System.out.println(Crawler.urlToDo.size());//debug size
 				Thread.sleep(wait);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

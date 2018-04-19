@@ -116,6 +116,26 @@
   
   <build>
     <plugins>
+    <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+            <execution>
+                <id>WebCrawler</id>
+                <goals><goal>java</goal></goals>
+                <configuration>
+                    <mainClass>edu.upenn.cis555.searchengine.crawler.Crawler</mainClass>
+                    <arguments>
+                        <argument>http://crawltest.cis.upenn.edu/.</argument>
+                        <argument>./bdb</argument>
+                        <argument>10</argument>
+                        <argument>100</argument>
+                    </arguments>
+                </configuration>
+            </execution>
+        </executions>
+    </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
