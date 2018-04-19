@@ -43,7 +43,7 @@ public class CrawlerWorker implements Runnable {
         this.dbWrapper=dbWrapper;
         this.docDB =dbWrapper.getDocDB();
         this.crawledNum=crawledNum;
-        System.out.println("helloworld");
+        System.out.println(id + "worker setup");
         // private PriorityQueue<URLEntry> urlToDo = Crawler.urlToDo;
     }
 
@@ -62,7 +62,7 @@ public class CrawlerWorker implements Runnable {
         String url =urlEntry.getUrl().toString();
         System.out.println("downloading " + url);
         HttpClient hc = new HttpClient();
-        if (!hc.send("GET", url)) {
+        if (!hc.send("GET", urlEntry)) {
             return;
         }
         Transaction txn;
@@ -70,7 +70,7 @@ public class CrawlerWorker implements Runnable {
         txn = dbWrapper.getTransaction();
         try {
             String lastModified = Utilities.convertTime(hc.getLastModified());
-            Doc doc = new Doc(url, hc.toString(), hc.getContentType(), new Long(hc.getContentLength()), lastModified);
+            Doc doc = new Doc(url, hc.getContent(), hc.getContentType(), new Long(hc.getContentLength()), lastModified);
             if (updateflag) {
                 docDB.updateDoc(doc, txn);
             } else {
@@ -89,7 +89,7 @@ public class CrawlerWorker implements Runnable {
     public static boolean typeValid(String contentType) {
         try {
             contentType = contentType.toLowerCase().trim();
-            return (contentType.equals("text/html") || contentType.equals("application/xml")
+            return (contentType.contains("text/html") || contentType.contains("application/xml")
                     || contentType.endsWith("+xml") || contentType.endsWith("xml") || contentType.endsWith("html"));
 
         } catch (NullPointerException e) {
@@ -100,7 +100,7 @@ public class CrawlerWorker implements Runnable {
 
     //put links generated from JSOUP document to urlToDo, and filter some obviously we dont want
     public void anaylize(Doc doc) {
-        if (!doc.getDocType().toLowerCase().endsWith("html")) {
+        if (!doc.getDocType().toLowerCase().contains("html")) {
             return;
         }
         String absHost = doc.getAbsHost();
@@ -112,12 +112,14 @@ public class CrawlerWorker implements Runnable {
             if (Pattern.matches(pattern, text) || text.contains("@")) {
                 continue;
             }
+            // System.out.println(doc.getUrl()+"\t\t"+text);
             URL url=null;
 			try {
 				url = new URL(text);
 			} catch (MalformedURLException e) {
-                e.printStackTrace();
-                return;
+                // System.out.println("nullpointer"+text);
+                // e.printStackTrace();
+                continue;
 			}
             Crawler.urlToDo.add(new URLEntry(url, toCrawlDate));
         }
@@ -140,12 +142,12 @@ public class CrawlerWorker implements Runnable {
             //new host found, download the robot
             // lastCrawedTime = new Long(0);
             HttpClient hc = new HttpClient();
-            if (!hc.send("GET", "https://" + hostName + "/robots.txt")) { //turn to absolute address
+            if (!hc.send("GET", new URLEntry("http://" + url.getHost() + "/robots.txt", System.currentTimeMillis()))) { //turn to absolute address
                 robot = new RobotsTxtInfo("User-agent: *", absoluteRoot);
                 Crawler.robotLst.put(hostName, robot);
                 return true;
             }
-            robot = new RobotsTxtInfo(hc.toString(), absoluteRoot);
+            robot = new RobotsTxtInfo(hc.getContent(), absoluteRoot);
             Crawler.robotLst.put(hostName, robot);
         }
         //find allowed/disallowed
@@ -171,7 +173,9 @@ public class CrawlerWorker implements Runnable {
                 return false;
             }
         }
+        System.out.println(id+"gets ");
         toCrawlDate = robot.getNextCrawlDate(agent);
+        System.out.println(id+"release ");
 
         return true;
     }
@@ -189,17 +193,19 @@ public class CrawlerWorker implements Runnable {
             //take out one url
             if (Crawler.urlToDo.isEmpty()) {
 //                flag = true;
-                try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+                // try {
+				// 	Thread.sleep(500);
+				// } catch (InterruptedException e) {
+				// 	e.printStackTrace();
+				// }
                 continue;
             } else {
                 urlEntry = Crawler.urlToDo.poll();
                 // System.out.println()
             }
-
+            if(urlEntry==null){
+                continue;
+            }
             URL urlCurrent = urlEntry.getUrl();
             //Robot check
             if (!checkRobot(urlCurrent)) {
@@ -216,7 +222,7 @@ public class CrawlerWorker implements Runnable {
                     Long crawledDate = Utilities.convertDate(doc.getcrawledDate());
                     //send head to check 
                     HttpClient hc = new HttpClient();
-                    if (hc.send("HEAD",urlString)) {
+                    if (!hc.send("HEAD",urlEntry)) {
                         crawledNum--;
                         continue;
                     }
@@ -232,7 +238,7 @@ public class CrawlerWorker implements Runnable {
                     //Doc is NOT in the DB                    
                     updateflag = false;
                     HttpClient hc = new HttpClient();
-                    if (!hc.send("HEAD", urlString)) {
+                    if (!hc.send("HEAD", urlEntry)) {
                         crawledNum--;
                         continue;
                     }

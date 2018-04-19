@@ -1,5 +1,7 @@
 package edu.upenn.cis555.searchengine.crawler;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -8,10 +10,8 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import org.jboss.netty.util.internal.ConcurrentHashMap;
@@ -19,6 +19,8 @@ import org.jboss.netty.util.internal.ConcurrentHashMap;
 import edu.upenn.cis555.searchengine.crawler.info.RobotsTxtInfo;
 import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
 import edu.upenn.cis555.searchengine.crawler.structure.URLEntry;
+
+import org.apache.commons.io.FileUtils;
 
 public class Crawler {
     public static PriorityBlockingQueue<URLEntry> urlToDo;
@@ -55,6 +57,15 @@ public class Crawler {
             ;
             if (args.length > 4) {
                 hostname = args[4];
+                if(args.length>5){
+                    if(args[5].equals("1")){
+                        try {//clean db
+							FileUtils.cleanDirectory(new File(dbDirectory));
+						} catch (IOException e) {
+							e.printStackTrace();
+						} 
+                    }
+                }
             }
         }
         urlToDo = new PriorityBlockingQueue<>(maxFileNumber);//in the sput

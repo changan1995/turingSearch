@@ -1,7 +1,7 @@
 package edu.upenn.cis555.searchengine.crawler.storage;
 
 
-import org.w3c.dom.Document;
+// import org.w3c.dom.Document;
 
 import edu.upenn.cis555.searchengine.crawler.Utilities;
 import edu.upenn.cis555.searchengine.crawler.info.URLInfo;

@@ -8,19 +8,19 @@ import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.je.Transaction;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.StoreConfig;
-import com.sleepycat.persist.impl.Store;
+// import com.sleepycat.persist.impl.Store;
 
 // import edu.upenn.cis455.crawler.CrawlerWorker;
 // import XPAThcra
 
 public class DBWrapper {
 	
-	private static String envDirectory = null;
+	private String envDirectory = null;
 	
-	private static Environment myEnv;
-	private static EntityStore store;
+	private Environment myEnv;
+	private EntityStore store;
 
-	private static DocDB docDB;
+	private DocDB docDB;
 //	private static UserDB userDB;
 	
 	public DBWrapper(String envDir){

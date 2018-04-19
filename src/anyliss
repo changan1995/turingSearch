@@ -1,0 +1,112 @@
+0worker setup
+1worker setup
+2worker setup
+3worker setup
+4worker setup
+5worker setup
+6worker setup
+7worker setup
+8worker setup
+9worker setup
+finished
+0gets
+0release
+downloading http://crawltest.cis.upenn.edu:80/
+4gets Exception in thread "pool-1-thread-4"
+6gets
+8gets
+9gets java.lang.NullPointerException
+
+9release        at edu.upenn.cis555.searchengine.crawler.CrawlerWorker.run(CrawlerWorker.java:205)
+
+5gets   at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+5release
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+
+7gets   at java.lang.Thread.run(Thread.java:748)
+7release
+
+2gets
+2release
+1gets
+1release
+8release
+0gets
+6release
+4release
+0release
+downloading http://crawltest.cis.upenn.edu/misc/eurofxref-daily.xml
+downloading http://crawltest.cis.upenn.edu/cnn/
+9gets
+9release
+downloading http://crawltest.cis.upenn.edu/bbc/
+downloading http://crawltest.cis.upenn.edu/cnn/index.html
+downloading http://crawltest.cis.upenn.edu/international/
+downloading http://crawltest.cis.upenn.edu/marie/
+5gets
+5release
+downloading http://crawltest.cis.upenn.edu/nytimes/
+downloading http://crawltest.cis.upenn.edu/cnn/cnn_world.rss.xml
+1gets
+1release
+2gets
+2release
+downloading http://crawltest.cis.upenn.edu/misc/weather.xml
+0gets
+0release
+9gets
+9release
+6gets
+6release
+4gets
+4release
+7gets
+7release
+8gets
+8release
+5gets
+5release
+1gets
+1release
+5gets
+5release
+8gets
+8release
+7gets
+7release
+1gets
+1release
+7gets
+7release
+8gets
+8release
+1gets
+5gets
+5release
+1release
+7gets
+7release
+8gets
+7gets
+5gets
+1gets
+5release
+7release
+8release
+1release
+7gets
+1gets
+8gets
+7release
+8release
+5gets
+5release
+1release
+7gets
+7release
+5gets
+5release
+1gets
+1release
+not modified http://crawltest.cis.upenn.edu/misc/weather.xml
+downloading http://crawltest.cis.upenn.edu/misc/moreweather.xml

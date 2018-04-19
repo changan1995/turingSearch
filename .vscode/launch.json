@@ -1,17 +1,27 @@
 {
     "version": "0.2.0",
     "configurations": [
-
         {
             "type": "java",
-            "name": "Debug (Launch)-XPathCrawler<homework-2>",
+            "name": "debug num",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "console":"externalTerminal",
+            "console":"integratedTerminal",
             "stopOnEntry": false,
-            "mainClass": "edu.upenn.cis555.searchengine.Crawler",
+            "mainClass": "edu.upenn.cis555.searchengine.crawler.logger.BDBPrint",
             // "projectName": "searchengine",
-            "args": "http://crawltest.cis.upenn.edu:80/ ./bdb 1 10000000"
+            "args": "./bdb"
+        },
+        {
+            "type": "java",
+            "name": "Crawler Launch",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console":"integratedTerminal",
+            "stopOnEntry": false,
+            "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
+            // "projectName": "searchengine",
+            "args": "https://en.wikipedia.org/wiki/Main_Page ./bdb 1 10000000 1"
         }
     ]
 }

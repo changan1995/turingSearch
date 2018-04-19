@@ -1,6 +1,7 @@
 package edu.upenn.cis555.searchengine.crawler.structure;
 
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 
@@ -10,6 +11,16 @@ public class URLEntry implements Comparable<URLEntry>{
 
         public URLEntry(URL url,long toCrawlDate){
             this.url=url;
+            this.toCrawlDate = toCrawlDate;
+        }
+
+        public URLEntry(String urlString,long toCrawlDate){
+            try {
+				this.url=new URL(urlString);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             this.toCrawlDate = toCrawlDate;
         }
 

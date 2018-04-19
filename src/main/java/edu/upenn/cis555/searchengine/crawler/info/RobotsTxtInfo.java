@@ -155,16 +155,20 @@ public class RobotsTxtInfo {
 	/**
 	 * @return the nextCrawlDate
 	 */
-	public long getNextCrawlDate(String key) {
+	public  long  getNextCrawlDate(String key) {
+        synchronized(this){
 		long current = System.currentTimeMillis();
-		if(nextCrawlDate<current){//if nextcrawled has passed , return current;
-			nextCrawlDate=current + getCrawlDelay(key);
+        if(nextCrawlDate<current){//if nextcrawled has passed , return current;
+			nextCrawlDate=current + getCrawlDelay(key)*1000;
 			return current;
 		}else{//if nextcrawled time not arrived, return next crawed time ,and add crawl time.
-			long temp = nextCrawlDate;
-			nextCrawlDate+= getCrawlDelay(key);
+            long temp = nextCrawlDate;
+            // System.out.println("crawl delay is "+getCrawlDelay(key));
+            nextCrawlDate+= getCrawlDelay(key)*1000;
+            // System.out.println((nextCrawlDate-System.currentTimeMillis())/1000);
 			return temp;
-		}
+        }
+        }
 	}
 
 	/**

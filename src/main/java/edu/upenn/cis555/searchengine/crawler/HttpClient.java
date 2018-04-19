@@ -15,7 +15,8 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import edu.upenn.cis555.searchengine.crawler.info.URLInfo;;
+import edu.upenn.cis555.searchengine.crawler.info.URLInfo;
+import edu.upenn.cis555.searchengine.crawler.structure.URLEntry;;
 
 public class HttpClient {
     // private final String URL = "www.baidu.com";
@@ -49,8 +50,21 @@ public class HttpClient {
     }
 
     //both send from here
-    public boolean send(String method, String urlString) {
+    public boolean send(String method, URLEntry urlEntry) {
         //url string testing
+        String urlString = urlEntry.getUrl().toString();
+        long toCrawlTime = urlEntry.getToCrawlDate();
+        long currentTime = System.currentTimeMillis();
+        long wait =(toCrawlTime-currentTime)/10;//TODO: some how 10 times??
+        if(wait>0){
+            try {
+                System.out.println(wait);
+				Thread.sleep(wait);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
         https = urlString.toLowerCase().startsWith("https://");
         urlInfo = new URLInfo(urlString);
         try {
@@ -234,6 +248,9 @@ public class HttpClient {
 		this.english = english;
 	}
 
+    public String getContent(){
+        return this.body;
+    }
 
 
 
