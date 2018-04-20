@@ -146,7 +146,7 @@
                 </configuration>
             </execution>
             <execution>
-                <id>Printout</id>
+                <id>testDB</id>
                 <goals><goal>java</goal></goals>
                 <configuration>
                     <mainClass>edu.upenn.cis555.searchengine.crawler.storage.S3Wrapper</mainClass>
