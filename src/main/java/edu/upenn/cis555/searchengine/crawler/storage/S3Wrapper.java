@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0.
 package edu.upenn.cis555.searchengine.crawler.storage;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSCredentialsProviderChain;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -19,27 +22,29 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.S3Link;
 
 public class S3Wrapper {
 
-    static AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
+    // static AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
     static SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     
 
     public static void main(String[] args) throws Exception {
-        // BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAJJVOKDS4O2JIIO5Q", "PRB3moNWX5FZn5AdqNWwOvw/X6WfpI0gklm/MKQW");
-        // AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
-        //                         .withRegion("us-east-1")
-        //                         .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
-        //                         .build();
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAIYGQI5BZEQ4IWZSA", "vaW7GHGmAFOr4rhubXIJEEPtxsC3fuCdOvv4xvYd");
+        // AWSCredentialsProvider s3Credential = new AWSCredentialsProviderChain(credentialsProviders)
+        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
+                                .withRegion("us-east-1")
+                                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+                                .build();
         
         try {
-
-            DynamoDBMapper mapper = new DynamoDBMapper(client); 
+            AWSCredentialsProvider s3Creds = new AWSStaticCredentialsProvider(awsCreds);
+            DynamoDBMapper mapper = new DynamoDBMapper(client,s3Creds); 
 
             testBatchSave(mapper);
-            testBatchDelete(mapper);
-            testBatchWrite(mapper);
+            // testBatchDelete(mapper);
+            // testBatchWrite(mapper);
 
             System.out.println("Example complete!");
 
@@ -59,6 +64,8 @@ public class S3Wrapper {
         book1.price = 10;
         book1.productCategory = "Book";
         book1.title = "My book created in batch write";
+        book1.setContentLink(mapper.createS3Link("cis455-crawler-changanw", "resource/meiliangxin.jpeg"));
+        book1.getContentLink().uploadFrom(new File("./resource/meiliangxin.jpeg"));
 
         Book book2 = new Book();
         book2.id = 902;
@@ -68,6 +75,9 @@ public class S3Wrapper {
         book2.price = 20;
         book2.productCategory = "Book";
         book2.title = "My second book created in batch write";
+        book2.setContentLink(mapper.createS3Link("cis455-crawler-changanw", "resource/meiliangxin.jpeg"));
+        book2.getContentLink().uploadFrom(new File("./resource/sample.txt"));
+        
 
         Book book3 = new Book();
         book3.id = 903;
@@ -121,6 +131,7 @@ public class S3Wrapper {
     @DynamoDBTable(tableName = "ProductCatalog")
     public static class Book {
         private int id;
+        private S3Link contentLink;
         private String title;
         private String ISBN;
         private int price;
@@ -165,6 +176,8 @@ public class S3Wrapper {
             this.price = price;
         }
 
+        
+
         @DynamoDBAttribute(attributeName = "PageCount")
         public int getPageCount() {
             return pageCount;
@@ -197,6 +210,15 @@ public class S3Wrapper {
             return "Book [ISBN=" + ISBN + ", price=" + price + ", product category=" + productCategory + ", id=" + id
                     + ", title=" + title + "]";
         }
+
+        @DynamoDBAttribute(attributeName = "ContentLink")        
+		public S3Link getContentLink() {
+			return contentLink;
+        }
+        
+		public void setContentLink(S3Link contentLink) {
+			this.contentLink = contentLink;
+		}
 
     }
 
