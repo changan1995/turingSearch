@@ -142,8 +142,6 @@
                     <arguments>
                         <!-- <argument>http://crawltest.cis.upenn.edu/.</argument> -->
                         <argument>./bdb</argument>
-                        <argument>10</argument>
-                        <argument>100</argument>
                     </arguments>
                 </configuration>
             </execution>
