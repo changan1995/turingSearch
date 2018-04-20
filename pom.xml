@@ -134,6 +134,19 @@
                     </arguments>
                 </configuration>
             </execution>
+            <execution>
+                <id>Printout</id>
+                <goals><goal>java</goal></goals>
+                <configuration>
+                    <mainClass>edu.upenn.cis555.searchengine.logger.BDBPrint</mainClass>
+                    <arguments>
+                        <!-- <argument>http://crawltest.cis.upenn.edu/.</argument> -->
+                        <argument>./bdb</argument>
+                        <argument>10</argument>
+                        <argument>100</argument>
+                    </arguments>
+                </configuration>
+            </execution>
         </executions>
     </plugin>
       <plugin>

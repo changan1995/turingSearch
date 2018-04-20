@@ -179,9 +179,9 @@ public class CrawlerWorker implements Runnable {
                 return false;
             }
         }
-        System.out.println(id+"gets ");
+        // System.out.println(id+"gets ");
         toCrawlDate = robot.getNextCrawlDate(agent);
-        System.out.println(id+"release ");
+        // System.out.println(id+"release ");
 
         return true;
     }
