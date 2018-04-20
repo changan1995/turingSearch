@@ -138,7 +138,7 @@
                 <id>Printout</id>
                 <goals><goal>java</goal></goals>
                 <configuration>
-                    <mainClass>edu.upenn.cis555.searchengine.logger.BDBPrint</mainClass>
+                    <mainClass>edu.upenn.cis555.searchengine.crawler.logger.BDBPrint</mainClass>
                     <arguments>
                         <!-- <argument>http://crawltest.cis.upenn.edu/.</argument> -->
                         <argument>./bdb</argument>
