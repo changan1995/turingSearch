@@ -121,8 +121,9 @@ public class CrawlerWorker implements Runnable {
         Elements links = document.select("a");
         for (Element link : links) {
             String text = link.absUrl("abs:href");
-            String pattern = "^.*\\.(png|jpg|pdf|docx|pptx)$";
-            if (Pattern.matches(pattern, text) || text.contains("@")) {
+            // String pattern = "^.*\\.(png|jpg|pdf|docx|pptx)$";
+            String blackLst = "[.](jpeg)|(jpg)|(gif)|(png)$|facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|tumblr";
+            if (Pattern.matches(blackLst, text) || text.contains("@")) {
                 continue;
             }
             // System.out.println(doc.getUrl()+"\t\t"+text);

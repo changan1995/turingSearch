@@ -61,10 +61,7 @@ public class HttpClient {
         String urlString = urlEntry.getUrl().toString();
 
         //black list
-        String blackLst = "facebook|twitter|weibo|amazon|linkedin|pornhub|instagram|tumblr";
-        if(Pattern.matches(blackLst, urlString)){
-            return false;
-        }
+
         
         long toCrawlTime = urlEntry.getToCrawlDate();
         long currentTime = System.currentTimeMillis();
@@ -109,7 +106,7 @@ public class HttpClient {
 			conn.setRequestProperty("accept", "*/*");
 			conn.setRequestProperty("connection", "Keep-Alive");
             conn.setRequestProperty("user-agent", "cis455crawler");
-            conn.setRequestProperty("Accept-Language", "en-GB");
+            conn.setRequestProperty("Accept-Language", "en-");
 
 			// connect
             if((responseSucces = conn.getResponseCode()== HttpURLConnection.HTTP_OK)){
@@ -169,6 +166,7 @@ public class HttpClient {
 		}
         httpsconn.setRequestProperty("Host", url.getHost());
         httpsconn.setRequestProperty("User-Agent", "cis455crawler");
+        httpsconn.setRequestProperty("Accept-Language", "en-");
 
         try{
             //check response code
