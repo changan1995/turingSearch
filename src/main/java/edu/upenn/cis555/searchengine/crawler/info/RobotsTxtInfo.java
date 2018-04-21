@@ -121,7 +121,7 @@ public class RobotsTxtInfo {
 	
 	public int getCrawlDelay(String key){
         if(crawlDelays.get(key)==null){
-            return 0;
+            return 1;//default delay as 2 second
 		}
 		return crawlDelays.get(key);
 	}

@@ -136,9 +136,11 @@ public class CrawlerWorker implements Runnable {
             }
             // if(url!=null)
             outLinksBuff.add(url.toString());
-            if(Crawler.urlToDo.size()<100){
-                Crawler.urlToDo.add(new URLEntry(url, toCrawlDate));                
+            if(Crawler.urlToDo.size()>100){
+                Crawler.urlToDo.poll();
             }
+            Crawler.urlToDo.add(new URLEntry(url, toCrawlDate));                
+            
         }
         entry.setOutLinks(outLinksBuff);
     }
