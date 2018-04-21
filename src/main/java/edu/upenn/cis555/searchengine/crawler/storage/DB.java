@@ -31,6 +31,7 @@ public class DB{
 
     private DB(){
         this.buffer = new ArrayList<>();
+        bl= BloomFilter.create(Funnels.stringFunnel(), 10000);        
         BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAIYGQI5BZEQ4IWZSA", "vaW7GHGmAFOr4rhubXIJEEPtxsC3fuCdOvv4xvYd");
         // AWSCredentialsProvider s3Credential = new AWSCredentialsProviderChain(credentialsProviders)
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
@@ -75,7 +76,7 @@ public class DB{
     }
 
     public synchronized boolean add(Entry entry){
-        if(this.size()>=10){
+        if(this.size()>=23){
             flush();
         }
         try{

@@ -134,10 +134,10 @@
                 <configuration>
                     <mainClass>edu.upenn.cis555.searchengine.crawler.Crawler</mainClass>
                     <arguments>
-                        <argument>http://crawltest.cis.upenn.edu/.</argument>
+                        <argument>https://en.wikipedia.org/wiki/Ideal_gas_law</argument>
                         <argument>./bdb</argument>
                         <argument>10</argument>
-                        <argument>100</argument>
+                        <argument>1000</argument>
                     </arguments>
                 </configuration>
             </execution>

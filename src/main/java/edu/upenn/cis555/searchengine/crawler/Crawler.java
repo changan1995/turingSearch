@@ -14,6 +14,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.PriorityBlockingQueue;
 
+import com.google.common.hash.BloomFilter;
+import com.google.common.hash.Funnels;
+
 import org.jboss.netty.util.internal.ConcurrentHashMap;
 
 import edu.upenn.cis555.searchengine.crawler.info.RobotsTxtInfo;
@@ -26,6 +29,7 @@ public class Crawler {
     public static PriorityBlockingQueue<URLEntry> urlToDo;
     public static ConcurrentHashMap<String, RobotsTxtInfo> robotLst;//TODO:concurrent handle
     public static int crawledNum;
+    public static BloomFilter<CharSequence> bl;
     public static int maxFileSize;
 
     //udp settings
@@ -41,7 +45,7 @@ public class Crawler {
          * arg4 hostname for monitoring //todo
          */
 
-        //initial environment
+        //parameter setup
         URL urlCurrent = null;
         try {
             urlCurrent = new URL(args[0]);
@@ -68,6 +72,10 @@ public class Crawler {
                 }
             }
         }
+
+        //
+        //initial environment
+        bl =BloomFilter.create(Funnels.stringFunnel(), 10000);
         urlToDo = new PriorityBlockingQueue<>(maxFileNumber);//in the sput
         robotLst = new ConcurrentHashMap<String, RobotsTxtInfo>();//in the each filter
         urlToDo.add(new URLEntry(urlCurrent, System.currentTimeMillis()));

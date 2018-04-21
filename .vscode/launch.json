@@ -21,7 +21,7 @@
             "stopOnEntry": false,
             "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
             // "projectName": "searchengine",
-            "args": "http://crawltest.cis.upenn.edu/ ./bdb 1 10000000 1"
+            "args": "https://en.wikipedia.org/wiki/Ideal_gas_law ./bdb 1 10000000 1"
         },
         {
             "type": "java",

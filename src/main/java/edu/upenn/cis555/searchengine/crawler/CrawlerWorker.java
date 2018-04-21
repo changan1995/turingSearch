@@ -45,7 +45,7 @@ public class CrawlerWorker implements Runnable {
     private int id;
     private DB db;
     // private LRUCache 
-    private BloomFilter<CharSequence> bl;
+    // private BloomFilter<CharSequence> bl;
     private int crawledNum;
     private Entry entry =null;
     // public static String dbDirectory;
@@ -55,7 +55,7 @@ public class CrawlerWorker implements Runnable {
         this.db = DB.gettInstance();
         this.crawledNum=crawledNum;
         System.out.println(id + "worker setup");
-        bl= BloomFilter.create(Funnels.stringFunnel(), 10000);
+        // bl= BloomFilter.create(Funnels.stringFunnel(), 10000);
         // private PriorityQueue<URLEntry> urlToDo = Crawler.urlToDo;
     }
 
