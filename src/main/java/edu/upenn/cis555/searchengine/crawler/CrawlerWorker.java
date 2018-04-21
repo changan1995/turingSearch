@@ -63,6 +63,10 @@ public class CrawlerWorker implements Runnable {
         // }
         String url =urlEntry.getUrl().toString();
         HttpClient hc = new HttpClient();
+        String blackLst = "facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|tumblr";
+        if (Pattern.matches(blackLst, url)) {
+            return;
+        }
         if (!hc.send("GET", urlEntry)) {
             return;
         }
@@ -122,7 +126,7 @@ public class CrawlerWorker implements Runnable {
         for (Element link : links) {
             String text = link.absUrl("abs:href");
             // String pattern = "^.*\\.(png|jpg|pdf|docx|pptx)$";
-            String blackLst = "[.](jpeg)|(jpg)|(gif)|(png)$|facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|tumblr";
+            String blackLst = "/[.](jpeg)|(jpg)|(gif)|(png)$|facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|tumblr/gim";
             if (Pattern.matches(blackLst, text) || text.contains("@")) {
                 continue;
             }
