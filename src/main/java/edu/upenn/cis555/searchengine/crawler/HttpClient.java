@@ -14,10 +14,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import com.google.re2j.Pattern;
 
 import edu.upenn.cis555.searchengine.crawler.info.URLInfo;
 import edu.upenn.cis555.searchengine.crawler.structure.URLEntry;;
