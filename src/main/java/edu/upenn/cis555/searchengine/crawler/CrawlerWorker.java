@@ -27,7 +27,7 @@ import edu.upenn.cis555.searchengine.crawler.storage.DB;
 // import edu.upenn.cis555.searchengine.crawler.hw1.HttpServer;
 import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
 import edu.upenn.cis555.searchengine.crawler.storage.Doc;
-import edu.upenn.cis555.searchengine.crawler.storage.DocDB;
+import edu.upenn.cis555.searchengine.crawler.storage.DocDB; 
 import edu.upenn.cis555.searchengine.crawler.storage.Entry;
 import edu.upenn.cis555.searchengine.crawler.structure.URLEntry;
 
@@ -235,7 +235,7 @@ public class CrawlerWorker implements Runnable {
             try {
                 // Doc doc = docDB.get(urlString);
                 // filter.put(object);
-                if (!bl.put(urlString)) {
+                if (!Crawler.bl.put(urlString)) {
                     //Doc has been seen
                     // updateflag = true;
                     // Long crawledDate = Utilities.convertDate(doc.getcrawledDate());

@@ -10,8 +10,10 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -52,7 +54,15 @@ public class HttpClient {
     //both send from here
     public boolean  send(String method, URLEntry urlEntry) {
         //url string testing
+
+
         String urlString = urlEntry.getUrl().toString();
+
+        //black list
+        if(urlString.matches("facebook|twitter|weibo|amazon|linkedin|pornhub|instagram|tumblr")){
+            return false;
+        }
+        
         long toCrawlTime = urlEntry.getToCrawlDate();
         long currentTime = System.currentTimeMillis();
         long wait =(toCrawlTime-currentTime)/10;//TODO: some how 10 times??
@@ -71,9 +81,11 @@ public class HttpClient {
             url = new URL(urlString);
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
-            responseSucces=false;
-            e.printStackTrace();
+            e.printStackTrace();            
+            return false;
         }
+
+        
 
         if(https){
             return httpsSend(method,url);

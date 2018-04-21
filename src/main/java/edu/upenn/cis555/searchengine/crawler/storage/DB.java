@@ -23,7 +23,7 @@ import org.omg.IOP.TAG_ORB_TYPE;
 
 
 public class DB{
-    private List<Entry> buffer;
+    private List<Entry> buffer; 
     private DynamoDBMapper mapper;
     private String bucketName ="cis455-crawler-changanw";
     private String envDirectory = "crawled/";
@@ -31,7 +31,6 @@ public class DB{
 
     private DB(){
         this.buffer = new ArrayList<>();
-        bl= BloomFilter.create(Funnels.stringFunnel(), 10000);        
         BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAIYGQI5BZEQ4IWZSA", "vaW7GHGmAFOr4rhubXIJEEPtxsC3fuCdOvv4xvYd");
         // AWSCredentialsProvider s3Credential = new AWSCredentialsProviderChain(credentialsProviders)
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
