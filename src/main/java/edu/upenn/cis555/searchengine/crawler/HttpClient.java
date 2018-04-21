@@ -17,6 +17,8 @@ import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import com.google.re2j.Pattern;
+
 import edu.upenn.cis555.searchengine.crawler.info.URLInfo;
 import edu.upenn.cis555.searchengine.crawler.structure.URLEntry;;
 
@@ -59,7 +61,8 @@ public class HttpClient {
         String urlString = urlEntry.getUrl().toString();
 
         //black list
-        if(urlString.matches("facebook|twitter|weibo|amazon|linkedin|pornhub|instagram|tumblr")){
+        String blackLst = "facebook|twitter|weibo|amazon|linkedin|pornhub|instagram|tumblr";
+        if(Pattern.matches(blackLst, urlString)){
             return false;
         }
         
