@@ -37,7 +37,6 @@ public class CrawlerWorker implements Runnable {
     private boolean flag = false;
     // private DBWrapper dbWrapper = null;
     // private DocDB docDB = null;
-    private boolean updateflag = false;
     private RobotsTxtInfo robot;
     // private long lastCrawedTime = new Long(0);
     // private Transaction txn = null;
@@ -49,11 +48,15 @@ public class CrawlerWorker implements Runnable {
     private int crawledNum;
     private Entry entry =null;
     // public static String dbDirectory;
+    private URLFrontier frontier;
+	private URLDistributor distributor;
 
-    public CrawlerWorker(int id,DBWrapper dbWrapper,int crawledNum){
+    public CrawlerWorker(int id, int crawledNum, URLFrontier frontier, URLDistributor distributor){
         this.id =id;
         this.db = DB.gettInstance();
         this.crawledNum=crawledNum;
+        this.frontier = frontier;
+        this.distributor = distributor;
         System.out.println(id + "worker setup");
         // bl= BloomFilter.create(Funnels.stringFunnel(), 10000);
         // private PriorityQueue<URLEntry> urlToDo = Crawler.urlToDo;
@@ -71,7 +74,6 @@ public class CrawlerWorker implements Runnable {
             return;
         }
         System.out.println("downloading " + url);        
-        Transaction txn;
         //put the file in to db. prepare for multiple value
         // txn = dbWrapper.getTransaction();
         try {
@@ -83,10 +85,11 @@ public class CrawlerWorker implements Runnable {
             //     docDB.insertDoc(doc, txn);
             // }
             entry= new Entry(url);
+            // TODO uncomment the DynamoDB
             String contentString =hc.getContent();
-            db.setContentLink(entry, contentString);
-            db.add(entry);
+//            db.setContentLink(entry, contentString);
             anaylize(url,contentString,hc.getContentType());
+//            db.add(entry);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -99,8 +102,7 @@ public class CrawlerWorker implements Runnable {
     public static boolean typeValid(String contentType) {
         try {
             contentType = contentType.toLowerCase().trim();
-            return (contentType.contains("text/html") || contentType.contains("application/xml")
-                    || contentType.endsWith("xml") || contentType.endsWith("xml") || contentType.endsWith("html"));
+            return (contentType.contains("text/html"));
 
         } catch (NullPointerException e) {
             // System.out.println("")
@@ -141,10 +143,13 @@ public class CrawlerWorker implements Runnable {
             }
             // if(url!=null)
             outLinksBuff.add(url.toString());
-            if(Crawler.urlToDo.size()>100){
-                Crawler.urlToDo.poll();
-            }
-            Crawler.urlToDo.add(new URLEntry(url, toCrawlDate));                
+//            if(Crawler.urlToDo.size()>100){
+//                Crawler.urlToDo.poll();
+//            }
+//            Crawler.urlToDo.add(new URLEntry(url, toCrawlDate));
+            
+            // distribute url
+            distributor.distributeURL(url.toString());
             
         }
         entry.setOutLinks(outLinksBuff);
@@ -211,24 +216,36 @@ public class CrawlerWorker implements Runnable {
 
         while (!flag) {//main loop
             URLEntry urlEntry = null;
-            updateflag = false;
             //take out one url
-            if (Crawler.urlToDo.isEmpty()) {
-//                flag = true;
-                // try {
-				// 	Thread.sleep(500);
-				// } catch (InterruptedException e) {
-				// 	e.printStackTrace();
-				// }
-                continue;
-            } else {
-                urlEntry = Crawler.urlToDo.poll();
-                // System.out.println()
-            }
-            if(urlEntry==null){
-                continue;
-            }
-            URL urlCurrent = urlEntry.getUrl();
+            String url;
+			try {
+				url = frontier.getURL();
+			} catch (InterruptedException e2) {
+				continue;
+			}
+			urlEntry = new URLEntry(url, 0);
+//            if (Crawler.urlToDo.isEmpty()) {
+////                flag = true;
+//                // try {
+//				// 	Thread.sleep(500);
+//				// } catch (InterruptedException e) {
+//				// 	e.printStackTrace();
+//				// }
+//                continue;
+//            } else {
+//                urlEntry = Crawler.urlToDo.poll();
+//                // System.out.println()
+//            }
+//            if(urlEntry==null){
+//                continue;
+//            }
+//            URL urlCurrent = urlEntry.getUrl();
+            URL urlCurrent;
+			try {
+				urlCurrent = new URL(url);
+			} catch (MalformedURLException e1) {
+				continue;
+			}
             //Robot check
             if (!checkRobot(urlCurrent)) {
                 System.out.println("not allowed: "+urlCurrent.toString());
@@ -260,7 +277,6 @@ public class CrawlerWorker implements Runnable {
                     // }
                 } else {
                     //Doc is NOT in the DB                    
-                    updateflag = false;
                     HttpClient hc = new HttpClient();
                     if (!hc.send("HEAD", urlEntry)) {
                         crawledNum--;
@@ -268,6 +284,7 @@ public class CrawlerWorker implements Runnable {
                     }
                     if ((hc.getContentLength() < Crawler.maxFileSize) && typeValid(hc.getContentType())) {
                         download(urlEntry);
+                        Crawler.num.incrementAndGet();
                     } else {
                         continue;
                     }
