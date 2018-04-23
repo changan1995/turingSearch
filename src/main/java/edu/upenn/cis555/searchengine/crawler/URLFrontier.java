@@ -10,10 +10,13 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
@@ -22,9 +25,9 @@ import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
 public class URLFrontier {
 	
 	static Logger log = Logger.getLogger(URLFrontier.class);
-	
+	Random random =new Random();
 	int numThreads;
-	LinkedList<String> frontend;
+	ConcurrentLinkedQueue<String> frontend;
 	Queue<String>[] backends;
 	ConcurrentHashMap<String, Integer> hostToQueue;
 	PriorityBlockingQueue<TTR> releaseHeap;
@@ -47,7 +50,7 @@ public class URLFrontier {
 	public URLFrontier(int numThreads, List<String> seedURLs) {
 		this.numThreads = numThreads;
 		int maxHostNum = numThreads*20;
-		frontend = new LinkedList<>();
+		frontend = new ConcurrentLinkedQueue<>();
 		hostToQueue = new ConcurrentHashMap<String, Integer>();
 		releaseHeap = new PriorityBlockingQueue<>(150);
 		backends = new Queue[maxHostNum];
@@ -95,7 +98,7 @@ public class URLFrontier {
 			public void run() {
 				HashSet<Integer> emptyQueue = URLFrontier.this.emptyQueue;
 				ConcurrentHashMap<String, Integer> hostToQueue = URLFrontier.this.hostToQueue;
-				LinkedList<String> frontend = URLFrontier.this.frontend;
+				ConcurrentLinkedQueue<String> frontend = URLFrontier.this.frontend;
 				synchronized (emptyQueue) {
 					log.debug("Empty Queue" + emptyQueue.size());
 					log.debug("FrontQueue size:" + frontend.size());
@@ -112,7 +115,6 @@ public class URLFrontier {
 					ArrayList<String> list = db.getURLs(40);
 					
 					String uF;
-					synchronized (frontend) {
 						int limit = 20;
 //						if (frontend.size() > 200) {
 //							limit = 30;
@@ -125,7 +127,6 @@ public class URLFrontier {
 								break;
 							}
 						}
-					}
 					HashMap<String, LinkedList<String>> map = new HashMap<>();
 					for (String url : list) {
 						URL u;
@@ -246,8 +247,10 @@ public class URLFrontier {
 //			releaseHeap.add(available);
 //		}
 //	}
-	
+	// private AtomicInteger i;	
+
 	public String getURL() throws InterruptedException {
+		
 		TTR release;
 		synchronized (releaseHeap) {
 			release = releaseHeap.take();
@@ -258,7 +261,9 @@ public class URLFrontier {
 			log.debug("wait");
 			Thread.sleep(wait);
 		}
-		return retrieveBackQuene(release);
+		String returnString = retrieveBackQuene(release);
+		
+		return returnString;
 	}
 	
 	public String retrieveBackQuene(TTR release) {
@@ -272,13 +277,13 @@ public class URLFrontier {
 //			synchronized (hostToQueue) {
 				hostToQueue.remove(host);
 //			}
-			new Thread(() -> {
-				if (!frontToBack(idx)) {
-					synchronized (emptyQueue) {
+			// new Thread(() -> {
+			// 	if (!frontToBack(idx)) {
+			// 		synchronized (emptyQueue) {
 						emptyQueue.add(idx);
-					}
-				}
-			}).start();
+			// 		}
+			// 	}
+			// }).start();
 		} else {
 			// TODO change release time
 			release.releaseTime = System.currentTimeMillis() + getDelay(host) * 1000;
@@ -288,42 +293,42 @@ public class URLFrontier {
 		return url;
 	}
 	
-	public synchronized boolean frontToBack(int idx) {
-		// get url from front queue
-		String s;
-		synchronized (frontend) {
-			if (frontend.isEmpty()) {
-				frontend.addAll(db.getURLs(-1));
-			}
-			s = frontend.poll();
-		}
-		if (s == null) {
-			return false;
-		}
-		try {
-			URL url = new URL(s);
-			String host = url.getHost();
-			if (hostToQueue.containsKey(host)) {
-				backends[hostToQueue.get(host)].add(s);
-				return false;
-			} else {
-				hostToQueue.put(host, idx);
-				backends[idx].add(s);
-//				synchronized (lastRelease) {
-					Long releaseTime = lastRelease.get(host);
-					if (releaseTime == null)
-						releaseHeap.put(new TTR(host, System.currentTimeMillis()));
-					else {
-						long time = releaseTime.longValue() + getDelay(host) * 1000;
-						releaseHeap.put(new TTR(host, time));
-					}
-//				}
-				return true;
-			}
-		} catch (MalformedURLException e) {
-			return false;
-		}
-	}
+// 	public synchronized boolean frontToBack(int idx) {
+// 		// get url from front queue
+// 		String s;
+// 		synchronized (frontend) {
+// 			if (frontend.isEmpty()) {
+// 				frontend.addAll(db.getURLs(-1));
+// 			}
+// 			s = frontend.poll();
+// 		}
+// 		if (s == null) {
+// 			return false;
+// 		}
+// 		try {
+// 			URL url = new URL(s);
+// 			String host = url.getHost();
+// 			if (hostToQueue.containsKey(host)) {
+// 				backends[hostToQueue.get(host)].add(s);
+// 				return false;
+// 			} else {
+// 				hostToQueue.put(host, idx);
+// 				backends[idx].add(s);
+// //				synchronized (lastRelease) {
+// 					Long releaseTime = lastRelease.get(host);
+// 					if (releaseTime == null)
+// 						releaseHeap.put(new TTR(host, System.currentTimeMillis()));
+// 					else {
+// 						long time = releaseTime.longValue() + getDelay(host) * 1000;
+// 						releaseHeap.put(new TTR(host, time));
+// 					}
+// //				}
+// 				return true;
+// 			}
+// 		} catch (MalformedURLException e) {
+// 			return false;
+// 		}
+	// }
 	
 	private int getDelay(String host) {
 		if (delayCache.containsKey(host)) {
@@ -339,15 +344,13 @@ public class URLFrontier {
 	}
 	
 	public void addURLToHead(String url) {
-		synchronized (frontend) {
-			frontend.addLast(url);
-		}
+			frontend.add(url);
 	}
 	
 	public boolean hasHost(String host) {
-		synchronized (hostToQueue) {
+		// synchronized (hostToQueue) {
 			return hostToQueue.containsKey(host);
-		}
+		// }
 	}
 	
 	public int getFrontend() {
@@ -355,9 +358,9 @@ public class URLFrontier {
 	}
 	
 	public boolean hitUpperBound() {
-		synchronized (frontend) {
+		// synchronized (frontend) {
 			return frontend.size() >= upperLimit*0.3;
-		}
+		// }
 	}
 
 }

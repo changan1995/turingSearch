@@ -9,7 +9,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,6 +22,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
+import edu.upenn.cis555.searchengine.crawler.structure.URLList;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -30,23 +33,15 @@ public class URLDistributor{
 	
 	// private static final long serialVersionUID = -1715283408490447605L;
 
-	public static class URLList implements Serializable{
-		private static final long serialVersionUID = 3484819397569692815L;
-		public LinkedList<String> list;
-		public URLList() {
-			list = new LinkedList<>();
-		}
-		
-	} 
+
 	
 	static Logger log = Logger.getLogger(URLDistributor.class);
 	
 	// flush buffer when exceed this limit
-	private static final int maxURLNum = 50;
+	private static final int maxURLNum = 500;
 	
 	DBWrapper db;
 	HashMap<String, URLList> buffers;
-	Random random = new Random();
 	String[] workerList;
 	int index;
 	final ObjectMapper om = new ObjectMapper();
@@ -90,31 +85,31 @@ public class URLDistributor{
 //		// save urlseen every 30 minutes
 //		timer.scheduleAtFixedRate(seenTask, 5 * 1000, 10 * 1000);
 		
-		Spark.post("/push", new Route() {
+		// Spark.post("/push", new Route() {
 
-			@Override
-			public Object handle(Request arg0, Response arg1) {
-				try {
-					log.debug("get request");
-					URLList list = om.readValue(arg0.body(), URLList.class);
+		// 	@Override
+		// 	public Object handle(Request arg0, Response arg1) {
+		// 		try {
+		// 			log.debug("get request");
+		// 			URLList list = om.readValue(arg0.body(), URLList.class);
 
-					// log.debug("Recieved " + list.list.size());					
-					for (String url : list.list){
-						try {
-							addURLToQueue(url);
-							// log.debug("Recieved " + url);
-						} catch(Exception e) {
-							continue;
-						}
-					}
-				} catch (Exception e) {
-					log.debug(e.getMessage());
-					e.printStackTrace();
-				} 
-				return "recieved";
-			}
+		// 			// log.debug("Recieved " + list.list.size());					
+		// 			for (String url : list.list){
+		// 				try {
+		// 					addURLToQueue(url);
+		// 					// log.debug("Recieved " + url);
+		// 				} catch(Exception e) {
+		// 					continue;
+		// 				}
+		// 			}
+		// 		} catch (Exception e) {
+		// 			log.debug(e.getMessage());
+		// 			e.printStackTrace();
+		// 		} 
+		// 		return "recieved";
+		// 	}
 
-		});
+		// });
 	}
 	
 	
@@ -135,26 +130,49 @@ public class URLDistributor{
 	}
 	
 	
-	public void distributeURL(String url) {
-		try {
-			URL u = new URL(url);
-			int idx = Math.abs(u.getHost().hashCode()) % workerList.length;
-			if (index == idx) {
-				// still in the local node
-				addURLToQueue(url);
-			} else {
-				// should be sent to other node
-				addToBuffer(workerList[idx], url);
-			} 
-		} catch (Exception e) {
-			log.error("Distribute url: " + url + " " + e.getMessage());
-			return;
+	// public void distributeURL(String url) {
+		
+	// 	try {
+	// 		URL u = new URL(url);
+	// 		int idx = Math.abs(u.getHost().hashCode()) % workerList.length;
+	// 		if (index == idx) {
+	// 			// still in the local node
+	// 			addURLToQueue(url);
+	// 		} else {
+	// 			// should be sent to other node
+	// 			addToBuffer(workerList[idx], url);
+	// 		} 
+	// 	} catch (Exception e) {
+	// 		log.error("Distribute url: " + url + " " + e.getMessage());
+	// 		return;
+	// 	}
+		
+	// }
+
+	public void distributeURL(Set<String> urls) {
+		for (String url: urls ){
+			try {
+				URL u = new URL(url);
+				int idx = Math.abs(u.getHost().hashCode()) % workerList.length;
+				if (index == idx) {
+					// still in the local node
+					addURLToQueue(url);
+				} else {
+					// should be sent to other node
+					addToBuffer(workerList[idx], url);
+				} 
+			} catch (Exception e) {
+				log.error("Distribute url: " + url + " " + e.getMessage());
+				return;
+			}
 		}
+		return ;
+		
 	}
 	
 	private void addToBuffer(String address, String url) {
 		URLList buf = buffers.get(address);
-		synchronized (buf) {
+		// synchronized (buf) {
 			buf.list.add(url);
 //			log.debug(address + " buf size:" + buf.list.size());
 			// if exceed the size, send to other node
@@ -164,7 +182,7 @@ public class URLDistributor{
 				buf.list.clear();
 			}
 			
-		}
+		// }
 	}
 	
 	private void sendToWorker(String address, URLList content) {

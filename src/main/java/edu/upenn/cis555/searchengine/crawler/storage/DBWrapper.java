@@ -89,7 +89,6 @@ public class DBWrapper {
 
 	public synchronized void addURL(long time, String url) {
 //		log.debug("save " + url + " at " + time);
-		log.debug("add url"+ i);
 		DatabaseEntry keyEntry = new DatabaseEntry();
 		DatabaseEntry dataEntry = new DatabaseEntry();
 		LongBinding.longToEntry(time, keyEntry);
@@ -98,7 +97,6 @@ public class DBWrapper {
 		URLFrontier.put(null, keyEntry, dataEntry);
 //		URLFrontier.put(null, keyEntry, dataEntry);
 		URLFrontier.sync();
-		log.debug("add url end"+i++);		
 //		txn.commit();
 	}
 
@@ -112,17 +110,17 @@ public class DBWrapper {
 
 		ArrayList<String> list = new ArrayList<>();
 		int count = 0;
-		log.debug("Start get URLs");
+		// log.debug("Start get URLs");
 		while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
 			String url = StringBinding.entryToString(dataEntry);
 			list.add(url);
-			log.debug("get:" + url);
+			// log.debug("get:" + url);
 			URLFrontier.delete(null, keyEntry);
 			count++;
 			if (count >= limit) break;
 		}
 		URLFrontier.sync();
-		log.debug("Stop get URLs");
+		// log.debug("Stop get URLs");
 		return list;
 	}
 	
@@ -154,7 +152,6 @@ public class DBWrapper {
 //	}
 	
 	public void saveURLSeen(String url) {
-		log.debug("add seen"+j);
 		DatabaseEntry keyEntry = new DatabaseEntry();
 		DatabaseEntry dataEntry = new DatabaseEntry();
 		StringBinding.stringToEntry(url, keyEntry);
@@ -163,7 +160,7 @@ public class DBWrapper {
 		URLSeen.put(null, keyEntry, dataEntry);
 //		URLFrontier.put(null, keyEntry, dataEntry);
 		URLSeen.sync();
-		log.debug("add seen"+j++);
+
 		
 	}
 	

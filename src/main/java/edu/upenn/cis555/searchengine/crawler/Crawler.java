@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.amazonaws.services.waf.model.CreateWebACLRequest;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 
@@ -47,13 +48,19 @@ public class Crawler {
 
 	public URLFrontier frontier;
 	public URLDistributor distributor;
+	public URLReciver receiver;
 	public static RobotsRule rule = new RobotsRule();
 	private ExecutorService executorService = Executors.newCachedThreadPool();
+	public static int index = -1;
+	public static String[] workerList;
 
 	public Crawler(int index, String[] workerList, ArrayList<String> seedURL) {
 		Spark.port(port);
+		Crawler.index = index;
+		Crawler.workerList = workerList;
 		frontier = new URLFrontier(threadNum, seedURL);
-		distributor = new URLDistributor(index, workerList, frontier);
+		// distributor = new URLDistributor(index, workerList, frontier);
+		receiver = new URLReciver(index, workerList, frontier);
 	}
 
 	public static ArrayList<String> parseConfig(String path) throws IOException {
@@ -85,8 +92,9 @@ public class Crawler {
 		for (int i = 0; i < threadNum; i++) {
 			// Future<Integer> future = executorService.submit(new
 			// CrawlerWorker(i,dbWrapper,crawledNum));
-			CrawlerWorker cw = new CrawlerWorker(i, crawledNum, frontier, distributor);
+			CrawlerWorker cw = new CrawlerWorker(i, crawledNum, frontier);
 			executorService.execute(cw);
+			// executorService.exec
 			// resultList.add(future);
 		}
 	}

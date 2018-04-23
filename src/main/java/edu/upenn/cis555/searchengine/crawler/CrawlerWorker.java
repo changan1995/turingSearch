@@ -56,13 +56,14 @@ public class CrawlerWorker implements Runnable {
 	private URLDistributor distributor;
 	public static Pattern pattern = Pattern.compile("^http[s]?://.*(facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|tumblr)\\.com.*");
 
-    public CrawlerWorker(int id, int crawledNum, URLFrontier frontier, URLDistributor distributor){
+    public CrawlerWorker(int id, int crawledNum, URLFrontier frontier){
         this.id =id;
         this.db = DB.gettInstance();
         this.crawledNum=crawledNum;
         this.frontier = frontier;
-        this.distributor = distributor;
         System.out.println(id + "worker setup");
+        this.distributor = new URLDistributor(Crawler.index, Crawler.workerList, frontier);
+        
         // bl= BloomFilter.create(Funnels.stringFunnel(), 10000);
         // private PriorityQueue<URLEntry> urlToDo = Crawler.urlToDo;
     }
@@ -71,11 +72,12 @@ public class CrawlerWorker implements Runnable {
         // }
 //        String url =urlEntry.getUrl().toString();
         HttpClient hc = new HttpClient();
-
+        log.debug("id"+id+"\tDownloading:\t" + url);        
+        
         if (!hc.send("GET", url)) {
             return;
         }
-        log.debug("Downloading: " + url);        
+        log.debug("id"+id+"\tDownloaded:\t" + url);        
         //put the file in to db. prepare for multiple value
         // txn = dbWrapper.getTransaction();
         try {
@@ -89,10 +91,14 @@ public class CrawlerWorker implements Runnable {
             entry= new Entry(url);
             // TODO uncomment the DynamoDB
             String contentString =hc.getContent();
+        log.debug("id"+id+"\tUpDynamoing:\t" + url);        
+        
            db.setContentLink(entry, contentString);
             anaylize(url,contentString);
            db.add(entry);
             Crawler.num.incrementAndGet();
+        log.debug("id"+id+"\tUpDynamoDBed:\t" + url);        
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -125,6 +131,7 @@ public class CrawlerWorker implements Runnable {
 //        String absHost = url2.getProtocol()+"://"+url2.getHost()+url2.getPath();
         Document document = Jsoup.parse(contentString, urlString);
         Elements links = document.select("a");
+        // List<String> out
         for (Element link : links) {
             String text = link.absUrl("abs:href");
             if (text.startsWith("mailto")) {
@@ -152,7 +159,7 @@ public class CrawlerWorker implements Runnable {
 //            Crawler.urlToDo.add(new URLEntry(url, toCrawlDate));
             
             // distribute url
-            distributor.distributeURL(text);
+            // distributor.distributeURL(text);
             
         }
         try{
@@ -167,11 +174,15 @@ public class CrawlerWorker implements Runnable {
 			// body / title missed
 		}
         entry.setOutLinks(outLinksBuff);
+        distributor.distributeURL(outLinksBuff);
     }
 
     //if we can access return true;
     public boolean checkRobot(URL url) {
-    		return Crawler.rule.canCrawl(url.getHost(), url.getPath());
+        log.debug("id"+id+"\tcheckroboting\t" + url);        
+        boolean returnvalue= Crawler.rule.canCrawl(url.getHost(), url.getPath());
+        log.debug("id"+id+"\tcheckroboted\t" + url);        
+        return returnvalue;
         //put all valid links in urlToDo;
 //        ArrayList<String> allowed;
 //        ArrayList<String> disallowed;
@@ -228,6 +239,7 @@ public class CrawlerWorker implements Runnable {
 
     @Override
     public void run() {
+        // threadName = Thread.currentThread().getName();
 
         while (Crawler.num.get()<Crawler.crawledNum) {//main loop
 //            URLEntry urlEntry = null;
