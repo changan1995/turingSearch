@@ -1,2 +1,2 @@
-ip-172-31-25-234.ec2.internal:5001
-ip-172-31-23-58.ec2.internal:5001
+ubuntu@ip-172-31-25-234.ec2.internal:5001
+ubuntu@ip-172-31-23-58.ec2.internal:5001

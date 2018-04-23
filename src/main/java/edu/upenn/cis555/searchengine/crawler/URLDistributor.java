@@ -99,7 +99,7 @@ public class URLDistributor{
 					for (String url : list.list){
 						try {
 							addURLToQueue(url);
-							// log.debug("Recieved " + url);
+							log.debug("Recieved " + url);
 						} catch(Exception e) {
 							continue;
 						}
@@ -176,7 +176,7 @@ public class URLDistributor{
 			os.write(toSend);
 			os.flush();
 			conn.getResponseCode();
-			// log.debug("Sent urls to " + address);
+			log.debug("Sent urls to " + address);
 			conn.disconnect();
 		} catch (Exception e) {
 			log.error("Sent urls to " + address + ": " + e.getMessage());
