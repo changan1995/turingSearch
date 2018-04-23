@@ -14,3 +14,7 @@ rm -r /store
 mvn clean install
 mvn exec:java@WebCrawler -Dexec.args="./config.txt 0"
 mvn exec:java@WebCrawler -Dexec.args="./config.txt 1 ./seedPage"
+
+
+nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 0" > log &
+nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 1 ./seedPage" > log &
