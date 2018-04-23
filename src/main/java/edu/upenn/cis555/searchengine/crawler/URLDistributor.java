@@ -2,6 +2,7 @@ package edu.upenn.cis555.searchengine.crawler;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,8 +27,8 @@ import spark.Spark;
 
 public class URLDistributor {
 	
-	class URLList {
-		LinkedList<String> list;
+	public static class URLList implements Serializable{
+		public LinkedList<String> list;
 		public URLList() {
 			list = new LinkedList<>();
 		}
@@ -90,7 +91,11 @@ public class URLDistributor {
 			@Override
 			public Object handle(Request arg0, Response arg1) {
 				try {
+					log.debug("get request");
 					URLList list = om.readValue(arg0.body(), URLList.class);
+					log.debug("body: " + arg0.body());
+					log.debug(list);
+					log.debug(list.list.size());
 					for (String url : list.list){
 						try {
 							addURLToQueue(url);
@@ -99,10 +104,10 @@ public class URLDistributor {
 							continue;
 						}
 					}
-				} catch (JsonParseException e) {
-				} catch (JsonMappingException e) {
-				} catch (IOException e) {
-				}
+				} catch (Exception e) {
+					log.debug(e.getMessage());
+					e.printStackTrace();
+				} 
 				return "recieved";
 			}
 
@@ -121,7 +126,7 @@ public class URLDistributor {
 				frontier.addURLToHead(url);
 			} else {
 				// add to BDB
-				db.addURL(random.nextLong(), url);
+				db.addURL(System.currentTimeMillis(), url);
 			}
 		} 
 	}
@@ -152,7 +157,8 @@ public class URLDistributor {
 			// if exceed the size, send to other node
 			if (buf.list.size() >= maxURLNum) {
 				sendToWorker(address, buf);
-				buffers.put(address, new URLList());
+				buf.list.clear();
+//				buffers.put(address, new URLList());
 			}
 		}
 	}
@@ -168,9 +174,10 @@ public class URLDistributor {
 			OutputStream os = conn.getOutputStream();
 			String jsonForList = om.writerWithDefaultPrettyPrinter().writeValueAsString(content);
 			byte[] toSend = jsonForList.getBytes();
+			log.debug(toSend);
 			os.write(toSend);
 			os.flush();
-			conn.getResponseCode();
+			log.debug(conn.getResponseCode());
 			log.debug("Sent urls to " + address);
 			conn.disconnect();
 		} catch (Exception e) {

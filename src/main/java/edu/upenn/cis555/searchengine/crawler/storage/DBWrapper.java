@@ -7,10 +7,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
+
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
+
+import edu.upenn.cis555.searchengine.crawler.URLFrontier;
 
 import com.sleepycat.bind.EntryBinding;
 import com.sleepycat.bind.serial.SerialBinding;
@@ -28,8 +32,12 @@ import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.DatabaseNotFoundException;
 
 public class DBWrapper {
+	
+	static Logger log = Logger.getLogger(DBWrapper.class);
 
 	public static String envDirectory = "./store";
+	
+	public static int endIdx;
 
 	private Environment myEnv;
 	// private static EntityStore store;
@@ -75,6 +83,7 @@ public class DBWrapper {
 	}
 
 	public synchronized void addURL(long time, String url) {
+//		log.debug("save " + url + " at " + time);
 		DatabaseEntry keyEntry = new DatabaseEntry();
 		DatabaseEntry dataEntry = new DatabaseEntry();
 		LongBinding.longToEntry(time, keyEntry);
@@ -96,14 +105,17 @@ public class DBWrapper {
 
 		ArrayList<String> list = new ArrayList<>();
 		int count = 0;
+		log.debug("Start get URLs");
 		while (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
 			String url = StringBinding.entryToString(dataEntry);
 			list.add(url);
+			log.debug("get:" + url);
 			URLFrontier.delete(null, keyEntry);
 			count++;
 			if (count >= limit) break;
 		}
 		URLFrontier.sync();
+		log.debug("Stop get URLs");
 		return list;
 	}
 	

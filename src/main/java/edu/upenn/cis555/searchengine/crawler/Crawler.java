@@ -42,7 +42,7 @@ public class Crawler {
 	// udp settings
 	public static InetAddress host = null;
 	public static DatagramSocket s = null;
-	public static final int THREADNUMS = 10;
+	public static final int THREADNUMS = 15;
 	public static int port;
 
 	public URLFrontier frontier;
