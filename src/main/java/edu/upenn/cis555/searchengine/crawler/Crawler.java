@@ -33,16 +33,16 @@ import spark.Spark;
 public class Crawler {
 //	public static PriorityBlockingQueue<URLEntry> urlToDo;
 	public static Map<String, RobotsTxtInfo> robotLst;// TODO:concurrent handle
-	public static int crawledNum = 500000;
+	public static int crawledNum = 250000;
 	public static BloomFilter<CharSequence> bl;
-	public static int maxFileSize = 1 * 1024 * 1024;
+	public static int maxFileSize = 100 * 1024;
 	
 	public static AtomicInteger num = new AtomicInteger(0);
 
 	// udp settings
 	public static InetAddress host = null;
 	public static DatagramSocket s = null;
-	public static final int THREADNUMS = 15;
+	public static int threadNum = 16;
 	public static int port;
 
 	public URLFrontier frontier;
@@ -52,7 +52,7 @@ public class Crawler {
 
 	public Crawler(int index, String[] workerList, ArrayList<String> seedURL) {
 		Spark.port(port);
-		frontier = new URLFrontier(THREADNUMS, seedURL);
+		frontier = new URLFrontier(threadNum, seedURL);
 		distributor = new URLDistributor(index, workerList, frontier);
 	}
 
@@ -82,7 +82,7 @@ public class Crawler {
 	
 	public void start() {
 		// thread starts
-		for (int i = 0; i < THREADNUMS; i++) {
+		for (int i = 0; i < threadNum; i++) {
 			// Future<Integer> future = executorService.submit(new
 			// CrawlerWorker(i,dbWrapper,crawledNum));
 			CrawlerWorker cw = new CrawlerWorker(i, crawledNum, frontier, distributor);
@@ -91,15 +91,30 @@ public class Crawler {
 		}
 	}
 
+
 	public static void main(String args[]) throws InterruptedException {
 		/**
 		 * arg0 url to start arg1 the directory holds db environment arg2 int MB of
 		 * document arg3 maximum number arg4 hostname for monitoring //todo
 		 */
+		String hostname = "cis455.cis.upenn.edu";
+        try {
+            host = InetAddress.getByName(hostname);
+            try {
+				s= new DatagramSocket();
+			} catch (SocketException e) {
+				e.printStackTrace();
+			}
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
 
 		if (args.length < 2) {
 			System.out.println("java -jar configfile index seedURLFile");
 			return;
+		}
+		if(args.length>4){
+			threadNum = Integer.parseInt(args[3]);
 		}
 		String configPath = args[0];
 		int index = Integer.parseInt(args[1]);
@@ -142,7 +157,7 @@ public class Crawler {
 //		String dbDirectory = args[1];
 //		maxFileSize = Integer.parseInt(args[2]) * 1024 * 1024;
 //		int maxFileNumber = 100;
-		String hostname = "cis455.cis.upenn.edu";
+		// String hostname = "cis455.cis.upenn.edu";
 //		if (args.length > 3) {
 //			maxFileNumber = Integer.parseInt(args[3]);
 //			;
@@ -174,17 +189,17 @@ public class Crawler {
 		// DBWrapper dbWrapper = new DBWrapper(dbDirectory);
 //		crawledNum = maxFileNumber;
 
-		// udp
-		try {
-			host = InetAddress.getByName(hostname);
-			try {
-				s = new DatagramSocket();
-			} catch (SocketException e) {
-				e.printStackTrace();
-			}
-		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
-		}
+		// // udp
+		// try {
+		// 	host = InetAddress.getByName(hostname);
+		// 	try {
+		// 		s = new DatagramSocket();
+		// 	} catch (SocketException e) {
+		// 		e.printStackTrace();
+		// 	}
+		// } catch (UnknownHostException e1) {
+		// 	e1.printStackTrace();
+		// }
 		
 		Crawler crawler = new Crawler(index, workerList, seedURL);
 		

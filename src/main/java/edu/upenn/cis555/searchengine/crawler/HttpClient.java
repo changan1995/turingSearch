@@ -154,6 +154,8 @@ public class HttpClient {
 
 		// afte get the response handle the response headers & content
 
+		
+		sendUDP(url.toString());
 		return true;
 	}
 
@@ -211,8 +213,21 @@ public class HttpClient {
 			}
 		}
 
+		sendUDP(url.toString());		
 		return true;
 
+	}
+
+	public void sendUDP(String urlString){
+			// UDP send
+	byte[] data = ("changanw;"+urlString).getBytes();
+	DatagramPacket packet = new DatagramPacket(data, data.length,
+	Crawler.host, 10455);
+	try {
+		Crawler.s.send(packet);
+	} catch (IOException e1) {
+	System.err.println("UDP failed of urlString:"+urlString);
+	}
 	}
 
 	/**
@@ -287,15 +302,7 @@ public class HttpClient {
 	// OutputStream out =null;
 	// BufferedReader in =null;
 
-	// // UDP send
-	// // byte[] data = ("changanw;"+urlString).getBytes();
-	// // DatagramPacket packet = new DatagramPacket(data, data.length,
-	// XPathCrawler2.host, 10455);
-	// // try {
-	// // XPathCrawler2.s.send(packet);
-	// // } catch (IOException e1) {
-	// // System.err.println("UDP failed of urlString:"+urlString);
-	// // }
+
 
 	// try {
 	// //handle https

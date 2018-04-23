@@ -15,6 +15,7 @@ import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
 
 import edu.upenn.cis555.searchengine.crawler.URLFrontier;
+import edu.upenn.cis555.searchengine.crawler.Crawler;
 
 import com.sleepycat.bind.EntryBinding;
 import com.sleepycat.bind.serial.SerialBinding;
@@ -50,7 +51,7 @@ public class DBWrapper {
 
 	private StoredClassCatalog classCatalog;
 	
-	private static final int maxURL = 50;
+	private static final int maxURL = Crawler.threadNum*5;
 	
 	public void setUp() {
 		EnvironmentConfig envConfig = new EnvironmentConfig();

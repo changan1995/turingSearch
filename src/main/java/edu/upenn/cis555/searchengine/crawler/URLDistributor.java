@@ -25,9 +25,13 @@ import spark.Response;
 import spark.Route;
 import spark.Spark;
 
-public class URLDistributor {
+public class URLDistributor{
 	
+	
+	// private static final long serialVersionUID = -1715283408490447605L;
+
 	public static class URLList implements Serializable{
+		private static final long serialVersionUID = 3484819397569692815L;
 		public LinkedList<String> list;
 		public URLList() {
 			list = new LinkedList<>();
@@ -93,13 +97,12 @@ public class URLDistributor {
 				try {
 					log.debug("get request");
 					URLList list = om.readValue(arg0.body(), URLList.class);
-					log.debug("body: " + arg0.body());
-					log.debug(list);
-					log.debug(list.list.size());
+
+					// log.debug("Recieved " + list.list.size());					
 					for (String url : list.list){
 						try {
 							addURLToQueue(url);
-							log.debug("Recieved " + url);
+							// log.debug("Recieved " + url);
 						} catch(Exception e) {
 							continue;
 						}
@@ -157,9 +160,10 @@ public class URLDistributor {
 			// if exceed the size, send to other node
 			if (buf.list.size() >= maxURLNum) {
 				sendToWorker(address, buf);
+				// buffers.put(address, new URLList());
 				buf.list.clear();
-//				buffers.put(address, new URLList());
 			}
+			
 		}
 	}
 	

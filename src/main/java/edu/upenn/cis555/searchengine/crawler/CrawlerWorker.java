@@ -89,9 +89,9 @@ public class CrawlerWorker implements Runnable {
             entry= new Entry(url);
             // TODO uncomment the DynamoDB
             String contentString =hc.getContent();
-//            db.setContentLink(entry, contentString);
+           db.setContentLink(entry, contentString);
             anaylize(url,contentString);
-//            db.add(entry);
+           db.add(entry);
             Crawler.num.incrementAndGet();
         } catch (Exception e) {
             e.printStackTrace();
@@ -229,7 +229,7 @@ public class CrawlerWorker implements Runnable {
     @Override
     public void run() {
 
-        while (!flag) {//main loop
+        while (Crawler.num.get()<Crawler.crawledNum) {//main loop
 //            URLEntry urlEntry = null;
             //take out one url
             String urlString;
@@ -293,7 +293,7 @@ public class CrawlerWorker implements Runnable {
                     //Doc is NOT in the DB                    
                     HttpClient hc = new HttpClient();
                     if (!hc.send("HEAD", urlString)) {
-                        crawledNum--;
+                        // crawledNum--;
                         continue;
                     }
                     if ((hc.getContentLength() < Crawler.maxFileSize) && typeValid(hc.getContentType())) {

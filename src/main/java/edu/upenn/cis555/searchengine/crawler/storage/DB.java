@@ -1,5 +1,6 @@
 package edu.upenn.cis555.searchengine.crawler.storage;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +27,7 @@ public class DB{
     private List<Entry> buffer; 
     private DynamoDBMapper mapper;
     private String bucketName ="cis455-crawler-changanw";
-    private String envDirectory = "crawled/";
+    private String envDirectory = "test/";
     
 
     private DB(){
@@ -51,8 +52,8 @@ public class DB{
 
     public void setContentLink(Entry entry,String content){
         try{
-
-            entry.setContentLink(mapper.createS3Link(bucketName, envDirectory+entry.getUrlString()+".txt"));
+            
+            entry.setContentLink(mapper.createS3Link(bucketName, envDirectory+URLEncoder.encode(entry.getUrlString(),"UTF-8")));
             // S#Object stringObject = new S3Object()
             entry.getContentLink().uploadFrom(content.getBytes());
         }catch(Throwable t){
