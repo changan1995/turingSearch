@@ -88,21 +88,26 @@ public class HttpClient {
 			return false;
 		}
 
-		if (https) {
-			return httpsSend(method, url);
-		} else {
-			return httpSend(method, url);
+		try {
+			if (https) {
+				return httpsSend(method, url);
+			} else {
+				return httpSend(method, url);
+			}
+		} catch (Exception e) {
+			return false;
 		}
 		// return responseSucces;
 
 	}
 
-	public boolean httpSend(String method, URL url) {
+	public boolean httpSend(String method, URL url) throws SocketTimeoutException {
 		body = "";
 		BufferedReader in = null;
 		try {
 			// get connection
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setConnectTimeout(5 * 1000);
 			// set headers
 			conn.setRequestProperty("accept", "*/*");
 			conn.setRequestProperty("connection", "Keep-Alive");
@@ -152,12 +157,13 @@ public class HttpClient {
 		return true;
 	}
 
-	public boolean httpsSend(String method, URL url) {
+	public boolean httpsSend(String method, URL url) throws SocketTimeoutException {
 		body = "";
 		BufferedReader in = null;
 		HttpsURLConnection httpsconn = null;
 		try {
 			httpsconn = (HttpsURLConnection) url.openConnection();
+			httpsconn.setConnectTimeout(5 * 1000);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;

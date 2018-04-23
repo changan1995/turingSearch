@@ -3,10 +3,12 @@ package edu.upenn.cis555.searchengine.crawler;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,15 +41,18 @@ public class URLDistributor {
 	
 	DBWrapper db;
 	HashMap<String, URLList> buffers;
+	Random random = new Random();
 	String[] workerList;
 	int index;
 	final ObjectMapper om = new ObjectMapper();
+	URLFrontier frontier;
 	
-	public URLDistributor(int index, String[] workerList) {
+	public URLDistributor(int index, String[] workerList, URLFrontier frontier) {
 		
 		// worker list
 		this.workerList = workerList;
 		this.index = index;
+		this.frontier = frontier;
 		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 		buffers = new HashMap<>();
 		for (int i = 0; i < workerList.length; i++) {
@@ -87,7 +92,12 @@ public class URLDistributor {
 				try {
 					URLList list = om.readValue(arg0.body(), URLList.class);
 					for (String url : list.list){
+						try {
 							addURLToQueue(url);
+							log.debug("Recieved " + url);
+						} catch(Exception e) {
+							continue;
+						}
 					}
 				} catch (JsonParseException e) {
 				} catch (JsonMappingException e) {
@@ -100,13 +110,19 @@ public class URLDistributor {
 	}
 	
 	
-	private void addURLToQueue(String url) {
+	private void addURLToQueue(String url) throws MalformedURLException {
 		// check duplicate url
 		if (!db.checkURLSeen(url)) {
 			// add url to queue
-			log.debug("Recieved " + url);
 			db.saveURLSeen(url);
-			db.addURL(System.currentTimeMillis(), url);
+			String host = new URL(url).getHost();
+			if (!frontier.hasHost(host) && !frontier.hitUpperBound()) {
+				// add to in memory queue
+				frontier.addURLToHead(url);
+			} else {
+				// add to BDB
+				db.addURL(random.nextLong(), url);
+			}
 		} 
 	}
 	
@@ -114,14 +130,10 @@ public class URLDistributor {
 	public void distributeURL(String url) {
 		try {
 			URL u = new URL(url);
-			int idx = Math.abs(u.getAuthority().hashCode()) % workerList.length;
+			int idx = Math.abs(u.getHost().hashCode()) % workerList.length;
 			if (index == idx) {
 				// still in the local node
-				if (!db.checkURLSeen(url)) {
-					// add url to queue
-					db.saveURLSeen(url);
-					db.addURL(System.currentTimeMillis(), url);
-				}
+				addURLToQueue(url);
 			} else {
 				// should be sent to other node
 				addToBuffer(workerList[idx], url);

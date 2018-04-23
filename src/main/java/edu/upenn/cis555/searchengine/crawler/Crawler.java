@@ -53,7 +53,7 @@ public class Crawler {
 	public Crawler(int index, String[] workerList, ArrayList<String> seedURL) {
 		Spark.port(port);
 		frontier = new URLFrontier(THREADNUMS, seedURL);
-		distributor = new URLDistributor(index, workerList);
+		distributor = new URLDistributor(index, workerList, frontier);
 	}
 
 	public static ArrayList<String> parseConfig(String path) throws IOException {
