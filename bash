@@ -10,3 +10,7 @@ t2.2xlarge
 
 ssh -i "~/.ec2/edu_sshkey.pem" ubuntu@ec2-184-72-100-180.compute-1.amazonaws.com
 sftp -i "~/.ec2/edu_sshkey.pem" ubuntu@ec2-184-72-100-180.compute-1.amazonaws.com
+rm -r /store
+mvn clean install
+mvn exec:java@WebCrawler -Dexec.args="./config.txt 0"
+mvn exec:java@WebCrawler -Dexec.args="./config.txt 1 ./seedPage"

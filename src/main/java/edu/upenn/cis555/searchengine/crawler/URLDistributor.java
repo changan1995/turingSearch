@@ -2,6 +2,7 @@ package edu.upenn.cis555.searchengine.crawler;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,7 +27,8 @@ import spark.Spark;
 
 public class URLDistributor {
 	
-	class URLList {
+	class URLList implements Serializable{
+		private static final long serialVersionUID = 3484819397569692815L;
 		LinkedList<String> list;
 		public URLList() {
 			list = new LinkedList<>();
