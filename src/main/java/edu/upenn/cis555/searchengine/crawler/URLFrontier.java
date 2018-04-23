@@ -32,6 +32,7 @@ public class URLFrontier {
 	HashSet<Integer> emptyQueue = new HashSet<>();
 	LinkedHashMap<String, Long> lastRelease;
 	ConcurrentHashMap<String, Integer> delayCache;
+	private long initTime=System.currentTimeMillis();
 	
 	int upperLimit;
 	
@@ -86,15 +87,15 @@ public class URLFrontier {
 			public void run() {
 				HashSet<Integer> emptyQueue = URLFrontier.this.emptyQueue;
 				ConcurrentHashMap<String, Integer> hostToQueue = URLFrontier.this.hostToQueue;
-				Queue<String> frontend = URLFrontier.this.frontend;
+				LinkedList<String> frontend = URLFrontier.this.frontend;
 				synchronized (emptyQueue) {
 					log.debug("Empty Queue" + emptyQueue.size());
 					log.debug("FrontQueue size:" + frontend.size());
 //					log.debug("Last release LRU: " + lastRelease.size());
 					log.debug("Crawled docs: " + Crawler.num.get());
 					log.error("Active thread:" + Thread.activeCount());
-					
-					if (emptyQueue.size() > 0.8 * numThreads * 6) {
+
+					if (frontend.size() > 0.8 * upperLimit) {
 						return;
 					}
 					Iterator<Integer> iter = emptyQueue.iterator();
@@ -231,7 +232,7 @@ public class URLFrontier {
 			release.releaseTime = System.currentTimeMillis() + getDelay(host) * 1000;
 			releaseHeap.put(release);
 		}
-		log.debug("Get " + url);
+		// log.debug("Get " + url);
 		return url;
 	}
 	

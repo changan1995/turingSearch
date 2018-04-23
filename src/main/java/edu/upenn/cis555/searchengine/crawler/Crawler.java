@@ -42,7 +42,7 @@ public class Crawler {
 	// udp settings
 	public static InetAddress host = null;
 	public static DatagramSocket s = null;
-	public static final int THREADNUMS = 10;
+	public static int THREADNUMS = 10;
 	public static int port;
 
 	public URLFrontier frontier;
@@ -100,6 +100,9 @@ public class Crawler {
 		if (args.length < 2) {
 			System.out.println("java -jar configfile index seedURLFile");
 			return;
+		}
+		if(args.length>4){
+			THREADNUMS = Integer.parseInt(args[3]);
 		}
 		String configPath = args[0];
 		int index = Integer.parseInt(args[1]);

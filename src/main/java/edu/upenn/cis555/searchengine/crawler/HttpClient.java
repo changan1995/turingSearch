@@ -137,7 +137,7 @@ public class HttpClient {
 				// }
 			}
 		} catch (Exception e) {
-			log.debug("error in send " + method + ": " + url.toString() + " " + e.getMessage());
+			// log.debug("error in send " + method + ": " + url.toString() + " " + e.getMessage());
 			return false;
 		}
 		// close in put stream

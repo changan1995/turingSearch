@@ -145,32 +145,10 @@
                 <configuration>
                     <mainClass>edu.upenn.cis555.searchengine.crawler.Crawler</mainClass>
                     <arguments>
-                        <argument>https://www.yahoo.com/</argument>
-                        <argument>./bdb</argument>
-                        <argument>10</argument>
-                        <argument>1000</argument>
-                    </arguments>
-                </configuration>
-            </execution>
-            <execution>
-                <id>Printout</id>
-                <goals><goal>java</goal></goals>
-                <configuration>
-                    <mainClass>edu.upenn.cis555.searchengine.crawler.logger.BDBPrint</mainClass>
-                    <arguments>
-                        <!-- <argument>http://crawltest.cis.upenn.edu/.</argument> -->
-                        <argument>./bdb</argument>
-                    </arguments>
-                </configuration>
-            </execution>
-            <execution>
-                <id>testDB</id>
-                <goals><goal>java</goal></goals>
-                <configuration>
-                    <mainClass>edu.upenn.cis555.searchengine.crawler.storage.S3Wrapper</mainClass>
-                    <arguments>
-                        <!-- <argument>http://crawltest.cis.upenn.edu/.</argument> -->
-                        <!-- <argument>.</argument> -->
+                        <argument>./config.txt</argument>
+                        <argument>0</argument>
+                        <argument>./seedPage</argument>
+                        <argument>5</argument>
                     </arguments>
                 </configuration>
             </execution>
