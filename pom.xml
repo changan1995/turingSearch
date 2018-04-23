@@ -148,7 +148,7 @@
                         <argument>./config.txt</argument>
                         <argument>0</argument>
                         <argument>./seedPage</argument>
-                        <argument>5</argument>
+                        <argument>25</argument>
                     </arguments>
                 </configuration>
             </execution>

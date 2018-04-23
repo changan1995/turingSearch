@@ -39,28 +39,29 @@ public class URLFrontier {
 	@SuppressWarnings("unchecked")
 	public URLFrontier(int numThreads, List<String> seedURLs) {
 		this.numThreads = numThreads;
+		int maxHostNum = numThreads*20;
 		frontend = new LinkedList<>();
 		hostToQueue = new ConcurrentHashMap<String, Integer>();
 		releaseHeap = new PriorityBlockingQueue<>(150);
-		backends = new Queue[6 * numThreads];
+		backends = new Queue[maxHostNum];
 		upperLimit = numThreads * 100;
-		lastRelease =  new LinkedHashMap<String, Long>(6 * numThreads * 5, (float) 0.75, true) {
+		lastRelease =  new LinkedHashMap<String, Long>(maxHostNum * 5, (float) 0.75, true) {
 			private static final long serialVersionUID = 2009731084826885027L;
 
 			@Override
 			protected boolean removeEldestEntry(java.util.Map.Entry<String, Long> eldest) {
-				return size() > 6 * numThreads * 5;
+				return size() > maxHostNum * 5;
 			}
 		};
 		delayCache =  new ConcurrentHashMap<>();
 		db = DBWrapper.getInstance();
 		int emptyIdx = 0;
-		for (int i = 0; i < 6 * numThreads; i++) {
+		for (int i = 0; i < maxHostNum; i++) {
 			backends[i] = new LinkedList<String>();
 		}
 		
 		for (String url : seedURLs) {
-			if (emptyIdx < 6 * numThreads) {
+			if (emptyIdx < maxHostNum) {
 				if (addToBackEnd(url, emptyIdx)) emptyIdx++;
 			}
 			else {
@@ -69,7 +70,7 @@ public class URLFrontier {
 		}
 		
 		for (String url : db.getURLs(-1)) {
-			if (emptyIdx < 6 * numThreads) {
+			if (emptyIdx < maxHostNum) {
 				if (addToBackEnd(url, emptyIdx)) emptyIdx++;
 			}
 			else {
@@ -77,7 +78,7 @@ public class URLFrontier {
 			}
 		}
 		
-		while (emptyIdx < 6 * numThreads) {
+		while (emptyIdx < maxHostNum) {
 			emptyQueue.add(emptyIdx);
 			emptyIdx++;
 		}
@@ -288,7 +289,7 @@ public class URLFrontier {
 	
 	public void addURLToHead(String url) {
 		synchronized (frontend) {
-			frontend.addFirst(url);
+			frontend.addLast(url);
 		}
 	}
 	
@@ -304,7 +305,7 @@ public class URLFrontier {
 	
 	public boolean hitUpperBound() {
 		synchronized (frontend) {
-			return frontend.size() >= upperLimit;
+			return frontend.size() >= upperLimit*0.3;
 		}
 	}
 
