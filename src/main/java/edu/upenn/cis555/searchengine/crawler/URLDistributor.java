@@ -158,8 +158,10 @@ public class URLDistributor{
 			// if exceed the size, send to other node
 			if (buf.list.size() >= maxURLNum) {
 				sendToWorker(address, buf);
-				buffers.put(address, new URLList());
+				// buffers.put(address, new URLList());
+				buf.list.clear();
 			}
+			
 		}
 	}
 	
