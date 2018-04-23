@@ -54,6 +54,9 @@ public class DBWrapper {
 	
 	private static final int maxURL = Crawler.threadNum*5;
 	
+	private int i=0;
+	private int j=0;
+
 	public void setUp() {
 		EnvironmentConfig envConfig = new EnvironmentConfig();
 		envConfig.setAllowCreate(true);
@@ -86,6 +89,7 @@ public class DBWrapper {
 
 	public synchronized void addURL(long time, String url) {
 //		log.debug("save " + url + " at " + time);
+		log.debug("add url"+ i);
 		DatabaseEntry keyEntry = new DatabaseEntry();
 		DatabaseEntry dataEntry = new DatabaseEntry();
 		LongBinding.longToEntry(time, keyEntry);
@@ -94,6 +98,7 @@ public class DBWrapper {
 		URLFrontier.put(null, keyEntry, dataEntry);
 //		URLFrontier.put(null, keyEntry, dataEntry);
 		URLFrontier.sync();
+		log.debug("add url end"+i++);		
 //		txn.commit();
 	}
 
@@ -149,6 +154,7 @@ public class DBWrapper {
 //	}
 	
 	public void saveURLSeen(String url) {
+		log.debug("add seen"+j);
 		DatabaseEntry keyEntry = new DatabaseEntry();
 		DatabaseEntry dataEntry = new DatabaseEntry();
 		StringBinding.stringToEntry(url, keyEntry);
@@ -157,6 +163,8 @@ public class DBWrapper {
 		URLSeen.put(null, keyEntry, dataEntry);
 //		URLFrontier.put(null, keyEntry, dataEntry);
 		URLSeen.sync();
+		log.debug("add seen"+j++);
+		
 	}
 	
 	
