@@ -75,7 +75,7 @@ public class CrawlerWorker implements Runnable {
         if (!hc.send("GET", url)) {
             return;
         }
-        // log.debug("Downloading: " + url);        
+        log.debug("Downloading: " + url);        
         //put the file in to db. prepare for multiple value
         // txn = dbWrapper.getTransaction();
         try {

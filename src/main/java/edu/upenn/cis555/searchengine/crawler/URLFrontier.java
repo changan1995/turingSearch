@@ -95,6 +95,8 @@ public class URLFrontier {
 //					log.debug("Last release LRU: " + lastRelease.size());
 					log.debug("Crawled docs: " + Crawler.num.get());
 					log.error("Active thread:" + Thread.activeCount());
+					log.debug("Release heap size: " + releaseHeap.size());
+			
 
 					if (frontend.size() > 0.8 * upperLimit) {
 						return;
@@ -200,7 +202,7 @@ public class URLFrontier {
 		TTR release;
 		synchronized (releaseHeap) {
 			release = releaseHeap.take();
-			log.debug("Release heap size: " + releaseHeap.size());
+			// log.debug("Release heap size: " + releaseHeap.size());
 		}
 		long wait = release.releaseTime - System.currentTimeMillis();
 		if (wait > 0) {

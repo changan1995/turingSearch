@@ -100,7 +100,7 @@ public class URLDistributor{
 					for (String url : list.list){
 						try {
 							addURLToQueue(url);
-							log.debug("Recieved " + url);
+							// log.debug("Recieved " + url);
 						} catch(Exception e) {
 							continue;
 						}
@@ -174,11 +174,11 @@ public class URLDistributor{
 			OutputStream os = conn.getOutputStream();
 			String jsonForList = om.writerWithDefaultPrettyPrinter().writeValueAsString(content);
 			byte[] toSend = jsonForList.getBytes();
-			log.debug("Sent urls to " + toSend.length);			
+			// log.debug("Sent urls to " + toSend.length);			
 			os.write(toSend);
 			os.flush();
 			conn.getResponseCode();
-			log.debug("Sent urls to " + address);
+			// log.debug("Sent urls to " + address);
 			conn.disconnect();
 		} catch (Exception e) {
 			log.error("Sent urls to " + address + ": " + e.getMessage());
