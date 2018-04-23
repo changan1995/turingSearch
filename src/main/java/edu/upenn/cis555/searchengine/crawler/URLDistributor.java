@@ -1,15 +1,20 @@
 package edu.upenn.cis555.searchengine.crawler;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
 import spark.Request;
@@ -19,67 +24,74 @@ import spark.Spark;
 
 public class URLDistributor {
 	
+	class URLList {
+		LinkedList<String> list;
+		public URLList() {
+			list = new LinkedList<>();
+		}
+		
+	} 
+	
 	static Logger log = Logger.getLogger(URLDistributor.class);
 	
-	private static final int maxURLNum = 20;
+	// flush buffer when exceed this limit
+	private static final int maxURLNum = 50;
 	
 	DBWrapper db;
-	HashSet<String> urlSeen;
-	HashMap<String, MyStringBuilder> buffers;
+	HashMap<String, URLList> buffers;
 	String[] workerList;
 	int index;
+	final ObjectMapper om = new ObjectMapper();
 	
-	private class MyStringBuilder {
-		StringBuilder sb = new StringBuilder();
-		int count = 0;
-	}
-
 	public URLDistributor(int index, String[] workerList) {
 		
 		// worker list
 		this.workerList = workerList;
 		this.index = index;
+		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+		buffers = new HashMap<>();
 		for (int i = 0; i < workerList.length; i++) {
 			if (i != index) {
-				buffers.put(workerList[i], new MyStringBuilder());
+				buffers.put(workerList[i], new URLList());
 			}
 		}
 		db = DBWrapper.getInstance();
-		HashSet<String> set = null;
-		try {
-			set = db.getURLSeen();
-		} catch(Exception e) {
-			log.debug("Error get URLSeen.");
-		}
-		if (set != null) {
-			urlSeen = set;
-		} else {
-			urlSeen = new HashSet<>();
-		}
-		log.debug("URLSeen size:" + set.size());
+//		try {
+//			set = db.getURLSeen();
+//		} catch(Exception e) {
+//			log.debug("Error get URLSeen.");
+//		}
+//		if (set != null) {
+//			urlSeen = set;
+//		} else {
+//			urlSeen = new HashSet<>();
+//		}
+//		log.debug("URLSeen size:" + set.size());
 		
-		TimerTask seenTask = new TimerTask() {
-			@Override
-			public void run() {
-				db.saveURLSeen(urlSeen);
-				log.debug("Saved all seen url to BDBs");
-			}
-		};
-		
-		Timer timer = new Timer();
-		// save urlseen every 30 minutes
-		timer.scheduleAtFixedRate(seenTask, 5 * 1000, 10 * 1000);
+//		TimerTask seenTask = new TimerTask() {
+//			@Override
+//			public void run() {
+//				db.saveURLSeen(urlSeen);
+//				log.debug("Saved all seen url to BDBs");
+//			}
+//		};
+//		
+//		Timer timer = new Timer();
+//		// save urlseen every 30 minutes
+//		timer.scheduleAtFixedRate(seenTask, 5 * 1000, 10 * 1000);
 		
 		Spark.post("/push", new Route() {
 
 			@Override
 			public Object handle(Request arg0, Response arg1) {
-				String body = arg0.body();
-				for (String url : body.split("\n")) {
-					try {
-						addURLToQueue(new URL(url));
-					} catch (MalformedURLException e) {
+				try {
+					URLList list = om.readValue(arg0.body(), URLList.class);
+					for (String url : list.list){
+							addURLToQueue(url);
 					}
+				} catch (JsonParseException e) {
+				} catch (JsonMappingException e) {
+				} catch (IOException e) {
 				}
 				return "recieved";
 			}
@@ -88,14 +100,13 @@ public class URLDistributor {
 	}
 	
 	
-	private void addURLToQueue(URL url) {
+	private void addURLToQueue(String url) {
 		// check duplicate url
-		String u = url.toString();
-		if (!urlSeen.contains(u)) {
+		if (!db.checkURLSeen(url)) {
 			// add url to queue
-			log.debug("Recieved " + u);
-			urlSeen.add(u);
-			db.addURL(System.currentTimeMillis(), u);
+			log.debug("Recieved " + url);
+			db.saveURLSeen(url);
+			db.addURL(System.currentTimeMillis(), url);
 		} 
 	}
 	
@@ -106,9 +117,9 @@ public class URLDistributor {
 			int idx = Math.abs(u.getAuthority().hashCode()) % workerList.length;
 			if (index == idx) {
 				// still in the local node
-				if (!urlSeen.contains(url)) {
+				if (!db.checkURLSeen(url)) {
 					// add url to queue
-					urlSeen.add(url);
+					db.saveURLSeen(url);
 					db.addURL(System.currentTimeMillis(), url);
 				}
 			} else {
@@ -116,27 +127,25 @@ public class URLDistributor {
 				addToBuffer(workerList[idx], url);
 			} 
 		} catch (Exception e) {
-			System.out.println("distribute url: " + url);
-			e.printStackTrace();
+			log.error("Distribute url: " + url + " " + e.getMessage());
 			return;
 		}
 	}
 	
 	private void addToBuffer(String address, String url) {
-		MyStringBuilder buf = buffers.get(address);
+		URLList buf = buffers.get(address);
 		synchronized (buf) {
-			buf.sb.append(url + "\n");
-			buf.count++;
+			buf.list.add(url);
+//			log.debug(address + " buf size:" + buf.list.size());
 			// if exceed the size, send to other node
-			if (buf.count >= maxURLNum) {
-				sendToWorker(address, buf.sb.toString());
-				buf.sb.setLength(0);
-				buf.count = 0;
+			if (buf.list.size() >= maxURLNum) {
+				sendToWorker(address, buf);
+				buffers.put(address, new URLList());
 			}
 		}
 	}
 	
-	private void sendToWorker(String address, String content) {
+	private void sendToWorker(String address, URLList content) {
 		try {
 			URL url = new URL("http://" + address + "/push");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -145,14 +154,15 @@ public class URLDistributor {
 			
 			// send this to /push as a POST!
 			OutputStream os = conn.getOutputStream();
-			byte[] toSend = content.getBytes();
+			String jsonForList = om.writerWithDefaultPrettyPrinter().writeValueAsString(content);
+			byte[] toSend = jsonForList.getBytes();
 			os.write(toSend);
 			os.flush();
 			conn.getResponseCode();
 			log.debug("Sent urls to " + address);
 			conn.disconnect();
 		} catch (Exception e) {
-			log.error("Sent urls to" + address + ": " + e.getMessage());
+			log.error("Sent urls to " + address + ": " + e.getMessage());
 		}
 		
 	}

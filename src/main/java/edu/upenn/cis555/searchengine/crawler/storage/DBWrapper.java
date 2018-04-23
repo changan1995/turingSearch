@@ -15,6 +15,7 @@ import com.sleepycat.je.OperationStatus;
 import com.sleepycat.bind.EntryBinding;
 import com.sleepycat.bind.serial.SerialBinding;
 import com.sleepycat.bind.serial.StoredClassCatalog;
+import com.sleepycat.bind.tuple.BooleanBinding;
 import com.sleepycat.bind.tuple.IntegerBinding;
 import com.sleepycat.bind.tuple.LongBinding;
 import com.sleepycat.bind.tuple.StringBinding;
@@ -85,7 +86,10 @@ public class DBWrapper {
 //		txn.commit();
 	}
 
-	public synchronized ArrayList<String> getURLs() {
+	public synchronized ArrayList<String> getURLs(int limit) {
+		if (limit == -1) {
+			limit = maxURL;
+		}
 		DatabaseEntry keyEntry = new DatabaseEntry();
 		DatabaseEntry dataEntry = new DatabaseEntry();
 		Cursor cursor = URLFrontier.openCursor(null, null);
@@ -97,38 +101,60 @@ public class DBWrapper {
 			list.add(url);
 			URLFrontier.delete(null, keyEntry);
 			count++;
-			if (count >= maxURL) break;
+			if (count >= limit) break;
 		}
 		URLFrontier.sync();
 		return list;
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void saveURLSeen(HashSet<String> set) {
+//	@SuppressWarnings({ "rawtypes", "unchecked" })
+//	public void saveURLSeen(HashSet<String> set) {
+//		DatabaseEntry keyEntry = new DatabaseEntry();
+//		DatabaseEntry dataEntry = new DatabaseEntry();
+//		IntegerBinding.intToEntry(0, keyEntry);
+//		EntryBinding dataBinding = new SerialBinding(classCatalog, URLSeen.class);
+//		URLSeen seen = new URLSeen();
+//		seen.urlSeen = set;
+//	    dataBinding.objectToEntry(seen, dataEntry);
+//		URLSeen.put(null, keyEntry, dataEntry);
+//		URLSeen.sync();
+//	}
+	
+//	@SuppressWarnings({ "rawtypes", "unchecked" })
+//	public HashSet<String> getURLSeen() {
+//		DatabaseEntry keyEntry = new DatabaseEntry();
+//		DatabaseEntry dataEntry = new DatabaseEntry();
+//		Cursor cursor = URLSeen.openCursor(null, null);
+//		EntryBinding dataBinding = new SerialBinding(classCatalog, URLSeen.class);
+//		if (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
+//			URLSeen seen = (URLSeen) dataBinding.entryToObject(dataEntry);
+//			return seen.urlSeen;
+//		} else {
+//			return new HashSet<String>();
+//		}
+//	}
+	
+	public void saveURLSeen(String url) {
 		DatabaseEntry keyEntry = new DatabaseEntry();
 		DatabaseEntry dataEntry = new DatabaseEntry();
-		IntegerBinding.intToEntry(0, keyEntry);
-		EntryBinding dataBinding = new SerialBinding(classCatalog, URLSeen.class);
-		URLSeen seen = new URLSeen();
-		seen.urlSeen = set;
-	    dataBinding.objectToEntry(seen, dataEntry);
+		StringBinding.stringToEntry(url, keyEntry);
+		BooleanBinding.booleanToEntry(true, dataEntry);
+//		Transaction txn = myEnv.beginTransaction(null, null);
 		URLSeen.put(null, keyEntry, dataEntry);
+//		URLFrontier.put(null, keyEntry, dataEntry);
 		URLSeen.sync();
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public HashSet<String> getURLSeen() {
+	
+	public boolean checkURLSeen(String url) {
 		DatabaseEntry keyEntry = new DatabaseEntry();
 		DatabaseEntry dataEntry = new DatabaseEntry();
-		Cursor cursor = URLSeen.openCursor(null, null);
-		EntryBinding dataBinding = new SerialBinding(classCatalog, URLSeen.class);
-		if (cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
-			URLSeen seen = (URLSeen) dataBinding.entryToObject(dataEntry);
-			return seen.urlSeen;
-		} else {
-			return new HashSet<String>();
+		StringBinding.stringToEntry(url, keyEntry);
+		if (URLSeen.get(null, keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
+			return true;
 		}
+		return false;
 	}
-
+	
 
 }

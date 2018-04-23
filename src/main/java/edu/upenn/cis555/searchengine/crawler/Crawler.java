@@ -43,10 +43,11 @@ public class Crawler {
 	public static InetAddress host = null;
 	public static DatagramSocket s = null;
 	public static final int THREADNUMS = 10;
-	public static final int port = 5000;
+	public static int port;
 
 	public URLFrontier frontier;
 	public URLDistributor distributor;
+	public static RobotsRule rule = new RobotsRule();
 	private ExecutorService executorService = Executors.newCachedThreadPool();
 
 	public Crawler(int index, String[] workerList, ArrayList<String> seedURL) {
@@ -56,6 +57,18 @@ public class Crawler {
 	}
 
 	public static ArrayList<String> parseConfig(String path) throws IOException {
+		File config = new File(path);
+		BufferedReader reader = new BufferedReader(new FileReader(config));
+		String line;
+		ArrayList<String> list = new ArrayList<>();
+		while ((line = reader.readLine()) != null) {
+			list.add(line);
+		}
+		reader.close();
+		return list;
+	}
+	
+	public static ArrayList<String> parseSeed(String path) throws IOException {
 		File config = new File(path);
 		BufferedReader reader = new BufferedReader(new FileReader(config));
 		String line;
@@ -85,7 +98,7 @@ public class Crawler {
 		 */
 
 		if (args.length < 2) {
-			System.out.println("java -jar configfile index seedURL");
+			System.out.println("java -jar configfile index seedURLFile");
 			return;
 		}
 		String configPath = args[0];
@@ -101,11 +114,21 @@ public class Crawler {
 		
 		String[] workerList = workers.toArray(new String[workers.size()]);
 		
+		port = Integer.parseInt(workerList[index].split(":")[1]);
+		
 		ArrayList<String> seedURL = new ArrayList<>();
-		for (int i = 2; i < args.length; ++i) {
-			seedURL.add(args[i]);
+		
+		if (args.length >= 3) {
+			String seedFile = args[2];
+			try {
+				seedURL = parseSeed(seedFile);
+			} catch (IOException e) {
+				System.out.println("Parse config seed file error.");
+				return;
+			}
 		}
 		
+		DBWrapper.envDirectory += "" + index;
 		DBWrapper db = DBWrapper.getInstance();
 		db.setUp();
 

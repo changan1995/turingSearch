@@ -13,6 +13,8 @@ public class Entry{
     private String urlString;
     private S3Link contentLink;
     private Set<String> outLinks;
+    private String title;
+    private String bodySample;
 
     public Entry(String urlString,S3Link contentLink,Set<String> outLinks){
         this.urlString=urlString;
@@ -62,5 +64,23 @@ public class Entry{
     // public void addOutLinks(String outLink){
     //     this.outLinks.add(outLink);
     // }
+	@DynamoDBAttribute(attributeName = "title") 
+    public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+    @DynamoDBAttribute(attributeName = "bodySample") 
+	public String getBodySample() {
+		return bodySample;
+	}
+
+
+	public void setBodySample(String bodySample) {
+		this.bodySample = bodySample;
+	}
     
 }

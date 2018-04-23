@@ -14,6 +14,7 @@ import com.google.common.hash.Funnels;
 import com.jayway.jsonpath.spi.cache.LRUCache;
 import com.sleepycat.je.Transaction;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -32,6 +33,8 @@ import edu.upenn.cis555.searchengine.crawler.storage.Entry;
 import edu.upenn.cis555.searchengine.crawler.structure.URLEntry;
 
 public class CrawlerWorker implements Runnable {
+	
+	static Logger log = Logger.getLogger(CrawlerWorker.class);
     // public static BlockingQueue<URL> urlToDo;//add seen url
     // public static BlockingQueue<URL> urlDone;
     private boolean flag = false;
@@ -43,6 +46,7 @@ public class CrawlerWorker implements Runnable {
     private long toCrawlDate;
     private int id;
     private DB db;
+    public static final int bodyLength = 350;
     // private LRUCache 
     // private BloomFilter<CharSequence> bl;
     private int crawledNum;
@@ -50,6 +54,7 @@ public class CrawlerWorker implements Runnable {
     // public static String dbDirectory;
     private URLFrontier frontier;
 	private URLDistributor distributor;
+	public static Pattern pattern = Pattern.compile("^http[s]?://.*(facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|tumblr)\\.com.*");
 
     public CrawlerWorker(int id, int crawledNum, URLFrontier frontier, URLDistributor distributor){
         this.id =id;
@@ -62,18 +67,15 @@ public class CrawlerWorker implements Runnable {
         // private PriorityQueue<URLEntry> urlToDo = Crawler.urlToDo;
     }
 
-    public void download(URLEntry urlEntry) {
+    public void download(String url) {
         // }
-        String url =urlEntry.getUrl().toString();
+//        String url =urlEntry.getUrl().toString();
         HttpClient hc = new HttpClient();
-        String blackLst = "facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|tumblr";
-        if (Pattern.matches(blackLst, url)) {
+
+        if (!hc.send("GET", url)) {
             return;
         }
-        if (!hc.send("GET", urlEntry)) {
-            return;
-        }
-        System.out.println("downloading " + url);        
+        log.debug("Downloading: " + url);        
         //put the file in to db. prepare for multiple value
         // txn = dbWrapper.getTransaction();
         try {
@@ -88,8 +90,9 @@ public class CrawlerWorker implements Runnable {
             // TODO uncomment the DynamoDB
             String contentString =hc.getContent();
 //            db.setContentLink(entry, contentString);
-            anaylize(url,contentString,hc.getContentType());
+            anaylize(url,contentString);
 //            db.add(entry);
+            Crawler.num.incrementAndGet();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,100 +114,112 @@ public class CrawlerWorker implements Runnable {
     }
 
     //put links generated from JSOUP document to urlToDo, and filter some obviously we dont want
-    public void anaylize(String urlString,String contentString, String contentType) {
-        if (!contentType.toLowerCase().contains("htm")) {
-            return;
-        }
-        URL url2=null;
+    public void anaylize(String urlString,String contentString) {
+//        URL url2=null;
         Set<String> outLinksBuff =new HashSet<>();
-		try {
-			url2 = new URL(urlString);
-		} catch (MalformedURLException e1) {
-			e1.printStackTrace();
-		}
-        String absHost = url2.getProtocol()+"://"+url2.getHost()+url2.getPath();
-        Document document = Jsoup.parse(contentString,absHost);
+//		try {
+//			url2 = new URL(urlString);
+//		} catch (MalformedURLException e1) {
+//			e1.printStackTrace();
+//		}
+//        String absHost = url2.getProtocol()+"://"+url2.getHost()+url2.getPath();
+        Document document = Jsoup.parse(contentString, urlString);
         Elements links = document.select("a");
         for (Element link : links) {
             String text = link.absUrl("abs:href");
-            // String pattern = "^.*\\.(png|jpg|pdf|docx|pptx)$";
-            String blackLst = "/[.](jpeg)|(jpg)|(gif)|(png)$|facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|tumblr/gim";
-            if (Pattern.matches(blackLst, text) || text.contains("@")) {
+            if (text.startsWith("mailto")) {
+            		continue;
+            }
+            if (pattern.matcher(text).find()) {
                 continue;
             }
+            if (text.contains("wikipedia") && !text.contains("en.wikipedia")) {
+            		continue;
+            }
             // System.out.println(doc.getUrl()+"\t\t"+text);
-            URL url=null;
 			try {
-				url = new URL(text);
+				URL url = new URL(text);
 			} catch (MalformedURLException e) {
                 // System.out.println("nullpointer"+text);
                 // e.printStackTrace();
                 continue;
             }
             // if(url!=null)
-            outLinksBuff.add(url.toString());
+            outLinksBuff.add(text);
 //            if(Crawler.urlToDo.size()>100){
 //                Crawler.urlToDo.poll();
 //            }
 //            Crawler.urlToDo.add(new URLEntry(url, toCrawlDate));
             
             // distribute url
-            distributor.distributeURL(url.toString());
+            distributor.distributeURL(text);
             
         }
+        try{
+			String body = document.body().text();
+			if (body.length() > bodyLength) {
+				entry.setBodySample(body.substring(0, bodyLength));
+			} else {
+				entry.setBodySample(body);
+			}
+			entry.setTitle(document.title());
+		} catch (NullPointerException e) {
+			// body / title missed
+		}
         entry.setOutLinks(outLinksBuff);
     }
 
     //if we can access return true;
     public boolean checkRobot(URL url) {
+    		return Crawler.rule.canCrawl(url.getHost(), url.getPath());
         //put all valid links in urlToDo;
-        ArrayList<String> allowed;
-        ArrayList<String> disallowed;
-        URLInfo urlInfo = new URLInfo(url.toString());
-        String absoluteRoot = urlInfo.getAbsoluteRoot();
-        String hostName = urlInfo.getHostName();
-        String agent = null;
-        robot = Crawler.robotLst.get(hostName);
-        if (robot == null) {
-            //new host found, download the robot
-            // lastCrawedTime = new Long(0);
-            HttpClient hc = new HttpClient();
-            if (!hc.send("GET", new URLEntry("http://" + url.getHost() + "/robots.txt", System.currentTimeMillis()))) { //turn to absolute address
-                robot = new RobotsTxtInfo("User-agent: *", absoluteRoot);
-                Crawler.robotLst.put(hostName, robot);
-                return true;
-            }
-            robot = new RobotsTxtInfo(hc.getContent(), absoluteRoot);
-            Crawler.robotLst.put(hostName, robot);
-        }
-        //find allowed/disallowed
-        if (robot.containsUserAgent("cis455crawler")) {
-            agent = "cis455crawler";
-        } else if (robot.containsUserAgent("*")) {
-            agent = "*";
-        } else {
-            return true;
-        }
-
-        allowed = robot.getAllowedLinks(agent);
-        disallowed = robot.getDisallowedLinks(agent);
-        if (disallowed == null) {
-            return true;
-        }
-        if (disallowed.size() == 0) {
-            return true;
-        }
-        for (String s : disallowed) {
-            // System.out.println(s);
-            if (urlInfo.getUrlNoPort().startsWith(s)) {
-                return false;
-            }
-        }
-        // System.out.println(id+"gets ");
-        toCrawlDate = robot.getNextCrawlDate(agent);
-        // System.out.println(id+"release ");
-
-        return true;
+//        ArrayList<String> allowed;
+//        ArrayList<String> disallowed;
+//        URLInfo urlInfo = new URLInfo(url.toString());
+//        String absoluteRoot = urlInfo.getAbsoluteRoot();
+//        String hostName = urlInfo.getHostName();
+//        String agent = null;
+//        robot = Crawler.robotLst.get(hostName);
+//        if (robot == null) {
+//            //new host found, download the robot
+//            // lastCrawedTime = new Long(0);
+//            HttpClient hc = new HttpClient();
+//            if (!hc.send("GET", new URLEntry("http://" + url.getHost() + "/robots.txt", System.currentTimeMillis()))) { //turn to absolute address
+//                robot = new RobotsTxtInfo("User-agent: *", absoluteRoot);
+//                Crawler.robotLst.put(hostName, robot);
+//                return true;
+//            }
+//            robot = new RobotsTxtInfo(hc.getContent(), absoluteRoot);
+//            Crawler.robotLst.put(hostName, robot);
+//        }
+//        //find allowed/disallowed
+//        if (robot.containsUserAgent("cis455crawler")) {
+//            agent = "cis455crawler";
+//        } else if (robot.containsUserAgent("*")) {
+//            agent = "*";
+//        } else {
+//            return true;
+//        }
+//
+//        allowed = robot.getAllowedLinks(agent);
+//        disallowed = robot.getDisallowedLinks(agent);
+//        if (disallowed == null) {
+//            return true;
+//        }
+//        if (disallowed.size() == 0) {
+//            return true;
+//        }
+//        for (String s : disallowed) {
+//            // System.out.println(s);
+//            if (urlInfo.getUrlNoPort().startsWith(s)) {
+//                return false;
+//            }
+//        }
+//        // System.out.println(id+"gets ");
+//        toCrawlDate = robot.getNextCrawlDate(agent);
+//        // System.out.println(id+"release ");
+//
+//        return true;
     }
 
     // public CrawlerWorker(int id){
@@ -215,15 +230,15 @@ public class CrawlerWorker implements Runnable {
     public void run() {
 
         while (!flag) {//main loop
-            URLEntry urlEntry = null;
+//            URLEntry urlEntry = null;
             //take out one url
-            String url;
+            String urlString;
 			try {
-				url = frontier.getURL();
+				urlString = frontier.getURL();
 			} catch (InterruptedException e2) {
 				continue;
 			}
-			urlEntry = new URLEntry(url, 0);
+//			urlEntry = new URLEntry(url, 0);
 //            if (Crawler.urlToDo.isEmpty()) {
 ////                flag = true;
 //                // try {
@@ -242,18 +257,17 @@ public class CrawlerWorker implements Runnable {
 //            URL urlCurrent = urlEntry.getUrl();
             URL urlCurrent;
 			try {
-				urlCurrent = new URL(url);
+				urlCurrent = new URL(urlString);
 			} catch (MalformedURLException e1) {
 				continue;
 			}
             //Robot check
             if (!checkRobot(urlCurrent)) {
-                System.out.println("not allowed: "+urlCurrent.toString());
+                log.debug("Not allowed: "+urlCurrent.toString());
                 continue;
             }
 
             //send head to check if we need to do download();
-            String urlString = urlCurrent.toString();
             try {
                 // Doc doc = docDB.get(urlString);
                 // filter.put(object);
@@ -278,13 +292,12 @@ public class CrawlerWorker implements Runnable {
                 } else {
                     //Doc is NOT in the DB                    
                     HttpClient hc = new HttpClient();
-                    if (!hc.send("HEAD", urlEntry)) {
+                    if (!hc.send("HEAD", urlString)) {
                         crawledNum--;
                         continue;
                     }
                     if ((hc.getContentLength() < Crawler.maxFileSize) && typeValid(hc.getContentType())) {
-                        download(urlEntry);
-                        Crawler.num.incrementAndGet();
+                        download(urlString);
                     } else {
                         continue;
                     }
