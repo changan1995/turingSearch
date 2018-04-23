@@ -76,14 +76,14 @@ public class URLFrontier {
 			}
 		}
 		
-		// for (String url : db.getURLs(-1)) {
-		// 	if (emptyIdx < maxHostNum) {
-		// 		if (addToBackEnd(url, emptyIdx)) emptyIdx++;
-		// 	}
-		// 	else {
-		// 		frontend.add(url);
-		// 	}
-		// }
+		for (String url : db.getURLs(-1)) {
+			if (emptyIdx < maxHostNum) {
+				if (addToBackEnd(url, emptyIdx)) emptyIdx++;
+			}
+			else {
+				frontend.add(url);
+			}
+		}
 		
 		while (emptyIdx < maxHostNum) {
 			emptyQueue.add(emptyIdx);

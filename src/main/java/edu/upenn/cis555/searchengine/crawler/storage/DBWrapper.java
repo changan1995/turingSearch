@@ -46,6 +46,7 @@ public class DBWrapper {
 	private Database URLFrontier;
 	private Database URLSeen;
 	private Database classDB;
+	// private 
 
 	private static DBWrapper db;
 
