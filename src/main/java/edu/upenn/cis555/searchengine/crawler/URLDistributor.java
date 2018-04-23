@@ -96,6 +96,7 @@ public class URLDistributor{
 			public Object handle(Request arg0, Response arg1) {
 				try {
 					URLList list = om.readValue(arg0.body(), URLList.class);
+					log.debug("Recieved " + list.list.size());					
 					for (String url : list.list){
 						try {
 							addURLToQueue(url);
