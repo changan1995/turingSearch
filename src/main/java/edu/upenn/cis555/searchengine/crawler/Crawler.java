@@ -35,7 +35,7 @@ public class Crawler {
 	public static Map<String, RobotsTxtInfo> robotLst;// TODO:concurrent handle
 	public static int crawledNum = 250000;
 	public static BloomFilter<CharSequence> bl;
-	public static int maxFileSize = 1 * 1024 * 1024;
+	public static int maxFileSize = 100 * 1024;
 	
 	public static AtomicInteger num = new AtomicInteger(0);
 
