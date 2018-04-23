@@ -27,7 +27,7 @@ public class DB{
     private List<Entry> buffer; 
     private DynamoDBMapper mapper;
     private String bucketName ="cis455-crawler-changanw";
-    private String envDirectory = "test/";
+    private String envDirectory = "test2/";
     
 
     private DB(){
