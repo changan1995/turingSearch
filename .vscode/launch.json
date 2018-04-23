@@ -3,36 +3,18 @@
     "configurations": [
         {
             "type": "java",
-            "name": "debug num",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console":"integratedTerminal",
-            "stopOnEntry": false,
-            "mainClass": "edu.upenn.cis555.searchengine.crawler.logger.BDBPrint",
-            // "projectName": "searchengine",
-            "args": "./bdb"
-        },
-        {
-            "type": "java",
-            "name": "Crawler Launch",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console":"integratedTerminal",
-            "stopOnEntry": false,
+            "name": "0worker",
+            "request": "launch","externalConsole": true,
             "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
-            // "projectName": "searchengine",
-            "args": "https://en.wikipedia.org/wiki/Ideal_gas_law ./bdb 1 10000000 1"
-        },
-        {
+            "args":"./config.txt 0 ./seedPage"
+
+        },{
             "type": "java",
-            "name": "S3Example",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console":"integratedTerminal",
-            "stopOnEntry": false,
-            "mainClass": "edu.upenn.cis555.searchengine.crawler.storage.S3Wrapper",
-            // "projectName": "searchengine",
-            "args": ""
+            "name": "1worker",
+            "request": "launch","externalConsole": true,
+            "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
+            "args":"./config.txt 1 ./seedPage"
+            
         }
     ]
 }

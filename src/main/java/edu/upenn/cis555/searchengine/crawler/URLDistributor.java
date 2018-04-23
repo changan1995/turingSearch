@@ -30,7 +30,7 @@ public class URLDistributor{
 	
 	// private static final long serialVersionUID = -1715283408490447605L;
 
-	public class URLList implements Serializable{
+	public static class URLList implements Serializable{
 		private static final long serialVersionUID = 3484819397569692815L;
 		public LinkedList<String> list;
 		public URLList() {
@@ -96,7 +96,7 @@ public class URLDistributor{
 			public Object handle(Request arg0, Response arg1) {
 				try {
 					URLList list = om.readValue(arg0.body(), URLList.class);
-					log.debug("Recieved " + list.list.size());					
+					// log.debug("Recieved " + list.list.size());					
 					for (String url : list.list){
 						try {
 							addURLToQueue(url);
@@ -174,6 +174,7 @@ public class URLDistributor{
 			OutputStream os = conn.getOutputStream();
 			String jsonForList = om.writerWithDefaultPrettyPrinter().writeValueAsString(content);
 			byte[] toSend = jsonForList.getBytes();
+			log.debug("Sent urls to " + toSend.length);			
 			os.write(toSend);
 			os.flush();
 			conn.getResponseCode();
