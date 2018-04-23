@@ -25,8 +25,11 @@ import spark.Response;
 import spark.Route;
 import spark.Spark;
 
-public class URLDistributor {
+public class URLDistributor implements Serializable{
 	
+	
+	private static final long serialVersionUID = -1715283408490447605L;
+
 	class URLList implements Serializable{
 		private static final long serialVersionUID = 3484819397569692815L;
 		LinkedList<String> list;
