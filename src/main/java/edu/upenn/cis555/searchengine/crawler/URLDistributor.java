@@ -38,7 +38,7 @@ public class URLDistributor{
 	static Logger log = Logger.getLogger(URLDistributor.class);
 	
 	// flush buffer when exceed this limit
-	private static final int maxURLNum = 500;
+	private static final int maxURLNum = 50;
 	
 	DBWrapper db;
 	HashMap<String, URLList> buffers;
