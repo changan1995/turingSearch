@@ -99,49 +99,51 @@ public class URLFrontier {
 				HashSet<Integer> emptyQueue = URLFrontier.this.emptyQueue;
 				ConcurrentHashMap<String, Integer> hostToQueue = URLFrontier.this.hostToQueue;
 				ConcurrentLinkedQueue<String> frontend = URLFrontier.this.frontend;
-				synchronized (emptyQueue) {
-					log.debug("Empty Queue" + emptyQueue.size());
-					log.debug("FrontQueue size:" + frontend.size());
-//					log.debug("Last release LRU: " + lastRelease.size());
-					log.debug("Crawled docs: " + Crawler.num.get());
-					log.error("Active thread:" + Thread.activeCount());
-					log.debug("Release heap size: " + releaseHeap.size());
-			
+				
+				log.debug("Empty Queue" + emptyQueue.size());
+				log.debug("FrontQueue size:" + frontend.size());
+				log.debug("Last release LRU: " + lastRelease.size());
+				log.debug("Crawled docs: " + Crawler.num.get());
+				log.error("Active thread:" + Thread.activeCount());
+				log.debug("Release heap size: " + releaseHeap.size());
+		
 
-//					if (frontend.size() > 0.8 * upperLimit) {
-//						return;
-//					}
-					if (releaseHeap.size() >= 0.75 * maxHostNum) {
-						return;
+//				if (frontend.size() > 0.8 * upperLimit) {
+//					return;
+//				}
+				if (releaseHeap.size() >= 0.75 * maxHostNum) {
+					return;
+				}
+				
+				ArrayList<String> list = db.getURLs(50);
+				
+				String uF;
+				int limit = 20;
+				if (frontend.size() > 0.8 * upperLimit) {
+					limit = 50;
+				}
+				int count = 0;
+				while((uF = frontend.poll()) != null) {
+					list.add(uF);
+					count++;
+					if (count >= limit) {
+						break;
 					}
+				}
+				HashMap<String, LinkedList<String>> map = new HashMap<>();
+				for (String url : list) {
+					URL u;
+					try {
+						u = new URL(url);
+						String host = u.getHost();
+						LinkedList<String> hostList = map.getOrDefault(host, new LinkedList<>());
+						hostList.add(url);
+						map.put(host, hostList);
+					} catch (MalformedURLException e) {
+					}
+				}
+				synchronized (emptyQueue) {
 					Iterator<Integer> iter = emptyQueue.iterator();
-					ArrayList<String> list = db.getURLs(50);
-					
-					String uF;
-						int limit = 20;
-						if (frontend.size() > 0.8 * upperLimit) {
-							limit = 50;
-						}
-						int count = 0;
-						while((uF = frontend.poll()) != null) {
-							list.add(uF);
-							count++;
-							if (count >= limit) {
-								break;
-							}
-						}
-					HashMap<String, LinkedList<String>> map = new HashMap<>();
-					for (String url : list) {
-						URL u;
-						try {
-							u = new URL(url);
-							String host = u.getHost();
-							LinkedList<String> hostList = map.getOrDefault(host, new LinkedList<>());
-							hostList.add(url);
-							map.put(host, hostList);
-						} catch (MalformedURLException e) {
-						}
-					}
 					while(iter.hasNext()) {
 						int idx = iter.next();
 						String toRemove = null;
