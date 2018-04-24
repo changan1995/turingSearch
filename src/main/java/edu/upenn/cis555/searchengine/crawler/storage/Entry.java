@@ -8,7 +8,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.S3Link;
 
-@DynamoDBTable(tableName = "Crawled")
+@DynamoDBTable(tableName = "Doc")
 public class Entry{
     private String urlString;
     private S3Link contentLink;

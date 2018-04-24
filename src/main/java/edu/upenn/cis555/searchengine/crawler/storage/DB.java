@@ -26,7 +26,7 @@ import org.omg.IOP.TAG_ORB_TYPE;
 public class DB{
     private List<Entry> buffer; 
     private DynamoDBMapper mapper;
-    private String bucketName ="cis555test";
+    private String bucketName ="cis555_5nodes";
     private String envDirectory = "crawled/";
     
 
