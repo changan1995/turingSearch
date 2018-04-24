@@ -149,7 +149,11 @@ public class URLFrontier {
 						String toRemove = null;
 						for (String host : map.keySet()) {
 							if (hostToQueue.containsKey(host)) {
-								backends[hostToQueue.get(host)].addAll(map.get(host));
+								int hostIdx = hostToQueue.get(host);
+								if (backends[hostIdx].size() > 200) {
+									continue;
+								}
+								backends[hostIdx].addAll(map.get(host));
 								continue;
 							} else {
 								iter.remove();
