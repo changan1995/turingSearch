@@ -24,7 +24,7 @@ public class RobotsRule {
 		});
 	}
 	
-	public int getDelay(String host) {
+	public int getDelay(String host) throws Exception {
 		RobotsTxtInfo robot = robotLst.get(host);
 		if (robot == null) {
 			robot = requestRobotTxt(host);
@@ -36,7 +36,7 @@ public class RobotsRule {
 		
 	}
 	
-	private RobotsTxtInfo requestRobotTxt(String host) {
+	private RobotsTxtInfo requestRobotTxt(String host) throws Exception {
 		HttpClient hc = new HttpClient();
 		RobotsTxtInfo robot;
         if (!hc.send("GET", "http://" + host + "/robots.txt")) { //turn to absolute address
@@ -49,7 +49,7 @@ public class RobotsRule {
         return robot;
 	}
 	
-	public boolean canCrawl(String host, String filePath) {
+	public boolean canCrawl(String host, String filePath) throws Exception {
 		RobotsTxtInfo robot = robotLst.get(host);
 		if (robot == null) {
 			robot = requestRobotTxt(host);

@@ -104,7 +104,7 @@ public class URLFrontier {
 				log.debug("FrontQueue size:" + frontend.size());
 				log.debug("Last release LRU: " + lastRelease.size());
 				log.debug("Crawled docs: " + Crawler.num.get());
-				log.error("Active thread:" + Thread.activeCount());
+				
 				log.debug("Release heap size: " + releaseHeap.size());
 		
 
@@ -164,12 +164,12 @@ public class URLFrontier {
 								if (releaseTime == null)
 									releaseHeap.put(new TTR(host, System.currentTimeMillis()));
 								else {
-//									try {
+									try {
 										long time = releaseTime.longValue() + getDelay(host) * 1000;
 										releaseHeap.put(new TTR(host, time));
-//									} catch(Exception e) {
-//										continue;
-//									}
+									} catch(Exception e) {
+										continue;
+									}
 								}
 								break;
 							}
@@ -258,7 +258,7 @@ public class URLFrontier {
 //	}
 	// private AtomicInteger i;	
 
-	public String getURL() throws InterruptedException {
+	public String getURL() throws Exception {
 		
 		TTR release;
 		synchronized (releaseHeap) {
@@ -270,12 +270,13 @@ public class URLFrontier {
 			log.debug("wait");
 			Thread.sleep(wait);
 		}
+//		log.error("Active thread:" + Thread.activeCount());
 		String returnString = retrieveBackQuene(release);
-		
+//		log.debug("id" + Thread.currentThread().getName() + "\tget:\t" + returnString);
 		return returnString;
 	}
 	
-	public String retrieveBackQuene(TTR release) {
+	public String retrieveBackQuene(TTR release) throws Exception {
 		String host = release.host;
 		synchronized (lastRelease) {
 			lastRelease.put(host, System.currentTimeMillis());
@@ -339,7 +340,7 @@ public class URLFrontier {
 // 		}
 	// }
 	
-	private int getDelay(String host) {
+	private int getDelay(String host) throws Exception {
 		if (delayCache.containsKey(host)) {
 			return delayCache.get(host);
 		} else {

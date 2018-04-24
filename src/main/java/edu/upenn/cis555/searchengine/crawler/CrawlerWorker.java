@@ -68,11 +68,11 @@ public class CrawlerWorker implements Runnable {
         // private PriorityQueue<URLEntry> urlToDo = Crawler.urlToDo;
     }
 
-    public void download(String url) {
+    public void download(String url) throws Exception {
         // }
 //        String url =urlEntry.getUrl().toString();
         HttpClient hc = new HttpClient();
-        log.debug("id"+id+"\tDownloading:\t" + url);        
+//        log.debug("id"+id+"\tDownloading:\t" + url);        
         
         if (!hc.send("GET", url)) {
             return;
@@ -91,13 +91,13 @@ public class CrawlerWorker implements Runnable {
             entry= new Entry(url);
             // TODO uncomment the DynamoDB
             String contentString =hc.getContent();
-        log.debug("id"+id+"\tUpDynamoing:\t" + url);        
+//        log.debug("id"+id+"\tUpDynamoing:\t" + url);        
         
            db.setContentLink(entry, contentString);
             anaylize(url,contentString);
            db.add(entry);
             Crawler.num.incrementAndGet();
-        log.debug("id"+id+"\tUpDynamoDBed:\t" + url);        
+//        log.debug("id"+id+"\tUpDynamoDBed:\t" + url);        
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,7 +108,7 @@ public class CrawlerWorker implements Runnable {
     }
 
     //decided whehter it is the form we required
-    public static boolean typeValid(String contentType) {
+    public static boolean typeValid(String contentType) throws Exception {
         try {
             contentType = contentType.toLowerCase().trim();
             return (contentType.contains("text/html"));
@@ -120,7 +120,7 @@ public class CrawlerWorker implements Runnable {
     }
 
     //put links generated from JSOUP document to urlToDo, and filter some obviously we dont want
-    public void anaylize(String urlString,String contentString) {
+    public void anaylize(String urlString,String contentString) throws Exception{
 //        URL url2=null;
         Set<String> outLinksBuff =new HashSet<>();
 //		try {
@@ -178,10 +178,10 @@ public class CrawlerWorker implements Runnable {
     }
 
     //if we can access return true;
-    public boolean checkRobot(URL url) {
-        log.debug("id"+id+"\tcheckroboting\t" + url);        
+    public boolean checkRobot(URL url) throws Exception{
+//        log.debug("id"+id+"\tcheckroboting\t" + url);        
         boolean returnvalue= Crawler.rule.canCrawl(url.getHost(), url.getPath());
-        log.debug("id"+id+"\tcheckroboted\t" + url);        
+//        log.debug("id"+id+"\tcheckroboted\t" + url);        
         return returnvalue;
         //put all valid links in urlToDo;
 //        ArrayList<String> allowed;
@@ -240,16 +240,18 @@ public class CrawlerWorker implements Runnable {
     @Override
     public void run() {
         // threadName = Thread.currentThread().getName();
-
+    		Thread.currentThread().setName("" + id);
         while (Crawler.num.get()<Crawler.crawledNum) {//main loop
 //            URLEntry urlEntry = null;
             //take out one url
+        		try {
             String urlString;
 			try {
 				urlString = frontier.getURL();
 			} catch (InterruptedException e2) {
 				continue;
 			}
+//			log.debug("id"+id+"\t get:\t" + urlString);
 //			urlEntry = new URLEntry(url, 0);
 //            if (Crawler.urlToDo.isEmpty()) {
 ////                flag = true;
@@ -283,7 +285,7 @@ public class CrawlerWorker implements Runnable {
             try {
                 // Doc doc = docDB.get(urlString);
                 // filter.put(object);
-                if (!Crawler.bl.put(urlString)) {
+//                if (!Crawler.bl.put(urlString)) {
                     //Doc has been seen
                     // updateflag = true;
                     // Long crawledDate = Utilities.convertDate(doc.getcrawledDate());
@@ -301,11 +303,12 @@ public class CrawlerWorker implements Runnable {
                     // } else {
                     //     download(urlEntry);
                     // }
-                } else {
+//                } else {
                     //Doc is NOT in the DB                    
                     HttpClient hc = new HttpClient();
                     if (!hc.send("HEAD", urlString)) {
                         // crawledNum--;
+//                    		log.debug("id"+id+"\t remove after Head: " + urlString);
                         continue;
                     }
                     if ((hc.getContentLength() < Crawler.maxFileSize) && typeValid(hc.getContentType())) {
@@ -313,16 +316,20 @@ public class CrawlerWorker implements Runnable {
                     } else {
                         continue;
                     }
-                }
+//                }
             } catch (Exception e) {
                 e.printStackTrace();
                 continue;
             }
 
             //after one loop check status 
-            if (crawledNum <= 0) {
-                flag = true;
-            }
+//            if (crawledNum <= 0) {
+//                flag = true;
+//            }
+        		} catch (Throwable e) {
+        			System.err.println("id"+id+"\t unhandled throwable:\t" + e.getMessage());
+        			e.printStackTrace();
+        		}
         }
 
         return ; //TODO: crawled number

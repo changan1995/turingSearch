@@ -108,6 +108,7 @@ public class HttpClient {
 			// get connection
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setConnectTimeout(5 * 1000);
+			conn.setRequestMethod(method);
 			// set headers
 			conn.setRequestProperty("accept", "*/*");
 			conn.setRequestProperty("connection", "Keep-Alive");

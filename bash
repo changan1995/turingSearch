@@ -26,6 +26,7 @@ nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 0" > log2 &
 nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 1" > log2 &
 
 
+ssh -i "~/cis555project.pem" ubuntu@ec2-34-235-125-121.compute-1.amazonaws.com
 git clone https://github.com/changan1995/cis455.git
 nohup mvn exec:java@WebCrawler -Dexec.args="./moj.txt 0" > log &
 nohup mvn exec:java@WebCrawler -Dexec.args="./moj.txt 1" > log &
