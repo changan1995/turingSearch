@@ -49,10 +49,10 @@ public class URLFrontier {
 	@SuppressWarnings("unchecked")
 	public URLFrontier(int numThreads, List<String> seedURLs) {
 		this.numThreads = numThreads;
-		int maxHostNum = numThreads*20;
+		int maxHostNum = numThreads*4;
 		frontend = new ConcurrentLinkedQueue<>();
 		hostToQueue = new ConcurrentHashMap<String, Integer>();
-		releaseHeap = new PriorityBlockingQueue<>(150);
+		releaseHeap = new PriorityBlockingQueue<>(maxHostNum);
 		backends = new Queue[maxHostNum];
 		upperLimit = numThreads * 100;
 		lastRelease =  new LinkedHashMap<String, Long>(maxHostNum * 5, (float) 0.75, true) {
@@ -108,17 +108,20 @@ public class URLFrontier {
 					log.debug("Release heap size: " + releaseHeap.size());
 			
 
-					if (frontend.size() > 0.8 * upperLimit) {
+//					if (frontend.size() > 0.8 * upperLimit) {
+//						return;
+//					}
+					if (releaseHeap.size() >= 0.75 * maxHostNum) {
 						return;
 					}
 					Iterator<Integer> iter = emptyQueue.iterator();
-					ArrayList<String> list = db.getURLs(40);
+					ArrayList<String> list = db.getURLs(50);
 					
 					String uF;
 						int limit = 20;
-//						if (frontend.size() > 200) {
-//							limit = 30;
-//						}
+						if (frontend.size() > 0.8 * upperLimit) {
+							limit = 50;
+						}
 						int count = 0;
 						while((uF = frontend.poll()) != null) {
 							list.add(uF);
@@ -139,74 +142,74 @@ public class URLFrontier {
 						} catch (MalformedURLException e) {
 						}
 					}
-//					while(iter.hasNext()) {
-//						int idx = iter.next();
-//						String toRemove = null;
-//						for (String host : map.keySet()) {
-//							if (hostToQueue.containsKey(host)) {
-//								backends[hostToQueue.get(host)].addAll(map.get(host));
-//								continue;
-//							} else {
-//								iter.remove();
-//								backends[idx].addAll(map.get(host));
-//								toRemove = host;
-//								hostToQueue.put(host, idx);
-//								Long releaseTime = lastRelease.get(host);
-//								if (releaseTime == null)
-//									releaseHeap.put(new TTR(host, System.currentTimeMillis()));
-//								else {
+					while(iter.hasNext()) {
+						int idx = iter.next();
+						String toRemove = null;
+						for (String host : map.keySet()) {
+							if (hostToQueue.containsKey(host)) {
+								backends[hostToQueue.get(host)].addAll(map.get(host));
+								continue;
+							} else {
+								iter.remove();
+								backends[idx].addAll(map.get(host));
+								toRemove = host;
+								hostToQueue.put(host, idx);
+								Long releaseTime = lastRelease.get(host);
+								if (releaseTime == null)
+									releaseHeap.put(new TTR(host, System.currentTimeMillis()));
+								else {
 //									try {
-//										long time = releaseTime.longValue() + getDelay(host) * 1000;
-//										releaseHeap.put(new TTR(host, time));
+										long time = releaseTime.longValue() + getDelay(host) * 1000;
+										releaseHeap.put(new TTR(host, time));
 //									} catch(Exception e) {
 //										continue;
 //									}
-//								}
-//								break;
-//							}
-//						}
-//						if (toRemove != null) {
-//							map.remove(toRemove);
-//						}
-//					}
-					
-					for (String url : list) {
-						try {
-							URL u = new URL(url);
-							String host = u.getHost();
-//							int delay = Crawler.rule.getDelay(host);
-//							log.debug("Delay("+ host + "): " + delay);
-//							synchronized (hostToQueue) {
-								if (hostToQueue.containsKey(host)) {
-//									log.debug("Has item put" + host + " to " + hostToQueue.get(host));
-//									log.debug("Queue of " + host + ":" + backends[hostToQueue.get(host)].size());
-									if (backends[hostToQueue.get(host)].size() > 200) {
-										continue;
-									}
-//									else
-									backends[hostToQueue.get(host)].add(url);
-									continue;
-								} else if (iter.hasNext()) {
-									int idx = iter.next();
-									iter.remove();
-//									log.debug("Empty put" + host + " to " + idx);
-									backends[idx].add(url);
-									hostToQueue.put(host, idx);
-									Long releaseTime = lastRelease.get(host);
-									if (releaseTime == null)
-										releaseHeap.put(new TTR(host, System.currentTimeMillis()));
-									else {
-										long time = releaseTime.longValue() + getDelay(host) * 1000;
-										releaseHeap.put(new TTR(host, time));
-									}
-									continue;
 								}
-//							}
-							frontend.add(url);
-						} catch (Exception e) {
-							continue;
+								break;
+							}
+						}
+						if (toRemove != null) {
+							map.remove(toRemove);
 						}
 					}
+					
+//					for (String url : list) {
+//						try {
+//							URL u = new URL(url);
+//							String host = u.getHost();
+////							int delay = Crawler.rule.getDelay(host);
+////							log.debug("Delay("+ host + "): " + delay);
+////							synchronized (hostToQueue) {
+//								if (hostToQueue.containsKey(host)) {
+////									log.debug("Has item put" + host + " to " + hostToQueue.get(host));
+////									log.debug("Queue of " + host + ":" + backends[hostToQueue.get(host)].size());
+//									if (backends[hostToQueue.get(host)].size() > 200) {
+//										continue;
+//									}
+////									else
+//									backends[hostToQueue.get(host)].add(url);
+//									continue;
+//								} else if (iter.hasNext()) {
+//									int idx = iter.next();
+//									iter.remove();
+////									log.debug("Empty put" + host + " to " + idx);
+//									backends[idx].add(url);
+//									hostToQueue.put(host, idx);
+//									Long releaseTime = lastRelease.get(host);
+//									if (releaseTime == null)
+//										releaseHeap.put(new TTR(host, System.currentTimeMillis()));
+//									else {
+//										long time = releaseTime.longValue() + getDelay(host) * 1000;
+//										releaseHeap.put(new TTR(host, time));
+//									}
+//									continue;
+//								}
+////							}
+//							frontend.add(url);
+//						} catch (Exception e) {
+//							continue;
+//						}
+//					}
 					
 				}
 			}
@@ -279,9 +282,9 @@ public class URLFrontier {
 //			}
 			// new Thread(() -> {
 			// 	if (!frontToBack(idx)) {
-			// 		synchronized (emptyQueue) {
+			 		synchronized (emptyQueue) {
 						emptyQueue.add(idx);
-			// 		}
+			 		}
 			// 	}
 			// }).start();
 		} else {

@@ -30,7 +30,7 @@ public class DB{
     private String envDirectory = "test2/";
     
 
-    private DB(){
+    public DB(){
         this.buffer = new ArrayList<>();
         BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAIYGQI5BZEQ4IWZSA", "vaW7GHGmAFOr4rhubXIJEEPtxsC3fuCdOvv4xvYd");
         // AWSCredentialsProvider s3Credential = new AWSCredentialsProviderChain(credentialsProviders)

@@ -58,7 +58,7 @@ public class CrawlerWorker implements Runnable {
 
     public CrawlerWorker(int id, int crawledNum, URLFrontier frontier){
         this.id =id;
-        this.db = DB.gettInstance();
+        this.db = new DB();
         this.crawledNum=crawledNum;
         this.frontier = frontier;
         System.out.println(id + "worker setup");
