@@ -6,8 +6,7 @@
             "name": "0worker",
             "request": "launch","externalConsole": true,
             "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
-            "args":"./config.txt 0"
-            //  ./seedPage 15
+            "args":"./config.txt 0 20"
 
         },{
             "type": "java",

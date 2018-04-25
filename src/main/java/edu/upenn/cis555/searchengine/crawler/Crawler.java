@@ -49,7 +49,7 @@ public class Crawler {
 	// udp settings
 	public static InetAddress host = null;
 	public static DatagramSocket s = null;
-	public static int threadNum = 10;
+	public static int threadNum;
 	public static int port;
 
 	public URLFrontier frontier;
@@ -60,7 +60,7 @@ public class Crawler {
 	public static int index = -1;
 	public static String[] workerList;
 
-	public Crawler(int index, String[] workerList, ArrayList<String> seedURL) {
+	public Crawler(int index, String[] workerList, ArrayList<String> seedURL, int threadNum) {
 		Spark.port(port);
 		
 		Spark.get("/status", new Route() {
@@ -151,14 +151,14 @@ public class Crawler {
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
-
+		System.out.print(args.length);
 		if (args.length < 2) {
 			System.out.println("java -jar configfile index seedURLFile");
 			return;
 		}
-		if (args.length > 3) {
+		if (args.length >= 3) {
 			threadNum = Integer.parseInt(args[2]);
-			System.out.println(threadNum  + "\t Threads are setuped");			
+			log.debug(threadNum  + "\t Threads are setuped");			
 		}
 		String configPath = args[0];
 		int index = Integer.parseInt(args[1]);
@@ -245,7 +245,7 @@ public class Crawler {
 		// e1.printStackTrace();
 		// }
 
-		Crawler crawler = new Crawler(index, workerList, seedURL);
+		Crawler crawler = new Crawler(index, workerList, seedURL,threadNum);
 
 		crawler.start();
 
