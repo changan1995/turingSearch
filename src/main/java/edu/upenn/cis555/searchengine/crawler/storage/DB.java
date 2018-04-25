@@ -26,13 +26,13 @@ import org.omg.IOP.TAG_ORB_TYPE;
 public class DB{
     private List<Entry> buffer; 
     private DynamoDBMapper mapper;
-    private String bucketName ="cis555test5nodes";
-    private String envDirectory = "crawled/";
+    private String bucketName ="cis455-crawler-changanw";
+    private String envDirectory = "test3/";
     
 
     public DB(){
         this.buffer = new ArrayList<>();
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAJJCSNAGYGNT4OWWA", "+oEGkYblnrQ2I08UoOKmLiiUHbBZp6nzi+KvB0Ff");
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAIYGQI5BZEQ4IWZSA", "vaW7GHGmAFOr4rhubXIJEEPtxsC3fuCdOvv4xvYd");
         // AWSCredentialsProvider s3Credential = new AWSCredentialsProviderChain(credentialsProviders)
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
                                 .withRegion("us-east-1")

@@ -61,55 +61,6 @@ public class URLDistributor{
 			}
 		}
 		db = DBWrapper.getInstance();
-//		try {
-//			set = db.getURLSeen();
-//		} catch(Exception e) {
-//			log.debug("Error get URLSeen.");
-//		}
-//		if (set != null) {
-//			urlSeen = set;
-//		} else {
-//			urlSeen = new HashSet<>();
-//		}
-//		log.debug("URLSeen size:" + set.size());
-		
-//		TimerTask seenTask = new TimerTask() {
-//			@Override
-//			public void run() {
-//				db.saveURLSeen(urlSeen);
-//				log.debug("Saved all seen url to BDBs");
-//			}
-//		};
-//		
-//		Timer timer = new Timer();
-//		// save urlseen every 30 minutes
-//		timer.scheduleAtFixedRate(seenTask, 5 * 1000, 10 * 1000);
-		
-		// Spark.post("/push", new Route() {
-
-		// 	@Override
-		// 	public Object handle(Request arg0, Response arg1) {
-		// 		try {
-		// 			log.debug("get request");
-		// 			URLList list = om.readValue(arg0.body(), URLList.class);
-
-		// 			// log.debug("Recieved " + list.list.size());					
-		// 			for (String url : list.list){
-		// 				try {
-		// 					addURLToQueue(url);
-		// 					// log.debug("Recieved " + url);
-		// 				} catch(Exception e) {
-		// 					continue;
-		// 				}
-		// 			}
-		// 		} catch (Exception e) {
-		// 			log.debug(e.getMessage());
-		// 			e.printStackTrace();
-		// 		} 
-		// 		return "recieved";
-		// 	}
-
-		// });
 	}
 	
 	
@@ -119,35 +70,12 @@ public class URLDistributor{
 			// add url to queue
 			db.saveURLSeen(url);
 			String host = new URL(url).getHost();
-			if (!frontier.hasHost(host) && !frontier.hitUpperBound()) {
-				// add to in memory queue
-				frontier.addURLToHead(url);
-			} else {
-				// add to BDB
+			if (!frontier.addUrl(url)) {//return false on failure
 				db.addURL(System.currentTimeMillis(), url);
 			}
 		} 
 	}
 	
-	
-	// public void distributeURL(String url) {
-		
-	// 	try {
-	// 		URL u = new URL(url);
-	// 		int idx = Math.abs(u.getHost().hashCode()) % workerList.length;
-	// 		if (index == idx) {
-	// 			// still in the local node
-	// 			addURLToQueue(url);
-	// 		} else {
-	// 			// should be sent to other node
-	// 			addToBuffer(workerList[idx], url);
-	// 		} 
-	// 	} catch (Exception e) {
-	// 		log.error("Distribute url: " + url + " " + e.getMessage());
-	// 		return;
-	// 	}
-		
-	// }
 
 	public void distributeURL(Set<String> urls) {
 		for (String url: urls ){

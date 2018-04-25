@@ -58,29 +58,7 @@ public class URLReciver{
 			}
 		}
 		db = DBWrapper.getInstance();
-//		try {
-//			set = db.getURLSeen();
-//		} catch(Exception e) {
-//			log.debug("Error get URLSeen.");
-//		}
-//		if (set != null) {
-//			urlSeen = set;
-//		} else {
-//			urlSeen = new HashSet<>();
-//		}
-//		log.debug("URLSeen size:" + set.size());
-		
-//		TimerTask seenTask = new TimerTask() {
-//			@Override
-//			public void run() {
-//				db.saveURLSeen(urlSeen);
-//				log.debug("Saved all seen url to BDBs");
-//			}
-//		};
-//		
-//		Timer timer = new Timer();
-//		// save urlseen every 30 minutes
-//		timer.scheduleAtFixedRate(seenTask, 5 * 1000, 10 * 1000);
+
 		
 		Spark.post("/push", new Route() {
 
@@ -116,11 +94,7 @@ public class URLReciver{
 			// add url to queue
 			db.saveURLSeen(url);
 			String host = new URL(url).getHost();
-			if (!frontier.hasHost(host) && !frontier.hitUpperBound()) {
-				// add to in memory queue
-				frontier.addURLToHead(url);
-			} else {
-				// add to BDB
+			if (!frontier.addUrl(url)) {//return false on failure
 				db.addURL(System.currentTimeMillis(), url);
 			}
 		} 
