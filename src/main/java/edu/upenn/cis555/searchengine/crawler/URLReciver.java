@@ -90,7 +90,7 @@ public class URLReciver{
 					log.debug("get request");
 					URLList list = om.readValue(arg0.body(), URLList.class);
 
-					// log.debug("Recieved " + list.list.size());					
+					 log.debug("Recieved " + list.list.size());					
 					for (String url : list.list){
 						try {
 							addURLToQueue(url);

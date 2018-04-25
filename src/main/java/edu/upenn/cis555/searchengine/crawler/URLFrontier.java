@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -79,7 +80,7 @@ public class URLFrontier {
 			}
 		}
 		
-		for (String url : db.getURLs(-1)) {
+		for (String url : db.getURLs(100)) {
 			if (emptyIdx < maxHostNum) {
 				if (addToBackEnd(url, emptyIdx)) emptyIdx++;
 			}
@@ -142,8 +143,14 @@ public class URLFrontier {
 					} catch (MalformedURLException e) {
 					}
 				}
+				Set<Integer> emptySet = new HashSet<>();
 				synchronized (emptyQueue) {
-					Iterator<Integer> iter = emptyQueue.iterator();
+					for (Integer i : emptyQueue)
+						emptySet.add(i.intValue());
+				}
+//				synchronized (emptyQueue) {
+				log.debug(emptySet);
+					Iterator<Integer> iter = emptySet.iterator();
 					while(iter.hasNext()) {
 						int idx = iter.next();
 						String toRemove = null;
@@ -177,6 +184,9 @@ public class URLFrontier {
 						if (toRemove != null) {
 							map.remove(toRemove);
 						}
+					}
+					synchronized (emptyQueue) {
+						emptyQueue.retainAll(emptySet);
 					}
 					
 //					for (String url : list) {
@@ -217,7 +227,7 @@ public class URLFrontier {
 //						}
 //					}
 					
-				}
+//				}
 			}
 		};
 		
@@ -340,17 +350,17 @@ public class URLFrontier {
 // 		}
 	// }
 	
-	private int getDelay(String host) throws Exception {
-		if (delayCache.containsKey(host)) {
-			return delayCache.get(host);
-		} else {
+	private int getDelay(String host) {
+//		if (delayCache.containsKey(host)) {
+//			return delayCache.get(host);
+//		} else {
 			int delay = 2;
 			try {
 				delay = Crawler.rule.getDelay(host);
 			} catch(Exception e) {
 			}
 			return delay;
-		}
+//		}
 	}
 	
 	public void addURLToHead(String url) {
