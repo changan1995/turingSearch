@@ -156,8 +156,9 @@ public class Crawler {
 			System.out.println("java -jar configfile index seedURLFile");
 			return;
 		}
-		if (args.length > 4) {
-			threadNum = Integer.parseInt(args[3]);
+		if (args.length > 3) {
+			threadNum = Integer.parseInt(args[2]);
+			System.out.println(threadNum  + "\t Threads are setuped");			
 		}
 		String configPath = args[0];
 		int index = Integer.parseInt(args[1]);
@@ -176,8 +177,8 @@ public class Crawler {
 
 		ArrayList<String> seedURL = new ArrayList<>();
 
-		if (args.length >= 3) {
-			String seedFile = args[2];
+		if (args.length >= 4) {
+			String seedFile = args[3];
 			try {
 				seedURL = parseSeed(seedFile);
 			} catch (IOException e) {

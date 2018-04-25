@@ -22,7 +22,7 @@ nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 0" > log &
 nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 1" > log &
 
 
-nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 0" > log2 &
+nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 0 15" > log2 &
 nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 1" > log2 &
 
 

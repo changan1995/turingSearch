@@ -3,3 +3,4 @@ bdb/
 *.class
 *.DS_Store
 /store0/
+*.pem
