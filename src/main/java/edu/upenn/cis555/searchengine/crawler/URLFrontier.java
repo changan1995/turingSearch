@@ -128,7 +128,7 @@ public class URLFrontier {
 				// ConcurrentLinkedQueue<String> frontend = URLFrontier.this.frontend;
 				
 				// log.debug("Empty Queue" + emptyQueue.size());
-				log.debug("BDB size:" + URLDistributor.urlFrontierCount);
+				log.debug("BDB size:" + db.getFrontierCount());
 				// log.debug("Last release LRU: " + lastRelease.size());
 				log.debug("Crawled docs: " + Crawler.num.get());
 				
