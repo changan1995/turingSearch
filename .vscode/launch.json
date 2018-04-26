@@ -6,7 +6,7 @@
             "name": "0worker",
             "request": "launch","externalConsole": true,
             "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
-            "args":"./config.txt 0 20 150"
+            "args":"./config.txt 0 10 150"
 
         },{
             "type": "java",

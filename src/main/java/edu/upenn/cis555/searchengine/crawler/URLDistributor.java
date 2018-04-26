@@ -81,18 +81,10 @@ public class URLDistributor{
 			// add url to queue
 			if(!this.urlFrontierFull()){
 				db.saveURLSeen(url);
-			}else{
-				urlSeenCount = new Long(200000);
 			}
 			String host = new URL(url).getHost();
 			if (!frontier.addUrl(url)) {//return false on failure
-				if(!this.urlFrontierFull()){
-					urlFrontierCount=db.getFrontierCount();
 					db.addURL(Crawler.fileIndex.incrementAndGet(), url);
-					log.debug("fronier has pages"+urlFrontierCount);	
-				}else{
-					urlFrontierCount =db.getFrontierCount();
-				}
 			}
 		}
 	}
