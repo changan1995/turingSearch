@@ -4,3 +4,10 @@ bdb/
 *.DS_Store
 /store0/
 *.pem
+log
+/store1/
+/store2/
+/store3/
+/store4/
+*.jdb
+
