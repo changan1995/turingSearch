@@ -90,6 +90,8 @@ public class URLFrontier {
 			// }
 			if(!this.addUrl(url)){
 				log.error("add url error");
+				db.addURL(Crawler.fileIndex.incrementAndGet(), url);
+				
 			}
 		}
 		
@@ -104,6 +106,8 @@ public class URLFrontier {
 			// }
 			if(!this.addUrl(url)){
 				log.error("add url error");
+				db.addURL(Crawler.fileIndex.incrementAndGet(), url);
+				
 			}
 
 			// else {
@@ -283,6 +287,7 @@ public class URLFrontier {
 			for (String url : db.getURLs(maxHostNum-hostQueueCount)) {
 				if(!this.addUrl(url)){
 					log.error("add url error");
+					db.addURL(Crawler.fileIndex.incrementAndGet(), url);					
 				}
 	
 				// else {
