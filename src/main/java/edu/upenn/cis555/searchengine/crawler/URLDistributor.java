@@ -52,7 +52,7 @@ public class URLDistributor{
 	private EvictingQueue<ListenableFuture<Response>> evictQueue = EvictingQueue.create(500);
 	
 	public boolean urlFrontierFull(){
-		return URLDistributor.urlFrontierCount>20000;
+		return URLDistributor.urlFrontierCount>10000;
 	}
 
 	public URLDistributor(int index, String[] workerList, URLFrontier frontier) {
@@ -80,7 +80,7 @@ public class URLDistributor{
 		if (!db.checkURLSeen(url)) {
 			// add url to queue
 			if(!this.urlFrontierFull()){
-				db.saveURLSeen(url);	
+				db.saveURLSeen(url);
 			}else{
 				urlSeenCount = new Long(200000);
 			}
