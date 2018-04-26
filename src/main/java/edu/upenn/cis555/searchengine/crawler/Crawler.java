@@ -180,7 +180,7 @@ public class Crawler {
 
 		ArrayList<String> seedURL = new ArrayList<>();
 		if (args.length >= 4) {
-			hostNum = Integer.parseInt(args[4]);
+			hostNum = Integer.parseInt(args[3]);
 			log.debug(hostNum  + "\t Threads are setuped");			
 		}
 		if (args.length >= 5) {
