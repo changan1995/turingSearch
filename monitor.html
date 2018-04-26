@@ -22,21 +22,22 @@
 	<button class="shutdown">shutdown</button>
 
 	<script>
-		var workerList = ["34.224.41.114:5001",
-						  "34.228.156.231:5001",
-						  "34.227.49.62:5001",
-						  "35.172.194.220:5001",
-						  "34.229.20.19:5001"];
+		var workerList = ["ec2-52-23-164-241.compute-1.amazonaws.com:5001",
+		"ec2-35-172-178-81.compute-1.amazonaws.com:5001",
+		"ec2-54-175-188-39.compute-1.amazonaws.com:5001",
+		"ec2-34-227-60-38.compute-1.amazonaws.com:5001",
+		"ec2-107-21-55-200.compute-1.amazonaws.com:5001"];
 
 		$('.status').click(function () {
 			for (var i = 0; i < workerList.length; i++) {
 				console.log(workerList[i]);
-
-			}
-			$.get("https://www.lyt48.com/photo?offset=5&tag=总选", crossDomain: true, function (data) {
+				$.get("https://www.lyt48.com/photo?offset=5&tag=总选", crossDomain: true, function (data) {
 				console.log(data);
 			});
 			console.log("status");
+
+			}
+
 		});
 
 		$('.shutdown').click(function () {
