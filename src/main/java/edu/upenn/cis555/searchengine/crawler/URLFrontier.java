@@ -48,7 +48,7 @@ public class URLFrontier {
 	// ConcurrentHashMap<String, Integer> delayCache;
 	// private long initTime=System.currentTimeMillis();
 	// int hostSize = numThreads *15;
-	private int maxQueueNum = 1000; 
+	private int maxQueueNum = 200; 
 	private int maxHostNum;
 	
 	// int upperLimit;
@@ -96,7 +96,7 @@ public class URLFrontier {
 		}
 		
 		// fill the rest with db queues, may not be at spreaded hosts;	
-		for (String url : db.getURLs(maxHostNum-emptyIdx-1)) {
+		for (String url : db.getURLs(((maxHostNum-emptyIdx)/50))) {
 			// String host=null;
 			// if((host=this.getHost(url))==null){ continue;}//get host name			
 			// if (emptyIdx < maxHostNum) {
@@ -284,7 +284,7 @@ public class URLFrontier {
 	public String getURL() throws Exception {
 		int hostQueueCount = hostQueue.size();
 		if(hostQueueCount<maxHostNum*0.15){
-			for (String url : db.getURLs(maxHostNum-hostQueueCount)) {
+			for (String url : db.getURLs((maxHostNum-hostQueueCount)/50)) {
 				if(!this.addUrl(url)){
 					log.error("add url error");
 					db.addURL(Crawler.fileIndex.incrementAndGet(), url);					
