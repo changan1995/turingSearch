@@ -74,9 +74,12 @@ public class URLDistributor{
 	
 	private void addURLToQueue(String url) throws MalformedURLException {
 		// check duplicate url
+		if(this.urlFrontierFull()){
+			return;
+		}
 		if (!db.checkURLSeen(url)) {
 			// add url to queue
-			if(urlSeenCount<100000){
+			if(!this.urlFrontierFull()){
 				db.saveURLSeen(url);	
 				urlSeenCount=db.getSeenCount();			
 			}else{
@@ -86,12 +89,13 @@ public class URLDistributor{
 			if (!frontier.addUrl(url)) {//return false on failure
 				if(!this.urlFrontierFull()){
 					urlFrontierCount=db.getFrontierCount();
-					db.addURL(Crawler.fileIndex.incrementAndGet(), url);	
+					db.addURL(Crawler.fileIndex.incrementAndGet(), url);
+					log.debug("fronier has pages"+urlFrontierCount);	
 				}else{
 					urlFrontierCount = new Long(200000);
 				}
 			}
-		} 
+		}
 	}
 	
 
