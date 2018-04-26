@@ -52,7 +52,7 @@ public class URLDistributor{
 	private EvictingQueue<ListenableFuture<Response>> evictQueue = EvictingQueue.create(500);
 	
 	public boolean urlFrontierFull(){
-		return URLDistributor.urlFrontierCount>250000;
+		return URLDistributor.urlFrontierCount>500000;
 	}
 
 	public URLDistributor(int index, String[] workerList, URLFrontier frontier) {
@@ -81,7 +81,6 @@ public class URLDistributor{
 			// add url to queue
 			if(!this.urlFrontierFull()){
 				db.saveURLSeen(url);	
-				urlSeenCount=db.getSeenCount();			
 			}else{
 				urlSeenCount = new Long(200000);
 			}
@@ -92,7 +91,7 @@ public class URLDistributor{
 					db.addURL(Crawler.fileIndex.incrementAndGet(), url);
 					log.debug("fronier has pages"+urlFrontierCount);	
 				}else{
-					urlFrontierCount = new Long(200000);
+					urlFrontierCount =db.getFrontierCount();
 				}
 			}
 		}

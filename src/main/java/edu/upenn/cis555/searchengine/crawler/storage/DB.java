@@ -76,7 +76,7 @@ public class DB{
     }
 
     public synchronized boolean add(Entry entry){
-        if(this.size()>=20){
+        if(this.size()>=25){
             flush();
         }
         try{
