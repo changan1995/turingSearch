@@ -187,6 +187,11 @@ public class Crawler {
 			hostNum = Integer.parseInt(args[3]);
 			log.debug(hostNum  + "\t Threads are setuped");			
 		}
+
+		if (args.length >= 4) {
+			hostNum = Integer.parseInt(args[3]);
+			log.debug(hostNum  + "\t Threads are setuped");			
+		}
 		if (args.length >= 5) {
 			String seedFile = args[4];
 			try {

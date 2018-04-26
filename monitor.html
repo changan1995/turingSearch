@@ -1,52 +1,67 @@
+
 <html>
-
 	
-	<head>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	</head>
-
-	<div class="node1"></div>
-	<br>
-	<div class="node2"></div>
-	<br>
-	<div class="node3"></div>
-	<br>
-	<div class="node4"></div>
-	<br>
-	<div class="node5"></div>
-	<br>
-
-	<button class="status">status</button>
-	<br>
-	<br>
-	<button class="shutdown">shutdown</button>
-
-	<script>
+		
+		<head>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		</head>
+		
+		<div class="nodes">
+		<div class="node0"></div>
+		<br>
+		<div class="node1"></div>
+		<br>
+		<div class="node2"></div>
+		<br>
+		<div class="node3"></div>
+		<br>
+		<div class="node4"></div>
+		<br>
+		</div>
+	
+		<button class="status">status</button>
+		<br>
+		<br>
+		<button class="shutdown">shutdown</button>
+	
+		<script>
 		var workerList = ["ec2-52-23-164-241.compute-1.amazonaws.com:5001",
 		"ec2-35-172-178-81.compute-1.amazonaws.com:5001",
 		"ec2-54-175-188-39.compute-1.amazonaws.com:5001",
 		"ec2-34-227-60-38.compute-1.amazonaws.com:5001",
 		"ec2-107-21-55-200.compute-1.amazonaws.com:5001"];
-
-		$('.status').click(function () {
-			for (var i = 0; i < workerList.length; i++) {
-				console.log(workerList[i]);
-				$.get("https://www.lyt48.com/photo?offset=5&tag=总选", crossDomain: true, function (data) {
-				console.log(data);
+	
+			$this = $('.nodes');
+			console.log($this);
+			function sendStatusRequest(i) {
+				$.get('http://' + workerList[i] + '/status', function(data) {
+					console.log($this);
+					$this.find('.node' + i).text(data);
+				});
+			}
+	
+			
+	
+			$('.status').click(function () {
+				
+				for (var i = 0; i < workerList.length; i++) {
+					sendStatusRequest(i);
+				}
+				
+				console.log("status");
 			});
-			console.log("status");
-
-			}
-
-		});
-
-		$('.shutdown').click(function () {
-			for (var i = 0; i < workerList.length; i++) {
-				console.log(workerList[i]);
-
-			}
-			console.log("shutdown");
-		});
-
-	</script>
-</html>
+	
+			$('.shutdown').click(function () {
+				for (var i = 0; i < workerList.length; i++) {
+					$.post("http://" + workerList[i] + "/shutdown", {
+					oops : "yeah"
+				}, function (data) {
+					console.log(data);
+				});
+	
+				}
+				
+			});
+	
+		</script>
+	</html>
