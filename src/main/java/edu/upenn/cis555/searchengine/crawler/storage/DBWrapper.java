@@ -148,6 +148,14 @@ public class DBWrapper {
 		// log.debug("Stop get URLs");
 		return urlString;
 	}
+
+	public void bulidBL(){
+		DatabaseEntry keyEntry = new DatabaseEntry();
+		DatabaseEntry dataEntry = new DatabaseEntry();
+		Cursor cursor = URLFrontier.openCursor(null, null);		
+		if(cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS)
+			Crawler.bl.put(StringBinding.entryToString(dataEntry));
+	}
 	
 //	@SuppressWarnings({ "rawtypes", "unchecked" })
 //	public void saveURLSeen(HashSet<String> set) {
@@ -191,13 +199,14 @@ public class DBWrapper {
 	
 	
 	public boolean checkURLSeen(String url) {
-		DatabaseEntry keyEntry = new DatabaseEntry();
-		DatabaseEntry dataEntry = new DatabaseEntry();
-		StringBinding.stringToEntry(url, keyEntry);
-		if (URLSeen.get(null, keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
-			return true;
-		}
-		return false;
+		// DatabaseEntry keyEntry = new DatabaseEntry();
+		// DatabaseEntry dataEntry = new DatabaseEntry();
+		// StringBinding.stringToEntry(url, keyEntry);
+		// if (URLSeen.get(null, keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
+		// 	return true;
+		// }
+		// return false;
+		return Crawler.bl.put(url);
 	}
 	
 

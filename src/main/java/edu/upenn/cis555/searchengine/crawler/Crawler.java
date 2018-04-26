@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.util.ConcurrentHashSet;
 
 import com.amazonaws.services.waf.model.CreateWebACLRequest;
 import com.google.common.hash.BloomFilter;
@@ -42,7 +44,7 @@ public class Crawler {
 	// public static PriorityBlockingQueue<URLEntry> urlToDo;
 	public static Map<String, RobotsTxtInfo> robotLst;// TODO:concurrent handle
 	public static int crawledNum = 250000;
-	// public static BloomFilter<CharSequence> bl;
+	public static BloomFilter<CharSequence> bl;
 	public static int maxFileSize = 100 * 1024;
 
 	public static AtomicInteger num = new AtomicInteger(0);
@@ -229,7 +231,7 @@ public class Crawler {
 
 		//
 		// initial environment
-		// bl = BloomFilter.create(Funnels.stringFunnel(), 200000);
+		bl = BloomFilter.create(Funnels.stringFunnel(Charset.forName("UTF-8")), 200000);
 		// urlToDo = new PriorityBlockingQueue<>(maxFileNumber);// in the sput
 		robotLst = Collections.synchronizedMap(new LinkedHashMap<String, RobotsTxtInfo>() {
 			@Override

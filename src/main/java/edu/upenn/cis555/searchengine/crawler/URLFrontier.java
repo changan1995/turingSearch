@@ -74,7 +74,8 @@ public class URLFrontier {
 		db = DBWrapper.getInstance();
 		int emptyIdx = 0;
 		long currentTime = System.currentTimeMillis();
-
+		
+		db.bulidBL();
 		// fill the queues with seeds.
 		for (String url : seedURLs) {
 			// log.debug(url);
