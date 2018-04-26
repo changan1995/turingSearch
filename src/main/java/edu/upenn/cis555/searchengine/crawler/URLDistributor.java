@@ -69,14 +69,14 @@ public class URLDistributor{
 	
 	private void addURLToQueue(String url) throws MalformedURLException {
 		// check duplicate url
-		if (!db.checkURLSeen(url)) {
+		// if (!db.checkURLSeen(url)) {
 			// add url to queue
-			db.saveURLSeen(url);
+			// db.saveURLSeen(url);
 			String host = new URL(url).getHost();
 			if (!frontier.addUrl(url)) {//return false on failure
-				db.addURL(System.currentTimeMillis(), url);
+				// db.addURL(System.currentTimeMillis(), url);
 			}
-		} 
+		// } 
 	}
 	
 
