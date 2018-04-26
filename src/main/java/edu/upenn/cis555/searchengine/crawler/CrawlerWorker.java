@@ -122,6 +122,7 @@ public class CrawlerWorker implements Runnable {
     //put links generated from JSOUP document to urlToDo, and filter some obviously we dont want
     public void anaylize(String urlString,String contentString) throws Exception{
 //        URL url2=null;
+
         Set<String> outLinksBuff =new HashSet<>();
 //		try {
 //			url2 = new URL(urlString);
@@ -174,7 +175,13 @@ public class CrawlerWorker implements Runnable {
 			// body / title missed
 		}
         entry.setOutLinks(outLinksBuff);
-        distributor.distributeURL(outLinksBuff);
+                
+        if(!distributor.urlFrontierFull()){
+            distributor.distributeURL(outLinksBuff);
+        
+        }
+        return;
+        
     }
 
     //if we can access return true;

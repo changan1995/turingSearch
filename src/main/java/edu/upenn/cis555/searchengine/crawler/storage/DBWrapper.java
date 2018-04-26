@@ -101,6 +101,13 @@ public class DBWrapper {
 //		txn.commit();
 	}
 
+	public long getSeenCount(){
+		return URLSeen.count();
+	}
+	public long getFrontierCount(){
+		return URLFrontier.count();
+	}
+
 	public synchronized ArrayList<String> getURLs(int limit) {
 		if (limit == -1) {
 			limit = maxURL;
@@ -123,6 +130,23 @@ public class DBWrapper {
 		URLFrontier.sync();
 		// log.debug("Stop get URLs");
 		return list;
+	}
+
+	
+	public synchronized String getURL() {
+		DatabaseEntry keyEntry = new DatabaseEntry();
+		DatabaseEntry dataEntry = new DatabaseEntry();
+		Cursor cursor = URLFrontier.openCursor(null, null);
+		String urlString =null;
+		// log.debug("Start get URLs");
+		if(cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS)
+			urlString= StringBinding.entryToString(dataEntry);
+			// log.debug("get:" + url);
+			URLFrontier.delete(null, keyEntry);
+	
+		URLFrontier.sync();
+		// log.debug("Stop get URLs");
+		return urlString;
 	}
 	
 //	@SuppressWarnings({ "rawtypes", "unchecked" })

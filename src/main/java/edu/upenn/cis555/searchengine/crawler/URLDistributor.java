@@ -40,7 +40,8 @@ public class URLDistributor{
 	
 	// flush buffer when exceed this limit
 	private static final int maxURLNum = 100;
-	
+	public static long urlSeenCount = 0;
+	public static long urlFrontierCount=0;
 	DBWrapper db;
 	HashMap<String, URLList> buffers;
 	String[] workerList;
@@ -50,6 +51,10 @@ public class URLDistributor{
 	
 	private EvictingQueue<ListenableFuture<Response>> evictQueue = EvictingQueue.create(500);
 	
+	public boolean urlFrontierFull(){
+		return URLDistributor.urlFrontierCount>100000;
+	}
+
 	public URLDistributor(int index, String[] workerList, URLFrontier frontier) {
 		
 		// worker list
@@ -71,10 +76,20 @@ public class URLDistributor{
 		// check duplicate url
 		if (!db.checkURLSeen(url)) {
 			// add url to queue
-			db.saveURLSeen(url);
+			if(urlSeenCount<100000){
+				db.saveURLSeen(url);	
+				urlSeenCount=db.getSeenCount();			
+			}else{
+				urlSeenCount = new Long(200000);
+			}
 			String host = new URL(url).getHost();
 			if (!frontier.addUrl(url)) {//return false on failure
-				db.addURL(Crawler.fileIndex.incrementAndGet(), url);
+				if(!this.urlFrontierFull()){
+					urlFrontierCount=db.getFrontierCount();
+					db.addURL(Crawler.fileIndex.incrementAndGet(), url);	
+				}else{
+					urlFrontierCount = new Long(200000);
+				}
 			}
 		} 
 	}

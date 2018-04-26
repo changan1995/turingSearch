@@ -277,7 +277,20 @@ public class URLFrontier {
 	// private AtomicInteger i;	
 
 	public String getURL() throws Exception {
-		
+		int hostQueueCount = hostQueue.size();
+		if(hostQueueCount<maxHostNum*0.15){
+			for (String url : db.getURLs(maxHostNum-hostQueueCount)) {
+				if(!this.addUrl(url)){
+					log.error("add url error");
+				}
+	
+				// else {
+				// 	frontend.add(url);
+				// }
+			}
+		}
+
+
 		TTR release;
 		if((release = hostQueue.take())==null){//blocking queue is currently blocking
 			return null;
