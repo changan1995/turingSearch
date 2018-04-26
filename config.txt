@@ -1,2 +1,5 @@
 ip-172-31-25-234.ec2.internal:5001
 ip-172-31-23-58.ec2.internal:5001
+ip-172-31-30-90.ec2.internal:5001
+ip-172-31-29-64.ec2.internal:5001
+ip-172-31-78-103.ec2.internal:5001
