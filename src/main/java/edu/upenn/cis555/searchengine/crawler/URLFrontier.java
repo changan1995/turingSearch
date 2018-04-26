@@ -56,7 +56,7 @@ public class URLFrontier {
 	@SuppressWarnings("unchecked")
 	public URLFrontier(int numThreads, List<String> seedURLs) {
 		this.numThreads = numThreads;
-		maxHostNum= numThreads*20;
+		maxHostNum= Crawler.hostNum;
 		// frontend = new ConcurrentLinkedQueue<>();
 		hostToQueue = new ConcurrentHashMap<String, Queue<String>>();
 		hostQueue = new PriorityBlockingQueue<>(maxHostNum);

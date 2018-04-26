@@ -51,6 +51,7 @@ public class Crawler {
 	public static DatagramSocket s = null;
 	public static int threadNum;
 	public static int port;
+	public static int hostNum;
 
 	public URLFrontier frontier;
 	public URLDistributor distributor;
@@ -178,9 +179,12 @@ public class Crawler {
 		port = Integer.parseInt(workerList[index].split(":")[1]);
 
 		ArrayList<String> seedURL = new ArrayList<>();
-
 		if (args.length >= 4) {
-			String seedFile = args[3];
+			hostNum = Integer.parseInt(args[4]);
+			log.debug(hostNum  + "\t Threads are setuped");			
+		}
+		if (args.length >= 5) {
+			String seedFile = args[4];
 			try {
 				seedURL = parseSeed(seedFile);
 			} catch (IOException e) {
