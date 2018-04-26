@@ -73,6 +73,7 @@ public class DBWrapper {
 		frontierConfig.setAllowCreate(true);
 		frontierConfig.setDeferredWrite(true);
 		URLFrontier = myEnv.openDatabase(null, "frontier", frontierConfig);
+		// URLFrontier.
 		DatabaseConfig seenConfig = new DatabaseConfig();
 		seenConfig.setAllowCreate(true);
 		seenConfig.setDeferredWrite(true);

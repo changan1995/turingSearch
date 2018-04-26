@@ -95,7 +95,7 @@ public class URLReciver{
 			db.saveURLSeen(url);
 			String host = new URL(url).getHost();
 			if (!frontier.addUrl(url)) {//return false on failure
-				db.addURL(System.currentTimeMillis(), url);
+				db.addURL(Crawler.fileIndex.incrementAndGet(), url);
 			}
 		} 
 	}

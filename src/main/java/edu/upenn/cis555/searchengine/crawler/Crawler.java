@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
 
@@ -45,20 +46,20 @@ public class Crawler {
 	public static int maxFileSize = 100 * 1024;
 
 	public static AtomicInteger num = new AtomicInteger(0);
-
 	// udp settings
 	public static InetAddress host = null;
 	public static DatagramSocket s = null;
 	public static int threadNum;
 	public static int port;
 	public static int hostNum;
-
+	// public static AtomicLong file;
 	public URLFrontier frontier;
 	public URLDistributor distributor;
 	public URLReciver receiver;
 	public static RobotsRule rule = new RobotsRule();
 	private ExecutorService executorService = Executors.newCachedThreadPool();
 	public static int index = -1;
+	public static AtomicLong fileIndex = new AtomicLong(0);
 	public static String[] workerList;
 
 	public Crawler(int index, String[] workerList, ArrayList<String> seedURL, int threadNum) {
@@ -94,6 +95,7 @@ public class Crawler {
 				return "shutdown";
 			}
 		});
+
 
 		Crawler.index = index;
 		Crawler.workerList = workerList;

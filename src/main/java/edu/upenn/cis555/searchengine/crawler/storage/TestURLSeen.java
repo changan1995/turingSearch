@@ -11,6 +11,5 @@ public class TestURLSeen {
 //		db.saveURLSeen("abc");
 		System.out.println(db.checkURLSeen("abc"));
 		
-		
 	}
 }
