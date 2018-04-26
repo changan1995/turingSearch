@@ -206,7 +206,7 @@ public class DBWrapper {
 		// 	return true;
 		// }
 		// return false;
-		return Crawler.bl.put(url);
+		return !Crawler.bl.put(url);
 	}
 	
 
