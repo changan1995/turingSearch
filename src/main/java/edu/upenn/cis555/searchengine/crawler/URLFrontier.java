@@ -48,7 +48,7 @@ public class URLFrontier {
 	// ConcurrentHashMap<String, Integer> delayCache;
 	// private long initTime=System.currentTimeMillis();
 	// int hostSize = numThreads *15;
-	private int maxQueueNum = 200; 
+	private int maxQueueNum = 1000; 
 	private int maxHostNum;
 	
 	// int upperLimit;
