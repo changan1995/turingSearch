@@ -31,3 +31,9 @@ git clone https://github.com/changan1995/cis455.git
 nohup mvn exec:java@WebCrawler -Dexec.args="./moj.txt 0" > log &
 nohup mvn exec:java@WebCrawler -Dexec.args="./moj.txt 1" > log &
 nohup mvn exec:java@WebCrawler -Dexec.args="./moj.txt 2 ./seedPage" > log &
+
+54.85.18.147:5001/status
+54.165.46.64:5001/status
+34.227.49.62:5001/status
+35.172.194.220:5001/status
+34.229.20.19:5001/status

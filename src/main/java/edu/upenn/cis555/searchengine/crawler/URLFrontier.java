@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -91,6 +92,7 @@ public class URLFrontier {
 			}
 		}
 		
+<<<<<<< HEAD
 		// fill the rest with db queues, may not be at spreaded hosts;	
 		for (String url : db.getURLs(maxHostNum-emptyIdx-1)) {
 			// String host=null;
@@ -102,6 +104,14 @@ public class URLFrontier {
 			// }
 			if(!this.addUrl(url)){
 				log.error("add url error");
+=======
+		for (String url : db.getURLs(100)) {
+			if (emptyIdx < maxHostNum) {
+				if (addToBackEnd(url, emptyIdx)) emptyIdx++;
+			}
+			else {
+				frontend.add(url);
+>>>>>>> moj
 			}
 
 			// else {
@@ -134,6 +144,7 @@ public class URLFrontier {
 				
 				// ArrayList<String> list = db.getURLs(50);
 				
+<<<<<<< HEAD
 				// String uF;
 				// int limit = 20;
 				// if (frontend.size() > 0.8 * upperLimit) {
@@ -195,6 +206,78 @@ public class URLFrontier {
 				// 			map.remove(toRemove);
 				// 		}
 				// 	}
+=======
+				String uF;
+				int limit = 20;
+				if (frontend.size() > 0.8 * upperLimit) {
+					limit = 50;
+				}
+				int count = 0;
+				while((uF = frontend.poll()) != null) {
+					list.add(uF);
+					count++;
+					if (count >= limit) {
+						break;
+					}
+				}
+				HashMap<String, LinkedList<String>> map = new HashMap<>();
+				for (String url : list) {
+					URL u;
+					try {
+						u = new URL(url);
+						String host = u.getHost();
+						LinkedList<String> hostList = map.getOrDefault(host, new LinkedList<>());
+						hostList.add(url);
+						map.put(host, hostList);
+					} catch (MalformedURLException e) {
+					}
+				}
+				Set<Integer> emptySet = new HashSet<>();
+				synchronized (emptyQueue) {
+					for (Integer i : emptyQueue)
+						emptySet.add(i.intValue());
+				}
+//				synchronized (emptyQueue) {
+				log.debug(emptySet);
+					Iterator<Integer> iter = emptySet.iterator();
+					while(iter.hasNext()) {
+						int idx = iter.next();
+						String toRemove = null;
+						for (String host : map.keySet()) {
+							if (hostToQueue.containsKey(host)) {
+								int hostIdx = hostToQueue.get(host);
+								if (backends[hostIdx].size() > 200) {
+									continue;
+								}
+								backends[hostIdx].addAll(map.get(host));
+								continue;
+							} else {
+								iter.remove();
+								backends[idx].addAll(map.get(host));
+								toRemove = host;
+								hostToQueue.put(host, idx);
+								Long releaseTime = lastRelease.get(host);
+								if (releaseTime == null)
+									releaseHeap.put(new TTR(host, System.currentTimeMillis()));
+								else {
+									try {
+										long time = releaseTime.longValue() + getDelay(host) * 1000;
+										releaseHeap.put(new TTR(host, time));
+									} catch(Exception e) {
+										continue;
+									}
+								}
+								break;
+							}
+						}
+						if (toRemove != null) {
+							map.remove(toRemove);
+						}
+					}
+					synchronized (emptyQueue) {
+						emptyQueue.retainAll(emptySet);
+					}
+>>>>>>> moj
 					
 //					for (String url : list) {
 //						try {
@@ -234,7 +317,11 @@ public class URLFrontier {
 //						}
 //					}
 					
+<<<<<<< HEAD
 				// }
+=======
+//				}
+>>>>>>> moj
 			}
 		};
 		
@@ -372,18 +459,30 @@ public class URLFrontier {
 // 		}
 	// }
 	
+<<<<<<< HEAD
 	private int getDelay(String host) throws Exception {
 		// if (delayCache.containsKey(host)) {
 		// 	return delayCache.get(host);
 		// } else {
 			int delay = 1;
+=======
+	private int getDelay(String host) {
+//		if (delayCache.containsKey(host)) {
+//			return delayCache.get(host);
+//		} else {
+			int delay = 2;
+>>>>>>> moj
 			try {
 				delay = Crawler.rule.getDelay(host);
 			} catch(Exception e) {
 				return 1;
 			}
 			return delay;
+<<<<<<< HEAD
 		// }
+=======
+//		}
+>>>>>>> moj
 	}
 	
 	public boolean addUrl(String url) {// add url to queue, call hashmap first then call queue.

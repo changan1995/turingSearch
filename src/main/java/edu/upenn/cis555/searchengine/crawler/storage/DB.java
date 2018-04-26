@@ -102,6 +102,11 @@ public class DB{
         buffer.clear();
         return true;
     }
+    
+    
+//    public List<Entry> getAllDocEntry() {
+//    		
+//    }
 
 
 }

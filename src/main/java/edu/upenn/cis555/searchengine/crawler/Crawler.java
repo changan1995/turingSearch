@@ -63,6 +63,8 @@ public class Crawler {
 	public Crawler(int index, String[] workerList, ArrayList<String> seedURL, int threadNum) {
 		Spark.port(port);
 		
+		Spark.threadPool(20, 8, 30000);
+		
 		Spark.get("/status", new Route() {
 			@Override
 			public Object handle(Request arg0, Response arg1) {

@@ -14,31 +14,32 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
+import org.asynchttpclient.*;
+import static org.asynchttpclient.Dsl.*;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.EvictingQueue;
 
 import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
 import edu.upenn.cis555.searchengine.crawler.structure.URLList;
-import spark.Request;
-import spark.Response;
-import spark.Route;
-import spark.Spark;
 
 public class URLDistributor{
 	
 	
 	// private static final long serialVersionUID = -1715283408490447605L;
-
-
+	
+//	AsyncHttpClient c = asyncHttpClient(config().setProxyServer(proxyServer("127.0.0.1", 38080)));
+	AsyncHttpClient c = asyncHttpClient();
 	
 	static Logger log = Logger.getLogger(URLDistributor.class);
 	
 	// flush buffer when exceed this limit
-	private static final int maxURLNum = 50;
+	private static final int maxURLNum = 100;
 	
 	DBWrapper db;
 	HashMap<String, URLList> buffers;
@@ -46,6 +47,8 @@ public class URLDistributor{
 	int index;
 	final ObjectMapper om = new ObjectMapper();
 	URLFrontier frontier;
+	
+	private EvictingQueue<ListenableFuture<Response>> evictQueue = EvictingQueue.create(500);
 	
 	public URLDistributor(int index, String[] workerList, URLFrontier frontier) {
 		
@@ -115,21 +118,23 @@ public class URLDistributor{
 	
 	private void sendToWorker(String address, URLList content) {
 		try {
-			URL url = new URL("http://" + address + "/push");
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestMethod("POST");
-			
-			// send this to /push as a POST!
-			OutputStream os = conn.getOutputStream();
+//			URL url = new URL("http://" + address + "/push");
+//			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//			conn.setDoOutput(true);
+//			conn.setRequestMethod("POST");
+//			// send this to /push as a POST!
+//			OutputStream os = conn.getOutputStream();
 			String jsonForList = om.writerWithDefaultPrettyPrinter().writeValueAsString(content);
 			byte[] toSend = jsonForList.getBytes();
-			log.debug(toSend);
-			os.write(toSend);
-			os.flush();
-			log.debug(conn.getResponseCode());
+			Request request = post("http://" + address + "/push").setBody(toSend).build();
+			log.debug("Try to send");
+			evictQueue.add(c.executeRequest(request));
+////			log.debug(toSend);
+//			os.write(toSend);
+//			os.flush();
+//			log.debug(conn.getResponseCode());
 			log.debug("Sent urls to " + address);
-			conn.disconnect();
+//			conn.disconnect();
 		} catch (Exception e) {
 			log.error("Sent urls to " + address + ": " + e.getMessage());
 		}

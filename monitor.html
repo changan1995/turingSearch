@@ -1,0 +1,51 @@
+<html>
+
+	
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+
+	<div class="node1"></div>
+	<br>
+	<div class="node2"></div>
+	<br>
+	<div class="node3"></div>
+	<br>
+	<div class="node4"></div>
+	<br>
+	<div class="node5"></div>
+	<br>
+
+	<button class="status">status</button>
+	<br>
+	<br>
+	<button class="shutdown">shutdown</button>
+
+	<script>
+		var workerList = ["34.224.41.114:5001",
+						  "34.228.156.231:5001",
+						  "34.227.49.62:5001",
+						  "35.172.194.220:5001",
+						  "34.229.20.19:5001"];
+
+		$('.status').click(function () {
+			for (var i = 0; i < workerList.length; i++) {
+				console.log(workerList[i]);
+
+			}
+			$.get("https://www.lyt48.com/photo?offset=5&tag=总选", crossDomain: true, function (data) {
+				console.log(data);
+			});
+			console.log("status");
+		});
+
+		$('.shutdown').click(function () {
+			for (var i = 0; i < workerList.length; i++) {
+				console.log(workerList[i]);
+
+			}
+			console.log("shutdown");
+		});
+
+	</script>
+</html>
