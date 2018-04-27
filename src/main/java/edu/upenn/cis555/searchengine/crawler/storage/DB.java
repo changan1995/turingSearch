@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -16,6 +18,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.S3Link;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper.FailedBatch;
 import com.amazonaws.services.s3.model.S3ObjectId;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 
@@ -92,8 +95,20 @@ public class DB{
         System.out.println("flushing buffer");
         try{
 
-        mapper.batchSave(buffer);
+        List<FailedBatch> failed =  mapper.batchSave(buffer);
+            // failed.get(0).
         // mapper.re
+        }catch (AmazonServiceException ase) {
+            System.err.println("Could not complete operation");
+            System.err.println("Error Message:  " + ase.getMessage());
+            System.err.println("HTTP Status:    " + ase.getStatusCode());
+            System.err.println("AWS Error Code: " + ase.getErrorCode());
+            System.err.println("Error Type:     " + ase.getErrorType());
+            System.err.println("Request ID:     " + ase.getRequestId());
+        
+        } catch (AmazonClientException ace) {
+            System.err.println("Internal error occured communicating with DynamoDB");
+            System.out.println("Error Message:  " + ace.getMessage());
         }catch(Throwable t){
             t.printStackTrace();
             System.err.println("err in sending buffer");
