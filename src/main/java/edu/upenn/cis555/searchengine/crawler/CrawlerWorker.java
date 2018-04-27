@@ -339,7 +339,7 @@ public class CrawlerWorker implements Runnable {
         		}
         }
 
-        return ; //TODO: crawled number
+        // return ; //TODO: crawled number
 
     }
 
