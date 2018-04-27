@@ -248,7 +248,7 @@ public class CrawlerWorker implements Runnable {
     public void run() {
         // threadName = Thread.currentThread().getName();
     		Thread.currentThread().setName("" + id);
-        while (Crawler.num.get()<Crawler.crawledNum) {//main loop
+        while (true) {//main loop
 //            URLEntry urlEntry = null;
             //take out one url
         		try {
