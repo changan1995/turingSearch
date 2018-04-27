@@ -54,7 +54,7 @@ public class CrawlerWorker implements Runnable {
     // public static String dbDirectory;
     private URLFrontier frontier;
 	private URLDistributor distributor;
-	public static Pattern pattern = Pattern.compile("^http[s]?://.*(facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|tumblr)\\.com.*");
+	public static Pattern pattern = Pattern.compile("^http[s]?://.*(facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|blogspot|tumblr)\\.com.*");
 
     public CrawlerWorker(int id, int crawledNum, URLFrontier frontier){
         this.id =id;

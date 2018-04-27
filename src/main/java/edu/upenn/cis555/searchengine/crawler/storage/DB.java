@@ -22,11 +22,17 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper.FailedBatch
 import com.amazonaws.services.s3.model.S3ObjectId;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 
+import org.apache.log4j.Logger;
 import org.omg.IOP.TAG_ORB_TYPE;
+
+import edu.upenn.cis555.searchengine.crawler.URLDistributor;
 
 
 
 public class DB{
+
+    static Logger log = Logger.getLogger(DB.class);
+    
     private List<Entry> buffer; 
     private DynamoDBMapper mapper;
     private String bucketName ="cis455-crawler-changanw-2";
@@ -96,9 +102,11 @@ public class DB{
         try{
 
         List<FailedBatch> failed =  mapper.batchSave(buffer);
+        System.err.println(failed.size());
             // failed.get(0).
         // mapper.re
         }catch (AmazonServiceException ase) {
+            log.debug("send error"+ase.getMessage());
             System.err.println("Could not complete operation");
             System.err.println("Error Message:  " + ase.getMessage());
             System.err.println("HTTP Status:    " + ase.getStatusCode());
@@ -107,6 +115,7 @@ public class DB{
             System.err.println("Request ID:     " + ase.getRequestId());
         
         } catch (AmazonClientException ace) {
+            log.debug("Error Message:  " + ace.getMessage());
             System.err.println("Internal error occured communicating with DynamoDB");
             System.out.println("Error Message:  " + ace.getMessage());
         }catch(Throwable t){
