@@ -32,7 +32,7 @@ public class DB{
 
     public DB(){
         this.buffer = new ArrayList<>();
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAIYGQI5BZEQ4IWZSA", "vaW7GHGmAFOr4rhubXIJEEPtxsC3fuCdOvv4xvYd");
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAJJVOKDS4O2JIIO5Q", "PRB3moNWX5FZn5AdqNWwOvw/X6WfpI0gklm/MKQW");
         // AWSCredentialsProvider s3Credential = new AWSCredentialsProviderChain(credentialsProviders)
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
                                 .withRegion("us-east-1")
