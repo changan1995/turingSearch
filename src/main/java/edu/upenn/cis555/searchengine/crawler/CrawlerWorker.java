@@ -163,17 +163,17 @@ public class CrawlerWorker implements Runnable {
             // distributor.distributeURL(text);
             
         }
-        try{
-			String body = document.body().text();
-			if (body.length() > bodyLength) {
-				entry.setBodySample(body.substring(0, bodyLength));
-			} else {
-				entry.setBodySample(body);
-			}
-			entry.setTitle(document.title());
-		} catch (NullPointerException e) {
-			// body / title missed
-		}
+        // try{
+		// 	String body = document.body().text();
+		// 	if (body.length() > bodyLength) {
+		// 		entry.setBodySample(body.substring(0, bodyLength));
+		// 	} else {
+		// 		entry.setBodySample(body);
+		// 	}
+		// 	entry.setTitle(document.title());
+		// } catch (NullPointerException e) {
+		// 	// body / title missed
+		// }
         entry.setOutLinks(outLinksBuff);
                 
         if(!distributor.urlFrontierFull()){

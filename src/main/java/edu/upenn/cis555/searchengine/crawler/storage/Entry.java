@@ -14,7 +14,7 @@ public class Entry{
     private S3Link contentLink;
     private Set<String> outLinks;
     private String title;
-    private String bodySample;
+    // private String bodySample;
 
     public Entry(String urlString,S3Link contentLink,Set<String> outLinks){
         this.urlString=urlString;
@@ -73,14 +73,14 @@ public class Entry{
 		this.title = title;
 	}
 
-    @DynamoDBAttribute(attributeName = "bodySample") 
-	public String getBodySample() {
-		return bodySample;
-	}
+    // @DynamoDBAttribute(attributeName = "bodySample") 
+	// public String getBodySample() {
+	// 	return bodySample;
+	// }
 
 
-	public void setBodySample(String bodySample) {
-		this.bodySample = bodySample;
-	}
+	// public void setBodySample(String bodySample) {
+	// 	this.bodySample = bodySample;
+	// }
     
 }

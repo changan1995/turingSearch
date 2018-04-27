@@ -236,7 +236,7 @@ public class Crawler {
 
 		//
 		// initial environment
-		bl = BloomFilter.create(Funnels.stringFunnel(Charset.forName("UTF-8")), 200000);
+		bl = BloomFilter.create(Funnels.stringFunnel(Charset.forName("UTF-8")), 400000);
 		// urlToDo = new PriorityBlockingQueue<>(maxFileNumber);// in the sput
 		robotLst = Collections.synchronizedMap(new LinkedHashMap<String, RobotsTxtInfo>() {
 			@Override
