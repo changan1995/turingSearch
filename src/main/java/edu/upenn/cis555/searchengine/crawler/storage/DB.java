@@ -76,7 +76,7 @@ public class DB{
     }
 
     public synchronized boolean add(Entry entry){
-        if(this.size()>=20){
+        if(this.size()>=5){
             flush();
         }
         try{
@@ -93,6 +93,7 @@ public class DB{
         try{
 
         mapper.batchSave(buffer);
+        // mapper.re
         }catch(Throwable t){
             t.printStackTrace();
             System.err.println("err in sending buffer");
