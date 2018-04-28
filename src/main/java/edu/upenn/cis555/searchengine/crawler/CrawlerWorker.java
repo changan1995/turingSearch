@@ -34,7 +34,7 @@ import edu.upenn.cis555.searchengine.crawler.structure.URLEntry;
 
 public class CrawlerWorker implements Runnable {
 	
-	static Logger log = Logger.getLogger(CrawlerWorker.class);
+	static Logger log = Logger.getLogger("debugLogger");
     // public static BlockingQueue<URL> urlToDo;//add seen url
     // public static BlockingQueue<URL> urlDone;
     private boolean flag = false;

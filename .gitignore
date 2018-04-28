@@ -5,6 +5,7 @@ bdb/
 /store0/
 *.pem
 log
+logs/
 /store1/
 /store2/
 /store3/
