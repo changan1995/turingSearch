@@ -152,10 +152,15 @@ public class DBWrapper {
 	public void bulidBL(){
 		DatabaseEntry keyEntry = new DatabaseEntry();
 		DatabaseEntry dataEntry = new DatabaseEntry();
-		Cursor cursor = URLFrontier.openCursor(null, null);		
-		if(cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS)
-			Crawler.bl.put(StringBinding.entryToString(dataEntry));
+		Cursor cursor = URLSeen.openCursor(null, null);	
+		int i=0;	
+		while(cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS){
+			i++;
+			Crawler.bl.put(StringBinding.entryToString(keyEntry));
+		}
+		System.out.println("built "+i+"seen url");
 	}
+
 	
 //	@SuppressWarnings({ "rawtypes", "unchecked" })
 //	public void saveURLSeen(HashSet<String> set) {
@@ -196,8 +201,20 @@ public class DBWrapper {
 
 		
 	}
+
+	public void removeDB(String id) {
+		try {
+			// close database before remove
+			myEnv.removeDatabase(null, id);
+		} catch (DatabaseNotFoundException e) {
+			System.out.println("Database " + id + " doesn't exist.");
+		}
+	}
 	
-	
+	public void closeFrontier(){
+		this.URLFrontier.close();
+	}
+
 	public boolean checkURLSeen(String url) {
 		// DatabaseEntry keyEntry = new DatabaseEntry();
 		// DatabaseEntry dataEntry = new DatabaseEntry();

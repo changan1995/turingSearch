@@ -141,6 +141,17 @@
 							</arguments>
 						</configuration>
 					</execution>
+					<execution>
+						<id>removeDB</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>edu.upenn.cis555.searchengine.crawler.storage.DBdelete</mainClass>
+							<arguments>
+							</arguments>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>

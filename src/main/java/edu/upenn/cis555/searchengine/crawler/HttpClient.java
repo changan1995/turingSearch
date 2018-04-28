@@ -156,7 +156,7 @@ public class HttpClient {
 		// afte get the response handle the response headers & content
 
 		
-		sendUDP(url.toString());
+		// sendUDP(url.toString());
 		return true;
 	}
 
@@ -214,7 +214,7 @@ public class HttpClient {
 			}
 		}
 
-		sendUDP(url.toString());		
+		// sendUDP(url.toString());		
 		return true;
 
 	}
@@ -293,6 +293,12 @@ public class HttpClient {
 
 	public String getContent() {
 		return this.body;
+	}
+
+
+	public static void main(String[] args){
+		HttpClient hc = new HttpClient();
+		System.out.println(hc.send("GET", "https://en.wikipedia.org/wiki/Turbine")==true);
 	}
 
 	// //text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8

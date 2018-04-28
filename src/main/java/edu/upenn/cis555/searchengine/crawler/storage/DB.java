@@ -102,6 +102,7 @@ public class DB{
         try{
 
         List<FailedBatch> failed =  mapper.batchSave(buffer);
+        // failed.
         System.err.println(failed.size());
             // failed.get(0).
         // mapper.re

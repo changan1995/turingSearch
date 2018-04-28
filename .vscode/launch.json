@@ -1,13 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
-    {
-        "type": "chrome",
-        "request": "launch",
-        "name": "Launch Chrome",
-        // "url": "http://localhost:8080",
-        "file": "${workspaceRoot}/monitor.html",
-    },
+
         {
             "type": "java",
             "name": "0worker",
@@ -22,6 +16,20 @@
             "request": "launch","externalConsole": true,
             "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
             "args":"./config.txt 1 ./seedPage"
+            
+        },{
+            "type": "java",
+            "name": "httpclienttest",
+            "request": "launch","externalConsole": true,
+            "mainClass": "edu.upenn.cis555.searchengine.crawler.HttpClient",
+            "args":"./config.txt 1 ./seedPage"
+            
+        },{
+            "type": "java",
+            "name": "removedb",
+            "request": "launch","externalConsole": true,
+            "mainClass": "edu.upenn.cis555.searchengine.crawler.storage.DBdelete",
+            "args":"1"
             
         }
     ]
