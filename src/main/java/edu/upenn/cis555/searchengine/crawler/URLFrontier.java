@@ -424,7 +424,7 @@ public class URLFrontier {
 		if((host=this.getHost(url))==null){ return false;}//get host name		
 		if((queue = hostToQueue.get(url))==null){//not in the hashmap
 			if(hostQueue.size()<maxHostNum){
-				int count = 50;
+				int count = 20;
 				if(whileLst.matcher(host).find()){
 					count =100000;
 				}
