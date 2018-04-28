@@ -166,7 +166,7 @@ public class HttpClient {
 		HttpsURLConnection httpsconn = null;
 		try {
 			httpsconn = (HttpsURLConnection) url.openConnection();
-			httpsconn.setConnectTimeout(5 * 1000);
+			httpsconn.setConnectTimeout(2 * 1000);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
