@@ -50,7 +50,7 @@ public class URLFrontier {
 	// ConcurrentHashMap<String, Integer> delayCache;
 	// private long initTime=System.currentTimeMillis();
 	// int hostSize = numThreads *15;
-	private int maxQueueNum = 50; 
+	private int maxQueueNum = 20; 
 	private int maxHostNum;
 	
 	// int upperLimit;
@@ -337,6 +337,7 @@ public class URLFrontier {
 				returnString = queue.poll();
 				return returnString;
 			}else{
+				hostToQueue.remove(host);
 				return null;
 			}
 		}
@@ -407,11 +408,11 @@ public class URLFrontier {
 		// if (delayCache.containsKey(host)) {
 		// 	return delayCache.get(host);
 		// } else {
-			int delay = 1;
+			int delay = 0;
 			try {
 				delay = Crawler.rule.getDelay(host); 
 			} catch(Exception e) {
-				return 1;
+				return 0;
 			}
 			return delay;
 		// }
