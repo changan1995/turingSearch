@@ -112,6 +112,7 @@ public class HttpClient {
 			// set headers
 			conn.setRequestProperty("accept", "*/*");
 			conn.setRequestProperty("connection", "Keep-Alive");
+			conn.setRequestProperty("content-language", "en");
 			conn.setRequestProperty("user-agent", "cis455crawler");
 			conn.setRequestProperty("Accept-Language", "en");
 
@@ -179,6 +180,8 @@ public class HttpClient {
 		httpsconn.setRequestProperty("Host", url.getHost());
 		httpsconn.setRequestProperty("User-Agent", "cis455crawler");
 		httpsconn.setRequestProperty("Accept-Language", "en");
+		httpsconn.setRequestProperty("content-language", "en");
+		
 
 		try {
 			// check response code

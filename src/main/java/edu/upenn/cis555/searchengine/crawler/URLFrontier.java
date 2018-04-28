@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -36,6 +37,7 @@ public class URLFrontier {
 	// ConcurrentLinkedQueue<String> frontend;
 	ConcurrentHashMap<String, Queue<String>> hostToQueue = new ConcurrentHashMap<String, Queue<String>>();
 	PriorityBlockingQueue<TTR> hostQueue;
+	public static Pattern whileLst = Pattern.compile("wikipedia|cnn|nytimes|espn|yahoo|reddit|apache|.org");	
 	DBWrapper db;
 	// LinkedHashMap<String, Long> lastRelease = new LinkedHashMap<String, Long>(6 * numThreads * 5, (float) 0.75, true) {
 	// 	private static final long serialVersionUID = 2009731084826885027L;
@@ -90,7 +92,8 @@ public class URLFrontier {
 			// }
 			if(!this.addUrl(url)){
 				log.error("add url error");
-				db.addURL(Crawler.fileIndex.incrementAndGet(), url);
+				db.addURL(System.currentTimeMillis(), url);
+				Crawler.num.incrementAndGet();
 				
 			}
 		}
@@ -106,8 +109,8 @@ public class URLFrontier {
 			// }
 			if(!this.addUrl(url)){
 				log.error("add url error");
-				db.addURL(Crawler.fileIndex.incrementAndGet(), url);
-				
+				db.addURL(System.currentTimeMillis(), url);
+				Crawler.num.incrementAndGet();
 			}
 
 			// else {
@@ -287,7 +290,8 @@ public class URLFrontier {
 			for (String url : db.getURLs((maxHostNum-hostQueueCount)/50)) {
 				if(!this.addUrl(url)){
 					log.error("add url error");
-					db.addURL(Crawler.fileIndex.incrementAndGet(), url);					
+					db.addURL(System.currentTimeMillis(), url);				
+					Crawler.num.incrementAndGet();	
 				}
 	
 				// else {
@@ -301,6 +305,12 @@ public class URLFrontier {
 		if((release = hostQueue.take())==null){//blocking queue is currently blocking
 			return null;
 		}			
+		if(release.getCount()<0){
+			hostToQueue.remove(release.getHost());
+			return null;
+		}else{
+			release.decrement();
+		}
 		// log.debug("Release heap size: " + hostQueue.size());
 		
 		long wait = release.getReleasTime() - System.currentTimeMillis();
@@ -321,6 +331,7 @@ public class URLFrontier {
 			if(queue.size()>1){
 				returnString = queue.poll();
 				release.setReleaseTime(System.currentTimeMillis()+getDelay(host));
+				hostQueue.add(release);				
 				return returnString;
 			}else if (queue.size()==1){
 				returnString = queue.poll();
@@ -398,7 +409,7 @@ public class URLFrontier {
 		// } else {
 			int delay = 1;
 			try {
-				delay = Crawler.rule.getDelay(host);
+				delay = Crawler.rule.getDelay(host); 
 			} catch(Exception e) {
 				return 1;
 			}
@@ -412,7 +423,11 @@ public class URLFrontier {
 		if((host=this.getHost(url))==null){ return false;}//get host name		
 		if((queue = hostToQueue.get(url))==null){//not in the hashmap
 			if(hostQueue.size()<maxHostNum){
-				TTR ttr =new TTR(host, System.currentTimeMillis());
+				int count = 50;
+				if(whileLst.matcher(host).find()){
+					count =100000;
+				}
+				TTR ttr =new TTR(host, System.currentTimeMillis(),count);
 				queue =new LinkedList<>();
 				queue.add(url);
 				hostToQueue.put(host,queue);

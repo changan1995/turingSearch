@@ -60,7 +60,7 @@ public class URLDistributor{
 		// worker list
 		this.workerList = workerList;
 		this.index = index;
-		this.frontier = frontier;
+		this.frontier = frontier; 
 		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 		buffers = new HashMap<>();
 		for (int i = 0; i < workerList.length; i++) {
@@ -84,7 +84,8 @@ public class URLDistributor{
 			}
 			String host = new URL(url).getHost();
 			if (!frontier.addUrl(url)) {//return false on failure
-					db.addURL(Crawler.fileIndex.incrementAndGet(), url);
+					db.addURL(System.currentTimeMillis(), url);
+					Crawler.num.incrementAndGet();
 			}
 		}
 	}

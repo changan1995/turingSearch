@@ -61,7 +61,7 @@ public class Crawler {
 	public static RobotsRule rule = new RobotsRule();
 	private ExecutorService executorService = Executors.newCachedThreadPool();
 	public static int index = -1;
-	public static AtomicLong fileIndex = new AtomicLong(0);
+	// public static AtomicLong fileIndex = new AtomicLong(0);
 	public static String[] workerList;
 
 	public Crawler(int index, String[] workerList, ArrayList<String> seedURL, int threadNum) {
