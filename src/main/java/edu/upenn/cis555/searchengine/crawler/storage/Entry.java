@@ -42,7 +42,7 @@ public class Entry{
 	public void setUrlString(String urlString) {
 		this.urlString = urlString;
     }
-    
+
     @DynamoDBAttribute(attributeName = "contentLink")        
 	public S3Link getContentLink() {
 		return contentLink;

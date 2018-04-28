@@ -55,7 +55,7 @@ public class CrawlerWorker implements Runnable {
     private URLFrontier frontier;
 	private URLDistributor distributor;
 	public static Pattern pattern = Pattern.compile("^http[s]?://.*(facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|blogspot|tumblr)\\.com.*");
-	public static Pattern blackLst = Pattern.compile("cn|.39.|163|nuomi|.ro|.it|glassdoor|fr.|academia|getithalfoff|cn|search|gril|porn|sex|create|subscribe|jp|kr|korea|hao123|qq|jd|shanghai|beijing|china|360|climatemps|hao315|leju|kankan|pussy|blog|fangjia|fangzi|cheshi|fuck|fbi");
+	public static Pattern blackLst = Pattern.compile("cn|.39.|163|nuomi|as.com|.ro|.it|glassdoor|fr.|kwnews|academia|getithalfoff|cn|search|gril|porn|sex|create|subscribe|jp|kr|korea|hao123|qq|jd|shanghai|beijing|china|360|climatemps|hao315|leju|kankan|pussy|blog|fangjia|fangzi|cheshi|fuck|fbi");
     
     public CrawlerWorker(int id, int crawledNum, URLFrontier frontier){
         this.id =id;
