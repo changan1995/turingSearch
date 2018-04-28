@@ -77,7 +77,6 @@ public class CrawlerWorker implements Runnable {
         if (!hc.send("GET", url)) {
             return;
         }
-        log.debug("id"+id+"\tDownloaded:\t" + url);        
         //put the file in to db. prepare for multiple value
         // txn = dbWrapper.getTransaction();
         try {
@@ -95,7 +94,11 @@ public class CrawlerWorker implements Runnable {
         
            db.setContentLink(entry, contentString);
             anaylize(url,contentString);
-           db.add(entry);
+           if(db.add(entry)){
+            log.debug("id"+id+"\tDownloaded:\t" + url);                    
+           }else{
+            log.debug("id"+id+"\tFailededed:\t" + url);                                
+           }
             Crawler.num.incrementAndGet();
 //        log.debug("id"+id+"\tUpDynamoDBed:\t" + url);        
             

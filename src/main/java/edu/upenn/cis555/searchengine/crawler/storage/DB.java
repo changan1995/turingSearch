@@ -92,6 +92,7 @@ public class DB{
             this.buffer.add(entry);
         }catch(Throwable e){
             System.err.println("err in add to buffer ,not send");
+            return false;
         }
         return true;
     }
