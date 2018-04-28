@@ -55,7 +55,7 @@ public class CrawlerWorker implements Runnable {
     private URLFrontier frontier;
 	private URLDistributor distributor;
 	public static Pattern pattern = Pattern.compile("^http[s]?://.*(facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|blogspot|tumblr)\\.com.*");
-	public static Pattern blackLst = Pattern.compile("cn|.39.|163|nuomi|cn|jp|hao123|qq|jd|shanghai|beijing|china|360|hao315|leju|kankan|pussy|blog|fangjia|fangzi|cheshi|fuck|fbi");
+	public static Pattern blackLst = Pattern.compile("cn|.39.|163|nuomi|cn|search|gril|porn|create|subscribe|jp|hao123|qq|jd|shanghai|beijing|china|360|hao315|leju|kankan|pussy|blog|fangjia|fangzi|cheshi|fuck|fbi");
     
     public CrawlerWorker(int id, int crawledNum, URLFrontier frontier){
         this.id =id;
@@ -148,6 +148,8 @@ public class CrawlerWorker implements Runnable {
             if (text.contains("wikipedia") && !text.contains("en.wikipedia")) {
             		continue;
             }
+            if(text.length()>120)
+                continue;
             // System.out.println(doc.getUrl()+"\t\t"+text);
 			try {
                 URL url = new URL(text);
