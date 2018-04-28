@@ -30,7 +30,7 @@ import edu.upenn.cis555.searchengine.crawler.structure.URLList;
 
 public class URLDistributor{
 	
-	
+		
 	// private static final long serialVersionUID = -1715283408490447605L;
 	
 //	AsyncHttpClient c = asyncHttpClient(config().setProxyServer(proxyServer("127.0.0.1", 38080)));
@@ -94,7 +94,9 @@ public class URLDistributor{
 		for (String url: urls ){
 			try {
 				URL u = new URL(url);
-				int idx = Math.abs(u.getHost().hashCode()) % workerList.length;
+				String host = u.getHost();
+				
+				int idx = Math.abs(host.hashCode()) % workerList.length;
 				if (index == idx) {
 					// still in the local node
 					addURLToQueue(url);

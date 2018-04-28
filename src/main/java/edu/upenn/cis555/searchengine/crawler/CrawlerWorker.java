@@ -55,7 +55,8 @@ public class CrawlerWorker implements Runnable {
     private URLFrontier frontier;
 	private URLDistributor distributor;
 	public static Pattern pattern = Pattern.compile("^http[s]?://.*(facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|blogspot|tumblr)\\.com.*");
-
+	public static Pattern blackLst = Pattern.compile("cn|.39.|pussy|fangjia|fangzi|cheshi|fuck|fbi");
+    
     public CrawlerWorker(int id, int crawledNum, URLFrontier frontier){
         this.id =id;
         this.db = new DB();
@@ -149,7 +150,11 @@ public class CrawlerWorker implements Runnable {
             }
             // System.out.println(doc.getUrl()+"\t\t"+text);
 			try {
-				URL url = new URL(text);
+                URL url = new URL(text);
+                String host = url.getHost();
+                if(blackLst.matcher(host).find()){
+                    continue;
+                }
 			} catch (MalformedURLException e) {
                 // System.out.println("nullpointer"+text);
                 // e.printStackTrace();

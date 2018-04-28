@@ -31,6 +31,13 @@
             "mainClass": "edu.upenn.cis555.searchengine.crawler.storage.DBdelete",
             "args":"1"
             
+        },{
+            "type": "java",
+            "name": "regextest",
+            "request": "launch","externalConsole": true,
+            "mainClass": "edu.upenn.cis555.RegexTest",
+            "args":"1"
+            
         }
     ]
 }
