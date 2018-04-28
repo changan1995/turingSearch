@@ -107,6 +107,7 @@ public class HttpClient {
 		try {
 			// get connection
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			HttpURLConnection.setFollowRedirects(false);
 			conn.setConnectTimeout(5 * 1000);
 			conn.setRequestMethod(method);
 			// set headers
@@ -167,6 +168,7 @@ public class HttpClient {
 		HttpsURLConnection httpsconn = null;
 		try {
 			httpsconn = (HttpsURLConnection) url.openConnection();
+			HttpsURLConnection.setFollowRedirects(false);
 			httpsconn.setConnectTimeout(2 * 1000);
 		} catch (IOException e) {
 			e.printStackTrace();
