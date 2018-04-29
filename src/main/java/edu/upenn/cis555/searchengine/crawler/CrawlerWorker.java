@@ -56,6 +56,7 @@ public class CrawlerWorker implements Runnable {
 	private URLDistributor distributor;
 	public static Pattern pattern = Pattern.compile("^http[s]?://.*(facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|blogspot|tumblr)\\.com.*");
 	public static Pattern blackLst = Pattern.compile("cn|.39.|163|nuomi|as.com|image|.ro|.it|glassdoor|fr.|kwnews|academia|getithalfoff|cn|search|gril|porn|sex|create|subscribe|jp|kr|korea|hao123|qq|jd|shanghai|beijing|china|360|climatemps|hao315|leju|kankan|pussy|blog|fangjia|fangzi|cheshi|fuck|fbi");
+	public static Pattern blackLst2 = Pattern.compile("wmflabs|xtools|wikimedia");
     
     public CrawlerWorker(int id, int crawledNum, URLFrontier frontier){
         this.id =id;
@@ -154,7 +155,7 @@ public class CrawlerWorker implements Runnable {
 			try {
                 URL url = new URL(text);
                 String host = url.getHost();
-                if(blackLst.matcher(host).find()){
+                if(blackLst.matcher(host).find()||blackLst2.matcher(host).find()){
                     continue;
                 }
 			} catch (MalformedURLException e) {
