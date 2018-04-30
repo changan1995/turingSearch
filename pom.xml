@@ -136,8 +136,10 @@
 							<arguments>
 								<argument>./config.txt</argument>
 								<argument>0</argument>
+								<argument>2</argument>
+								<argument>10</argument>
+								<argument>0</argument>
 								<argument>./seedPage</argument>
-								<argument>25</argument>
 							</arguments>
 						</configuration>
 					</execution>

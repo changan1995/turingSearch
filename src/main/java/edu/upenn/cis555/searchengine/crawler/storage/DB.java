@@ -85,15 +85,15 @@ public class DB{
     }
 
     public synchronized boolean add(Entry entry){
-        if(this.size()>=23){
-            flush();
-        }
-        try{
-            this.buffer.add(entry);
-        }catch(Throwable e){
-            System.err.println("err in add to buffer ,not send");
-            return false;
-        }
+        // if(this.size()>=23){
+        //     flush();
+        // }
+        // try{
+        //     this.buffer.add(entry);
+        // }catch(Throwable e){
+        //     System.err.println("err in add to buffer ,not send");
+        //     return false;
+        // }
         return true;
     }
 

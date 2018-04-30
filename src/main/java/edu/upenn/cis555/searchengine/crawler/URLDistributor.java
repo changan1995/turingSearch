@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,12 +30,10 @@ import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
 import edu.upenn.cis555.searchengine.crawler.structure.URLList;
 
 public class URLDistributor{
-	
-		
 	// private static final long serialVersionUID = -1715283408490447605L;
 	
 //	AsyncHttpClient c = asyncHttpClient(config().setProxyServer(proxyServer("127.0.0.1", 38080)));
-	AsyncHttpClient c = asyncHttpClient();
+	// AsyncHttpClient c = asyncHttpClient();
 	
 	static Logger log = Logger.getLogger(URLDistributor.class);
 	
@@ -49,7 +48,7 @@ public class URLDistributor{
 	final ObjectMapper om = new ObjectMapper();
 	URLFrontier frontier;
 	
-	private EvictingQueue<ListenableFuture<Response>> evictQueue = EvictingQueue.create(500);
+	// private EvictingQueue<ListenableFuture<Response>> evictQueue = EvictingQueue.create(500);
 	
 	public boolean urlFrontierFull(){
 		return db.getFrontierCount()>2000;
@@ -141,8 +140,17 @@ public class URLDistributor{
 			byte[] toSend = jsonForList.getBytes();
 			Request request = post("http://" + address + "/push").setBody(toSend).build();
 			log.debug("Try to send");
-			evictQueue.add(c.executeRequest(request));
-////			log.debug(toSend);
+			// evictQueue.add(c.executeRequest(request));
+			new Thread(() -> {
+						HttpClient hc = new HttpClient();
+						try {
+							hc.distributeUrl("http://" + address + "/push", toSend);
+						} catch (SocketTimeoutException e) {
+							log.error("timeout for this");
+						}
+			 		// }
+			}).start();
+////		log.debug(toSend);[]
 //			os.write(toSend);
 //			os.flush();
 //			log.debug(conn.getResponseCode());

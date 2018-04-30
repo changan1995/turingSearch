@@ -2,6 +2,9 @@ package edu.upenn.cis555.searchengine.crawler;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -53,6 +56,7 @@ public class CrawlerWorker implements Runnable {
     private Entry entry =null;
     // public static String dbDirectory;
     private URLFrontier frontier;
+    private DBWrapper dbWrapper;
 	private URLDistributor distributor;
 	public static Pattern pattern = Pattern.compile("^http[s]?://.*(facebook|google|twitter|amazon|linkedin|pornhub|weibo|instagram|blogspot|tumblr)\\.com.*");
 	public static Pattern blackLst = Pattern.compile("cn|.39.|163|nuomi|as.com|image|.ro|glassdoor|fr.|kwnews|academia|getithalfoff|cn|search|gril|porn|sex|create|subscribe|jp|kr|korea|hao123|qq|jd|shanghai|beijing|china|360|climatemps|hao315|leju|kankan|pussy|blog|fangjia|fangzi|cheshi|fuck|fbi");
@@ -65,7 +69,7 @@ public class CrawlerWorker implements Runnable {
         this.frontier = frontier;
         System.out.println(id + "worker setup");
         this.distributor = new URLDistributor(Crawler.index, Crawler.workerList, frontier);
-        
+        dbWrapper=DBWrapper.getInstance();
         // bl= BloomFilter.create(Funnels.stringFunnel(), 10000);
         // private PriorityQueue<URLEntry> urlToDo = Crawler.urlToDo;
     }
@@ -92,9 +96,20 @@ public class CrawlerWorker implements Runnable {
             entry= new Entry(url);
             // TODO uncomment the DynamoDB
             String contentString =hc.getContent();
-//        log.debug("id"+id+"\tUpDynamoing:\t" + url);        
-        
-           db.setContentLink(entry, contentString);
+
+//        log.debug("id"+id+"\tUpDynamoing:\t" + url);   
+            MessageDigest digest=null;
+            try {
+                digest = MessageDigest.getInstance("SHA-256");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            byte[] encoded = digest.digest(contentString.getBytes(StandardCharsets.UTF_8));     
+            if(!Crawler.bl_content.put(encoded)){
+                return;
+            }
+            dbWrapper.saveContentSeen(encoded);
+            db.setContentLink(entry, contentString);
             anaylize(url,contentString);
            if(db.add(entry)){
             log.debug("id"+id+"\tDownloaded:\t" + url);                    
@@ -187,10 +202,10 @@ public class CrawlerWorker implements Runnable {
 		// }
         entry.setOutLinks(outLinksBuff);
                 
-        if(!distributor.urlFrontierFull()){
+        // if(!distributor.urlFrontierFull()){
             distributor.distributeURL(outLinksBuff);
         
-        }
+        // }
         return;
         
     }

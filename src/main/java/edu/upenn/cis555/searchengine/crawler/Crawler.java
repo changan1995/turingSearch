@@ -45,8 +45,8 @@ public class Crawler {
 	public static Map<String, RobotsTxtInfo> robotLst;// TODO:concurrent handle
 	public static int crawledNum = 250000;
 	public static BloomFilter<CharSequence> bl;
+	public static BloomFilter<byte[]> bl_content;
 	public static int maxFileSize = 10 * 1024;
-
 	public static AtomicInteger num = new AtomicInteger(0);
 	// udp settings
 	public static InetAddress host = null;
@@ -237,6 +237,7 @@ public class Crawler {
 		//
 		// initial environment
 		bl = BloomFilter.create(Funnels.stringFunnel(Charset.forName("UTF-8")), 2000000);
+		bl_content = BloomFilter.create(Funnels.byteArrayFunnel(), 1000000);
 		// urlToDo = new PriorityBlockingQueue<>(maxFileNumber);// in the sput
 		robotLst = Collections.synchronizedMap(new LinkedHashMap<String, RobotsTxtInfo>() {
 			@Override

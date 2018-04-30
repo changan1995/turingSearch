@@ -5,17 +5,16 @@
         {
             "type": "java",
             "name": "0worker",
-            "request": "launch","externalConsole": true,
+            "request": "launch",
             "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
-            "args":"./config.txt 0 10 150 0 ./seedPage"
+            "args":"./config.txt 0 5 10 0 ./seedPage"
             // config.txt WokerIndex threadnum hosttoQueue currentNum SeedPage
-
         },{
             "type": "java",
             "name": "1worker",
             "request": "launch","externalConsole": true,
             "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
-            "args":"./config.txt 1 ./seedPage"
+            "args":"./config.txt 1 5 10 0 ./seedPage"
             
         },{
             "type": "java",
@@ -29,7 +28,7 @@
             "name": "removedb",
             "request": "launch","externalConsole": true,
             "mainClass": "edu.upenn.cis555.searchengine.crawler.storage.DBdelete",
-            "args":"1"
+            "args":"0"
             
         },{
             "type": "java",

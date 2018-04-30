@@ -57,6 +57,71 @@ public class HttpClient {
 
 	}
 
+	public boolean distributeUrl(String urlString , byte[] content) throws SocketTimeoutException{
+		URL url=null;
+		try {
+			url = new URL(urlString);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			// e.printStackTrace();
+			return false;
+		}
+		HttpURLConnection conn=null;
+		try {
+			conn = (HttpURLConnection) url.openConnection();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			return false;
+			
+		}
+		HttpURLConnection.setFollowRedirects(false);
+		conn.setConnectTimeout(2 * 1000);
+		try {
+			conn.setRequestMethod("POST");
+		} catch (ProtocolException e) {
+			// TODO Auto-generated catch block
+			return false;
+			
+		}
+		OutputStream out =null;
+		try {
+			conn.setDoOutput(true);
+			out = conn.getOutputStream();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			return false;
+			
+		}
+		try {
+			out.write(content);
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			return false;
+			
+		}
+		try {
+			if ((responseSucces = conn.getResponseCode() == HttpURLConnection.HTTP_OK)) {
+				return true;
+			// get response headers
+			// Map<String, List<String>> headers = conn.getHeaderFields();
+			// // headders test
+			// for (String key : headers.keySet()) {
+			// System.out.println(key + "--->" + headers.get(key));
+			// }
+		}else{
+			return false;
+		}
+		} catch (IOException e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return false;
+			
+		}finally{
+			return false;
+		}
+	}
+
 	// both send from here
 	public boolean send(String method, String urlString) {
 		// url string testing

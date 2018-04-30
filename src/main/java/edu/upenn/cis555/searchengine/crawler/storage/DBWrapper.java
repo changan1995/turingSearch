@@ -2,12 +2,16 @@ package edu.upenn.cis555.searchengine.crawler.storage;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
+import org.asynchttpclient.request.body.generator.ByteArrayBodyGenerator;
 
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
@@ -17,6 +21,7 @@ import com.sleepycat.je.OperationStatus;
 import edu.upenn.cis555.searchengine.crawler.URLFrontier;
 import edu.upenn.cis555.searchengine.crawler.Crawler;
 
+import com.sleepycat.bind.ByteArrayBinding;
 import com.sleepycat.bind.EntryBinding;
 import com.sleepycat.bind.serial.SerialBinding;
 import com.sleepycat.bind.serial.StoredClassCatalog;
@@ -46,6 +51,8 @@ public class DBWrapper {
 	private Database URLFrontier;
 	private Database URLSeen;
 	private Database classDB;
+	private Database contentSeen;
+	private ByteArrayBinding bb = new ByteArrayBinding();	
 	// private 
 
 	private static DBWrapper db;
@@ -79,6 +86,7 @@ public class DBWrapper {
 		seenConfig.setDeferredWrite(true);
 //		seenConfig.setBtreeComparator(LongComparator.class);
 		URLSeen = myEnv.openDatabase(null, "urlseen", seenConfig);
+		contentSeen = myEnv.openDatabase(null, "contentSeen", seenConfig);
 	}
 
 	public static DBWrapper getInstance() {
@@ -104,6 +112,11 @@ public class DBWrapper {
 	public long getSeenCount(){
 		return URLSeen.count();
 	}
+
+	public long getContentSeenCount(){
+		return contentSeen.count();
+	}
+
 	public long getFrontierCount(){
 		return URLFrontier.count();
 	}
@@ -153,10 +166,21 @@ public class DBWrapper {
 		DatabaseEntry keyEntry = new DatabaseEntry();
 		DatabaseEntry dataEntry = new DatabaseEntry();
 		Cursor cursor = URLSeen.openCursor(null, null);	
+		Cursor contentCursor = contentSeen.openCursor(null, null);
 		int i=0;	
 		while(cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS){
 			i++;
 			Crawler.bl.put(StringBinding.entryToString(keyEntry));
+			// Crawler.bl_content.put()
+		}
+		
+		keyEntry = new DatabaseEntry();
+		dataEntry = new DatabaseEntry();
+		i=0;
+		while(contentCursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS){
+			i++;
+			Crawler.bl_content.put(bb.entryToObject(keyEntry));
+			// Crawler.bl_content.put()
 		}
 		System.out.println("built "+i+"seen url");
 	}
@@ -188,16 +212,31 @@ public class DBWrapper {
 //			return new HashSet<String>();
 //		}
 //	}
-	
+		
 	public void saveURLSeen(String url) {
 		DatabaseEntry keyEntry = new DatabaseEntry();
 		DatabaseEntry dataEntry = new DatabaseEntry();
 		StringBinding.stringToEntry(url, keyEntry);
 		BooleanBinding.booleanToEntry(true, dataEntry);
-//		Transaction txn = myEnv.beginTransaction(null, null);
+	//		Transaction txn = myEnv.beginTransaction(null, null);
 		URLSeen.put(null, keyEntry, dataEntry);
-//		URLFrontier.put(null, keyEntry, dataEntry);
+	//		URLFrontier.put(null, keyEntry, dataEntry);
 		URLSeen.sync();
+	}	
+
+
+
+	public void saveContentSeen(byte[] contentString) {
+		DatabaseEntry keyEntry = new DatabaseEntry();
+		DatabaseEntry dataEntry = new DatabaseEntry();
+		// StringBinding.stringToEntry(url, keyEntry);
+
+		bb.objectToEntry(contentString, keyEntry);
+		BooleanBinding.booleanToEntry(true, dataEntry);
+	//		Transaction txn = myEnv.beginTransaction(null, null);
+		contentSeen.put(null, keyEntry, dataEntry);
+	//		URLFrontier.put(null, keyEntry, dataEntry);
+		contentSeen.sync();
 
 		
 	}
