@@ -170,7 +170,7 @@ public class DBWrapper {
 		int i=0;	
 		while(cursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS){
 			i++;
-			Crawler.bl.put(StringBinding.entryToString(keyEntry));
+			// Crawler.bl.put(StringBinding.entryToString(keyEntry));
 			// Crawler.bl_content.put()
 		}
 		
@@ -179,7 +179,7 @@ public class DBWrapper {
 		i=0;
 		while(contentCursor.getNext(keyEntry, dataEntry, LockMode.DEFAULT) == OperationStatus.SUCCESS){
 			i++;
-			Crawler.bl_content.put(bb.entryToObject(keyEntry));
+			// Crawler.bl_content.put(bb.entryToObject(keyEntry));
 			// Crawler.bl_content.put()
 		}
 		System.out.println("built "+i+"seen url");

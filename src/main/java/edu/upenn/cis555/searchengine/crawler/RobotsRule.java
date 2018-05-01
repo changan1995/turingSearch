@@ -40,9 +40,11 @@ public class RobotsRule {
 		HttpClient hc = new HttpClient();
 		RobotsTxtInfo robot;
         if (!hc.send("GET", "http://" + host + "/robots.txt")) { //turn to absolute address
-            robot = new RobotsTxtInfo("User-agent: *", host);
+			if(!hc.send("GET", "https://" + host + "/robots.txt")){
+			robot = new RobotsTxtInfo("User-agent: *", host);
             robotLst.put(host, robot);
-            return robot;
+			return robot;
+			}
         }
         robot = new RobotsTxtInfo(hc.getContent(), host);
         robotLst.put(host, robot);

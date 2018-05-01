@@ -171,28 +171,28 @@ public class HttpClient {
 		BufferedReader in = null;
 		try {
 			// get connection
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			HttpConnection conn = new HttpConnection(method, url.toString());
 			HttpURLConnection.setFollowRedirects(false);
-			conn.setConnectTimeout(5 * 1000);
-			conn.setRequestMethod(method);
-			// set headers
-			conn.setRequestProperty("accept", "*/*");
-			conn.setRequestProperty("connection", "Keep-Alive");
-			conn.setRequestProperty("content-language", "en");
-			conn.setRequestProperty("user-agent", "cis455crawler");
-			conn.setRequestProperty("Accept-Language", "en");
+			conn.setConnectTimeout(5 * 1000); 
+			// conn.setRequestMethod(method);
+			// // set headers
+			// conn.setRequestProperty("accept", "*/*");
+			// conn.setRequestProperty("connection", "Keep-Alive");
+			// conn.setRequestProperty("content-language", "en");
+			// conn.setRequestProperty("user-agent", "cis455crawler");
+			// conn.setRequestProperty("Accept-Language", "en");
 
 			// connect
-			if ((responseSucces = conn.getResponseCode() == HttpURLConnection.HTTP_OK)) {
+			if ((responseSucces = conn.getResponseCode() == 200)) {
 				String lang = conn.getHeaderField("content-language");
 				if (lang != null)
 					if (!lang.contains("en")) return false;
-				contentLength = conn.getContentLength();
-				contentType = conn.getContentType();
-				lastModified = conn.getLastModified();
+				contentLength = Integer.parseInt(conn.getHeaderField("Content-Length"));
+				contentType = conn.getHeaderField("Content-Type");
 
 				// get inputstream reader
-				in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				// in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				in = conn.getReader();
 				String line;
 				while ((line = in.readLine()) != null) {
 					body += "\n" + line;
