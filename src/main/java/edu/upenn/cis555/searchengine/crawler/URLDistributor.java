@@ -88,15 +88,24 @@ public class URLDistributor{
 			}
 		}
 	}
-	
+    
+    public int hashToIndex(int hash){
+        for(int i =0;i<Crawler.hashList.length;i++){
+            if(hash<Crawler.hashList[i]){
+                return i;
+            }
+        }
+        return 0;
+    }
+
 
 	public void distributeURL(Set<String> urls) {
 		for (String url: urls ){
 			try {
 				URL u = new URL(url);
 				String host = u.getHost();
-				
-				int idx = Math.abs(host.hashCode()) % workerList.length;
+                // int idx = Math.abs(host.hashCode()) % workerList.length;
+                int idx = hashToIndex(Math.abs(host.hashCode()%100));
 				if (index == idx) {
 					// still in the local node
 					addURLToQueue(url);
