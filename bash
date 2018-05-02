@@ -22,6 +22,8 @@ nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 0" > log &
 nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 1" > log &
 
 nohup mvn exec:java@WebCrawler -Dexec.args="./config2.txt 3 16 64 0" >> log &
+
+//test use
 nohup mvn exec:java@WebCrawler -Dexec.args="./config2.txt 0 10 15 0 ./seedPage" > log2 &
 nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 1" > log2 &
 
