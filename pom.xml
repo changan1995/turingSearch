@@ -134,7 +134,7 @@
 						<configuration>
 							<mainClass>edu.upenn.cis555.searchengine.crawler.Crawler</mainClass>
 							<arguments>
-								<argument>./config.txt</argument>
+								<argument>./config2.txt</argument>
 								<argument>0</argument>
 								<argument>2</argument>
 								<argument>10</argument>
