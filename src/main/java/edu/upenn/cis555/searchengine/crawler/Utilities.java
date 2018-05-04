@@ -18,20 +18,7 @@ public class Utilities{
     }
 
     public static long convertDate(String date){
-        // Date date = null;
-        // String dateString = headLinesDict.get(arg0);
-        // SimpleDateFormat df1 = new SimpleDateFormat(
-        //         "EEE, dd MMM yyyy HH:mm:ss z");
-        // df1.setTimeZone(TimeZone.getTimeZone("GMT"));
-        // try {
-        //     date = df1.parse(dateString);
-        // } catch (ParseException e) {
-        //     e.printStackTrace();
-        // }
-        // long millisecond = date.getTime();
-        // System.out.println(millisecond);
-        // return millisecond;
-        
+
         
         Locale locale = Locale.US;
         long milliseconds=-1;

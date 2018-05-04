@@ -2,8 +2,9 @@ sudo add-apt-repository ppa:webupd8team/java
 sudo apt-get update
 sudo apt-get install oracle-java8-installer
 sudo apt-get install oracle-java8-set-default
-sudo apt-get install maven
+sudo apt-get install mavenØ
 t2.2xlarge
+
 
 
 
@@ -24,7 +25,7 @@ nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 1" > log &
 nohup mvn exec:java@WebCrawler -Dexec.args="./config2.txt 3 16 64 0" >> log &
 
 //test use
-nohup mvn exec:java@WebCrawler -Dexec.args="./config2.txt 2 20 30 0 ./seedPage" > log2 &
+nohup mvn exec:java@WebCrawler -Dexec.args="./config2.txt 2 10 15 0 ./seedPage" > log2 &
 nohup mvn exec:java@WebCrawler -Dexec.args="./config.txt 1" > log2 &
 
 

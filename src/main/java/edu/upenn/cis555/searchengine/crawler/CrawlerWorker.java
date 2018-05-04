@@ -5,17 +5,9 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
-
-import com.google.common.hash.BloomFilter;
-import com.google.common.hash.Funnel;
-import com.google.common.hash.Funnels;
-import com.jayway.jsonpath.spi.cache.LRUCache;
-import com.sleepycat.je.Transaction;
 
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -25,36 +17,23 @@ import org.jsoup.select.Elements;
 // import org.mockito.internal.matchers.Null;
 
 import edu.upenn.cis555.searchengine.crawler.info.RobotsTxtInfo;
-import edu.upenn.cis555.searchengine.crawler.info.URLInfo;
 import edu.upenn.cis555.searchengine.crawler.storage.DB;
 // import edu.upenn.cis555.searchengine.crawler.hw1.BlockingQueue;
 // import edu.upenn.cis555.searchengine.crawler.hw1.HttpServer;
 import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
-import edu.upenn.cis555.searchengine.crawler.storage.Doc;
-import edu.upenn.cis555.searchengine.crawler.storage.DocDB; 
 import edu.upenn.cis555.searchengine.crawler.storage.Entry;
-import edu.upenn.cis555.searchengine.crawler.structure.URLEntry;
 
 public class CrawlerWorker implements Runnable {
 	
 	static Logger log = Logger.getLogger("debugLogger");
-    // public static BlockingQueue<URL> urlToDo;//add seen url
-    // public static BlockingQueue<URL> urlDone;
     private boolean flag = false;
-    // private DBWrapper dbWrapper = null;
-    // private DocDB docDB = null;
     private RobotsTxtInfo robot;
-    // private long lastCrawedTime = new Long(0);
-    // private Transaction txn = null;
     private long toCrawlDate;
     private int id;
     private DB db;
     public static final int bodyLength = 350;
-    // private LRUCache 
-    // private BloomFilter<CharSequence> bl;
     private int crawledNum;
     private Entry entry =null;
-    // public static String dbDirectory;
     private URLFrontier frontier;
     private DBWrapper dbWrapper;
 	private URLDistributor distributor;
@@ -70,31 +49,17 @@ public class CrawlerWorker implements Runnable {
         System.out.println(id + "worker setup");
         this.distributor = new URLDistributor(Crawler.index, Crawler.workerList, frontier);
         dbWrapper=DBWrapper.getInstance();
-        // bl= BloomFilter.create(Funnels.stringFunnel(), 10000);
-        // private PriorityQueue<URLEntry> urlToDo = Crawler.urlToDo;
     }
 
     public void download(String url) throws Exception {
-        // }
-//        String url =urlEntry.getUrl().toString();
         HttpClient hc = new HttpClient();
-//        log.debug("id"+id+"\tDownloading:\t" + url);        
         
         if (!hc.send("GET", url)) {
             return;
         }
         //put the file in to db. prepare for multiple value
-        // txn = dbWrapper.getTransaction();
         try {
-            // String lastModified = Utilities.convertTime(hc.getLastModified());
-            // Doc doc = new Doc(url, hc.getContent(), hc.getContentType(), new Long(hc.getContentLength()), lastModified);
-            // if (updateflag) {
-            //     docDB.updateDoc(doc, txn);
-            // } else {
-            //     docDB.insertDoc(doc, txn);
-            // }
             entry= new Entry(url);
-            // TODO uncomment the DynamoDB
             String contentString =hc.getContent();
 
 //        log.debug("id"+id+"\tUpDynamoing:\t" + url);   
@@ -123,8 +88,6 @@ public class CrawlerWorker implements Runnable {
             e.printStackTrace();
         }
 
-        // txn.commit();
-        // lastCrawedTime = System.currentTimeMillis();
     }
 
     //decided whehter it is the form we required
@@ -144,12 +107,6 @@ public class CrawlerWorker implements Runnable {
 //        URL url2=null;
 
         Set<String> outLinksBuff =new HashSet<>();
-//		try {
-//			url2 = new URL(urlString);
-//		} catch (MalformedURLException e1) {
-//			e1.printStackTrace();
-//		}
-//        String absHost = url2.getProtocol()+"://"+url2.getHost()+url2.getPath();
         Document document = Jsoup.parse(contentString, urlString);
         Elements links = document.select("a");
         // List<String> out
@@ -284,24 +241,6 @@ public class CrawlerWorker implements Runnable {
 			} catch (InterruptedException e2) {
 				continue;
 			}
-//			log.debug("id"+id+"\t get:\t" + urlString);
-//			urlEntry = new URLEntry(url, 0);
-//            if (Crawler.urlToDo.isEmpty()) {
-////                flag = true;
-//                // try {
-//				// 	Thread.sleep(500);
-//				// } catch (InterruptedException e) {
-//				// 	e.printStackTrace();
-//				// }
-//                continue;
-//            } else {
-//                urlEntry = Crawler.urlToDo.poll();
-//                // System.out.println()
-//            }
-//            if(urlEntry==null){
-//                continue;
-//            }
-//            URL urlCurrent = urlEntry.getUrl();
             URL urlCurrent;
 			try {
 				urlCurrent = new URL(urlString);

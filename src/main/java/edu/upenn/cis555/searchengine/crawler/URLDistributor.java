@@ -1,30 +1,17 @@
 package edu.upenn.cis555.searchengine.crawler;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.net.HttpURLConnection;
+import static org.asynchttpclient.Dsl.post;
+
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Future;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.log4j.Logger;
-import org.asynchttpclient.*;
-import static org.asynchttpclient.Dsl.*;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.EvictingQueue;
+import org.asynchttpclient.Request;
 
 import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
 import edu.upenn.cis555.searchengine.crawler.structure.URLList;
@@ -48,7 +35,6 @@ public class URLDistributor{
 	final ObjectMapper om = new ObjectMapper();
 	URLFrontier frontier;
 	
-	// private EvictingQueue<ListenableFuture<Response>> evictQueue = EvictingQueue.create(500);
 	
 	public boolean urlFrontierFull(){
 		return db.getFrontierCount()>2000;
@@ -118,10 +104,8 @@ public class URLDistributor{
 		// synchronized (buf) {
 			buf.list.add(url);
 //			log.debug(address + " buf size:" + buf.list.size());
-			// if exceed the size, send to other node
 			if (buf.list.size() >= maxURLNum) {
 				sendToWorker(address, buf);
-				// buffers.put(address, new URLList());
 				buf.list.clear();
 			}
 			
@@ -130,12 +114,6 @@ public class URLDistributor{
 	
 	private void sendToWorker(String address, URLList content) {
 		try {
-//			URL url = new URL("http://" + address + "/push");
-//			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//			conn.setDoOutput(true);
-//			conn.setRequestMethod("POST");
-//			// send this to /push as a POST!
-//			OutputStream os = conn.getOutputStream();
 			String jsonForList = om.writerWithDefaultPrettyPrinter().writeValueAsString(content);
 			byte[] toSend = jsonForList.getBytes();
 			Request request = post("http://" + address + "/push").setBody(toSend).build();
@@ -150,9 +128,6 @@ public class URLDistributor{
 						}
 			 		// }
 			}).start();
-////		log.debug(toSend);[]
-//			os.write(toSend);
-//			os.flush();
 //			log.debug(conn.getResponseCode());
 			log.debug("Sent urls to " + address);
 //			conn.disconnect();

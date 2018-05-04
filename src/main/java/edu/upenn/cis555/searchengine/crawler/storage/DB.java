@@ -2,9 +2,7 @@ package edu.upenn.cis555.searchengine.crawler.storage;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
@@ -13,19 +11,10 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.datamodeling.S3Link;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper.FailedBatch;
-import com.amazonaws.services.s3.model.S3ObjectId;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
 
 import org.apache.log4j.Logger;
-import org.omg.IOP.TAG_ORB_TYPE;
-
-import edu.upenn.cis555.searchengine.crawler.URLDistributor;
 
 
 
@@ -85,6 +74,7 @@ public class DB{
     }
 
     public synchronized boolean add(Entry entry){
+        // if you want to upload, use this.
         // if(this.size()>=23){
         //     flush();
         // }
@@ -103,6 +93,7 @@ public class DB{
         try{
 
         List<FailedBatch> failed =  mapper.batchSave(buffer);
+        
         // failed.
         System.err.println(failed.size());
             // failed.get(0).
@@ -130,10 +121,4 @@ public class DB{
         return true;
     }
     
-    
-//    public List<Entry> getAllDocEntry() {
-//    		
-//    }
-
-
 }

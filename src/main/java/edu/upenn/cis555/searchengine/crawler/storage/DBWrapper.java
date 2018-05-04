@@ -102,11 +102,8 @@ public class DBWrapper {
 		DatabaseEntry dataEntry = new DatabaseEntry();
 		LongBinding.longToEntry(time, keyEntry);
 		StringBinding.stringToEntry(url, dataEntry);
-//		Transaction txn = myEnv.beginTransaction(null, null);
 		URLFrontier.put(null, keyEntry, dataEntry);
-//		URLFrontier.put(null, keyEntry, dataEntry);
 		URLFrontier.sync();
-//		txn.commit();
 	}
 
 	public long getSeenCount(){

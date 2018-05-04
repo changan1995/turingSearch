@@ -60,31 +60,4 @@ public class TTR implements Comparable<TTR>{
 		this.count--;
 	}
 
-	// public Queue getQueue(){
-	// 	return this.urlQueue;
-	// }
-
-	// public void setQueue(Queue urlQueue){
-	// 	this.urlQueue=urlQueue;
-	// 	return;
-	// }
-
-	// public void add(String urlString){
-	// 	this.urlQueue.add(urlString);
-	// }
-
-	// public String poll(){
-	// 	return this.urlQueue.poll();
-	// }
-
-	// public int size(){
-	// 	return this.urlQueue.size();
-	// }
-
-	// public void clear(){
-	// 	this.host=null;
-	// 	this.releaseTime=-1;
-	// 	this.urlQueue=null;
-	// 	return ;
-	// }
 }

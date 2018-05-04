@@ -6,34 +6,24 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.SocketException;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.log4j.Logger;
-import org.eclipse.jetty.util.ConcurrentHashSet;
-
-import com.amazonaws.services.waf.model.CreateWebACLRequest;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 
+import org.apache.log4j.Logger;
+
 import edu.upenn.cis555.searchengine.crawler.info.RobotsTxtInfo;
 import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
-import edu.upenn.cis555.searchengine.crawler.structure.URLEntry;
-import edu.upenn.cis555.searchengine.crawler.structure.URLList;
 import spark.Request;
 import spark.Response;
 import spark.Route;
