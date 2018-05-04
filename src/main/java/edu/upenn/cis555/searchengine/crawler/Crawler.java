@@ -43,10 +43,11 @@ public class Crawler {
 	public static DatagramSocket s = null;
 	public static int threadNum;
 	public static int port;
+    public static int[] hashList;
 	public static int hostNum;
 	// public static AtomicLong file;
 	public URLFrontier frontier;
-	public URLDistributor distributor;
+    public URLDistributor distributor;
 	public URLReciver receiver;
 	public static RobotsRule rule = new RobotsRule();
 	private ExecutorService executorService = Executors.newCachedThreadPool();
@@ -168,8 +169,14 @@ public class Crawler {
 			return;
 		}
 
-		String[] workerList = workers.toArray(new String[workers.size()]);
-
+        String[] workerLine = workers.toArray(new String[workers.size()]);
+        String[] workerList = new String[workers.size()];
+        hashList = new int[workers.size()];
+        
+        for(int i =0;i<workers.size();i++){
+            workerList[i]=workerLine[i].split(" ")[0];
+            hashList[i]=Integer.parseInt(workerLine[i].split(" ")[1]);
+        }
 		port = Integer.parseInt(workerList[index].split(":")[1]);
 
 		ArrayList<String> seedURL = new ArrayList<>();

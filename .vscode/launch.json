@@ -12,9 +12,17 @@
         },{
             "type": "java",
             "name": "1worker",
+            "request": "launch",
+            "externalConsole": true,
+            "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
+            "args":"./config.txt 1 5 10 0"
+            
+        },{
+            "type": "java",
+            "name": "2worker",
             "request": "launch","externalConsole": true,
             "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
-            "args":"./config.txt 1 5 10 0 ./seedPage"
+            "args":"./config.txt 2 5 10 0"
             
         },{
             "type": "java",
