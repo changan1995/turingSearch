@@ -1,16 +1,17 @@
 # TuringSearch
 ![img](https://github.com/changan1995/turingSearch/raw/master/SearchEngine/conf/title1.jpg?raw=true)
+
 TuringSearch is based on traditional searching & crawler structure. The distributed crawler established on AWS ec2s,with high efficiency and scalability. The Pagerank and Indexer is implemented to support a query style search from the user-interface.
 
 ## author
 
-Quankang Wang: changanw@seas.upenn.edu	
+[Quankang Wang](mailto:changanw@seas.upenn.edu) - Crawler, Ranking algorithm, Map Searching.
 
-Mojiang Jia: mojjia@seas.upenn.edu
+[Mojiang Jia](mailtomojjia@seas.upenn.edu) - PageRank, Ranking.
 
-Yitong Long: yitongl@seas.upenn.edu		
+[Yitong Long](mailto:yitongl@seas.upenn.edu) - Indexing.
 
-Yi Guo: guoyi1@seas.upenn.edu
+[Yi Guo](mailto:guoyi1@seas.upenn.edu) - User Interface, Yelp support.
 
 # Introduction
 
@@ -21,12 +22,22 @@ Our Turing Search Engine consists of 4 main components, Crawler, Indexer, PageRa
 ##### Crawler: 
 
 The Crawler used Chord like distributing system, with high efficiency design and great scalability. Select the URLs by domain hashvalue, and implement high performance crawlering derived from the [paper of Allan Heydon and Marc Najork](https://doi.org/10.1023/A:1019213109274) 
-![image](https://github.com/changan1995/turingSearch/raw/master/figure/figure1.png?raw=true)
+
+![crawler structure](https://github.com/changan1995/turingSearch/raw/master/figure/figure1.png?raw=true)
+
+The crawling efficiency grows exponentially with the number of nodes of the distributed system,meanwhile linearly with the computing power of single nodes.
+
+![crawler efficiency](https://github.com/changan1995/turingSearch/raw/master/figure/figure1.png?raw=true)
+
+
+
 
 
 ##### Indexer: 
 
 MapReduce was used to calculate the value of tf and idf. We used EMR for map reduce process and stored the tables in DynamoDB for query. For keyword stemming, we chose to use snowball,a lightweight pure-algo open source stemmer.
+![image](https://github.com/changan1995/turingSearch/raw/master/figure/figure2.png?raw=true)
+
 
 ##### PageRank Engine: 
 
