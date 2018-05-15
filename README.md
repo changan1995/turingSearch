@@ -1,22 +1,38 @@
-#TuringSearch
+# TuringSearch
+TuringSearch is based on traditional searching & crawler structure. The distributed crawler established on AWS ec2s,
+with high efficiency and scalability. The Pagerank and Indexer is implemented to support a query style search from the user-interface.
+
 ##author
-Quankang Wang: changanw@seas.upenn.edu	Mojiang Jia: mojjia@seas.upenn.edu
-Yitong Long: yitongl@seas.upenn.edu		Yi Guo: guoyi1@seas.upenn.edu
+
+Quankang Wang: changanw@seas.upenn.edu	
+Mojiang Jia: mojjia@seas.upenn.edu
+Yitong Long: yitongl@seas.upenn.edu		
+Yi Guo: guoyi1@seas.upenn.edu
 
 #Introduction
+
 ##1.1 Approach
 Our Turing Search Engine consists of 4 main components, Crawler, Indexer, PageRank and User Interface. The approaches we used are shown below.
-Crawler: We implemented distributed crawlers communicating with each other by RESTFUL API. We maintained a cached LRU(100), containing both URL and content SHA256 and used Consumer (take url and download), producer( parse and put url) to avoid trap and filter duplicated URL..
-Indexer: MapReduce was used to calculate the value of tf and idf. We used EMR for map reduce process and stored the tables in DynamoDB for query. For keyword stemming, we chose to use snowball,a lightweight pure-algo open source stemmer.
-PageRank Engine: Given the crawled information, we used Hadoop MapReduce to implement a iterative PageRank algorithm, designed a data encoding to serve the output of previous iteration as input to the next. We used Random Surfer Model by adding a decay factor prevent “sinks” and “hogs”. Web graphs in Stanford Large Network Dataset Collection (https://snap.stanford.edu/data/) was used  to test correctness.
-User interface: The user interface is implemented by java servlet. The search interface was written by JavaScript, HTML and CSS. As to the result interface, we ranked the results by combining TF/IDF values and PageRank scores. The search results from Google map and Yelp were integrated by using the APIs.
+
+#####Crawler: 
+We implemented distributed crawlers communicating with each other by RESTFUL API. We maintained a cached LRU(100), containing both URL and content SHA256 and used Consumer (take url and download), producer( parse and put url) to avoid trap and filter duplicated URL..
+
+#####Indexer: 
+MapReduce was used to calculate the value of tf and idf. We used EMR for map reduce process and stored the tables in DynamoDB for query. For keyword stemming, we chose to use snowball,a lightweight pure-algo open source stemmer.
+
+#####PageRank Engine: 
+Given the crawled information, we used Hadoop MapReduce to implement a iterative PageRank algorithm, designed a data encoding to serve the output of previous iteration as input to the next. We used Random Surfer Model by adding a decay factor prevent “sinks” and “hogs”. Web graphs in Stanford Large Network Dataset Collection (https://snap.stanford.edu/data/) was used  to test correctness.
+
+#####User interface: 
+The user interface is implemented by java servlet. The search interface was written by JavaScript, HTML and CSS. As to the result interface, we ranked the results by combining TF/IDF values and PageRank scores. The search results from Google map and Yelp were integrated by using the APIs.
 
 ##1.2 Division of Labor
-Quankang Wang:Crawler, Google map Search, spell Checking ranking mathematic support.
-Yi Guo: Index and reversed index, ranking mathematic support.
-Mojiang Jia: PageRank, crawler， ranking mathematic support.
-Yitong Long: User Interface, Yelp search support, ranking system.
 
+* Quankang Wang:Crawler, Google map Search, spell Checking ranking mathematic support.
+* Yi Guo: Index and reversed index, ranking mathematic support.
+* Mojiang Jia: PageRank, crawler， ranking mathematic support.
+* Yitong Long: User Interface, Yelp search support, ranking system.
+<!-- 
 ##1.3 Timeline
 Milestone 0: Made a project plan (April 6th)
 Milestone 1: Set up Amazon EC2, S3, DynamoDB (April 14th)
@@ -24,15 +40,14 @@ Milestone 2: Deployed crawler on EC2 (April 23rd)
 Milestone 3: Finished Indexer and Pagerank and started running them on EMR(April 27th)
 Milestone 4: Started integration (April 30th)
 Milestone 5: Improved ranking performance (May 3rd)
-Milestone 6: Finished final report (May 4th)
+Milestone 6: Finished final report (May 4th) -->
 
 #2 Architecture
 Crawler, Indexer, PageRank and User Interface are four main components of our search engine.  The crawler crawled a huge amount of web pages and store them in the database. The indexer took words and other information from the crawler to create an index. Also, the PageRank did link analysis of ths web pages crawled. Finally, by combining the results of index and PageRank and other factors, the search engine ranked the search results and showed them in the user interface. 
 
 #3 Implementation
 ##3.1 Crawler
-The crawler is derived from the paper of Allan Heydon and Marc Najork.We modified the structure according to our goal. 
-Heydon, A. & Najork, M. World Wide Web (1999) 2: 219. https://doi.org/10.1023/A:1019213109274
+The crawler is derived from the [paper](https://doi.org/10.1023/A:1019213109274) of Allan Heydon and Marc Najork.We modified the structure according to our goal. 
 ![image](http://github.com/changan1995/turingSearch/raw/master/figure/figure1.png)
 
 
