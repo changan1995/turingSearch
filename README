@@ -1,5 +1,57 @@
-TuringSearch
+Full names:  ____Mojiang Jia__________ ____Yi Guo__________ _____Quankang Wang_________ ____Yi Guo__________
+SEAS logins: ______ mojjia________ ____guoyi1__________ ___changanw___________ ____ yitongl__________
 
-Crawler for aws crawling codes.
+Which features did you implement? 
+  (list features, or write 'Entire project')
+Entire project
+Did you complete any extra-credit tasks? If so, which ones?
+  (list extra-credit tasks)
+(1)Add support for digests to detect when the same document has been retrieved more than once
+(2)Try Apache Spark as a basis of PageRank implementation, still use Hadoop results for final ranking.
+(3)ntegrate search results from web services(Google API, Yelp)
+(4)Google-style spell check
 
-SearchEngine for websearch.
+Does your project use any third-party components or libraries
+that were authorized by an instructor on Piazza? If so, please
+DO NOT include these components in your submission; instead,
+specify below where these components can be downloaded.
+  (list sources for any third-party components, or write 'None')
+(1)Snowball stemmer
+(2)Spell check
+The library dependency is included in pom.xml
+
+Please include brief instructions for running your project
+below. If you are including a separate file with instructions,
+please include the name of this file.
+  (add instructions for running the project, or file name)
+
+Crawler and searchengine are splite into 2 different folder because of the maven dependency conflicts.
+First mvn clean install
+To run crawler
+mvn exec:java@WebCrawler
+To run the indexer 
+nohup hadoop jar target/SearchEngine-1.0.0-SNAPSHOT-jar-with-dependencies.jar edu.upenn.cis455.searchengine.IndexerMain input_bucket outputbucket
+To run page rank
+nohup hadoop jar target/SearchEngine-1.0.0-SNAPSHOT-jar-with-dependencies.jar edu.upenn.cis455.searchengine.PageRankMain input_bucket outputbucket
+To run Server mvn exec:java@WebServer2 -Dexec.args="./dic2.txt", where ./dic2.txt is the directory of dictionary.
+
+Did you and your teammates personally write _all_ the code you 
+are submitting (other than code that was explicitly authorized
+by an instructor on Piazza)?
+Yes
+
+
+Did you copy any code from the Internet, or from anyone who
+was not on your team?
+No
+ 
+
+Did you collaborate with anyone other than your teammates on 
+this assignment?
+No
+
+
+
+
+
+ssh -i "login.pem" ubuntu@ec2-54-157-22-10.compute-1.amazonaws.com

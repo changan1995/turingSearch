@@ -1,4 +1,4 @@
-package edu.upenn.turingSearch.searchengine.crawler.info;
+package edu.upenn.cis555.searchengine.crawler.info;
 
 public class URLInfo {
 	private String hostName;
