@@ -1,6 +1,6 @@
 # TuringSearch
-TuringSearch is based on traditional searching & crawler structure. The distributed crawler established on AWS ec2s,
-with high efficiency and scalability. The Pagerank and Indexer is implemented to support a query style search from the user-interface.
+![img](https://github.com/changan1995/turingSearch/raw/master/SearchEngine/conf/title1.jpg?raw=true)
+TuringSearch is based on traditional searching & crawler structure. The distributed crawler established on AWS ec2s,with high efficiency and scalability. The Pagerank and Indexer is implemented to support a query style search from the user-interface.
 
 ## author
 
@@ -15,11 +15,14 @@ Yi Guo: guoyi1@seas.upenn.edu
 # Introduction
 
 ##  Architecture
+
 Our Turing Search Engine consists of 4 main components, Crawler, Indexer, PageRank and User Interface. The approaches we used are shown below.
 
 ##### Crawler: 
 
-We implemented distributed crawlers communicating with each other by RESTFUL API. We maintained a cached LRU(100), containing both URL and content SHA256 and used Consumer (take url and download), producer( parse and put url) to avoid trap and filter duplicated URL..
+The Crawler used Chord like distributing system, with high efficiency design and great scalability. Select the URLs by domain hashvalue, and implement high performance crawlering derived from the [paper of Allan Heydon and Marc Najork](https://doi.org/10.1023/A:1019213109274) 
+![image](https://github.com/changan1995/turingSearch/raw/master/figure/figure1.png?raw=true)
+
 
 ##### Indexer: 
 
@@ -27,7 +30,7 @@ MapReduce was used to calculate the value of tf and idf. We used EMR for map red
 
 ##### PageRank Engine: 
 
-Given the crawled information, we used Hadoop MapReduce to implement a iterative PageRank algorithm, designed a data encoding to serve the output of previous iteration as input to the next. We used Random Surfer Model by adding a decay factor prevent “sinks” and “hogs”. Web graphs in Stanford Large Network Dataset Collection (https://snap.stanford.edu/data/) was used  to test correctness.
+Given the crawled information, we used Hadoop MapReduce to implement a iterative PageRank algorithm, designed a data encoding to serve the output of previous iteration as input to the next. We used Random Surfer Model by adding a decay factor prevent “sinks” and “hogs”. Web graphs in [Stanford Large Network Dataset Collection](https://snap.stanford.edu/data/) was used  to test correctness.
 
 ##### User interface: 
 
