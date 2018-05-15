@@ -1,6 +1,8 @@
 # ![Turing Search](https://github.com/changan1995/turingSearch/raw/master/SearchEngine/conf/title1.jpg?raw=true)
 
-TuringSearch is based on traditional searching & crawler structure. The distributed crawler established on AWS ec2s,with high efficiency and scalability. The Pagerank and Indexer is implemented to support a query style search from the user-interface.
+TuringSearch is based on traditional searching & crawler structure. The distributed crawler established on AWS ec2s,with high efficiency and scalability. The Pagerank and Indexer is implemented to support a query style search from the user-interface. 
+Essentially, 1.5 million websites are crawled in one day, concerning a wide spread of topics, which has already provided both accuracy and efficiency in searching.
+The whole system is capable of, as it is designed for, processing thousands times larger scale in releatively short time.
 
 ## author
 
@@ -40,6 +42,8 @@ MapReduce was used to calculate the value of tf and idf. We used EMR for map red
 ### PageRank Engine: 
 
 Given the crawled information, we used Hadoop MapReduce to implement a iterative PageRank algorithm, designed a data encoding to serve the output of previous iteration as input to the next. We used Random Surfer Model by adding a decay factor prevent “sinks” and “hogs”. Web graphs in [Stanford Large Network Dataset Collection](https://snap.stanford.edu/data/) was used  to test correctness.
+
+TODO: implementing perlocating pagerank.
 
 ### User interface: 
 
