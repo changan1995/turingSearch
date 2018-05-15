@@ -27,7 +27,7 @@ The Crawler used Chord like distributing system, with high efficiency design and
 
 The crawling efficiency grows exponentially with the number of nodes of the distributed system,meanwhile linearly with the computing power of single nodes.
 
-![crawler efficiency](https://github.com/changan1995/turingSearch/raw/master/figure/figure1.png?raw=true)
+![crawler efficiency](https://github.com/changan1995/turingSearch/raw/master/figure/figure3.png?raw=true)
 
 
 
