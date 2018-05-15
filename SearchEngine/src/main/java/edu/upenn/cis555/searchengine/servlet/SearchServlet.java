@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.servlet;
+package cs3.cs2.cs.searchengine.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,15 +22,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
-import edu.upenn.cis555.searchengine.servlet.extraapi.MapDrawer;
-import edu.upenn.cis555.searchengine.global.*;
+import cs3.cs2.cs.searchengine.servlet.extraapi.MapDrawer;
+import cs3.cs2.cs.searchengine.global.*;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.google.common.hash.BloomFilter;
 
 import com.google.common.hash.Funnels;
 
-import edu.upenn.cis555.searchengine.jettyserver.MinimalJettyServer;
+import cs3.cs2.cs.searchengine.jettyserver.MinimalJettyServer;
 
 @SuppressWarnings("serial")
 public class SearchServlet extends HttpServlet {

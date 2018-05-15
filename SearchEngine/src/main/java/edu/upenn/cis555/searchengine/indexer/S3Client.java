@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.indexer;
+package cs3.cs2.cs.searchengine.indexer;
 /**
  * author: Yi Guo
  * Description: Wrapped class of AmazonS3 client
@@ -16,7 +16,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
 public class S3Client {
-	public static final String BUCKET_NAME="cis455-crawler-changanw-2";
+	public static final String BUCKET_NAME="turingSearch-crawler-changanw-2";
 	private AmazonS3 s3Client =null;
 	public S3Client(){
 		//For EC2

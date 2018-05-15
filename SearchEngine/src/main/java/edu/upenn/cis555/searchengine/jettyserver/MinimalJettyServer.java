@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.jettyserver;
+package cs3.cs2.cs.searchengine.jettyserver;
 
 /**
  * Created by CIS555 Team on 3/10/17.
@@ -15,8 +15,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
-import edu.upenn.cis555.searchengine.servlet.QueryDBMapper;
-import edu.upenn.cis555.searchengine.servlet.SymSpell;
+import cs3.cs2.cs.searchengine.servlet.QueryDBMapper;
+import cs3.cs2.cs.searchengine.servlet.SymSpell;
 
 public class MinimalJettyServer  {
     

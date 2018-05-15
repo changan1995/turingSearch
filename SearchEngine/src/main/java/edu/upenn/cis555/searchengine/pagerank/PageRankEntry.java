@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.pagerank;
+package cs3.cs2.cs.searchengine.pagerank;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;

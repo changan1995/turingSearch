@@ -1,4 +1,4 @@
-package edu.upenn.cis555;
+package cs3.cs2.cis555;
 
 import java.net.MalformedURLException;
 import java.net.URL;

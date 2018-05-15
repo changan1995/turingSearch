@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.docsample;
+package cs3.cs2.cs.searchengine.docsample;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.util.ToolRunner;

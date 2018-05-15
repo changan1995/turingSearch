@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.indexer; 
+package cs3.cs2.cs.searchengine.indexer; 
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
 import java.util.regex.Matcher;

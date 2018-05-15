@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.global;
+package cs3.cs2.cs.searchengine.global;
 
 import java.util.HashSet;
 

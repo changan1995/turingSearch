@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.crawler.structure;
+package cs3.cs2.cs.searchengine.crawler.structure;
 
 
 import java.net.MalformedURLException;

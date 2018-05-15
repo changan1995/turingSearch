@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.servlet;
+package cs3.cs2.cs.searchengine.servlet;
 
 public class Link {
 	

@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.crawler;
+package cs3.cs2.cs.searchengine.crawler;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -19,8 +19,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
-import edu.upenn.cis555.searchengine.crawler.structure.URLList;
+import cs3.cs2.cs.searchengine.crawler.storage.DBWrapper;
+import cs3.cs2.cs.searchengine.crawler.structure.URLList;
 import spark.Request;
 import spark.Response;
 import spark.Route;

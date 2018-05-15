@@ -1,10 +1,10 @@
-// package edu.upenn.cis455.storage;
+// package cs3.cs2.turingSearch.storage;
 
 
 // import org.w3c.dom.Document;
 
-// import edu.upenn.cis455.crawler.info.URLInfo;
-// import edu.upenn.cis455.hw1.HttpServer;
+// import cs3.cs2.turingSearch.crawler.info.URLInfo;
+// import cs3.cs2.turingSearch.hw1.HttpServer;
 
 // import com.sleepycat.persist.model.Entity;
 // import com.sleepycat.persist.model.PrimaryKey;

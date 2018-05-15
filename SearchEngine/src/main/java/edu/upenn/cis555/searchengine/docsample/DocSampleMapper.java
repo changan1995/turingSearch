@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.docsample;
+package cs3.cs2.cs.searchengine.docsample;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -8,8 +8,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import edu.upenn.cis555.searchengine.indexer.IndexerSeperator;
-import edu.upenn.cis555.searchengine.indexer.S3Client;
+import cs3.cs2.cs.searchengine.indexer.IndexerSeperator;
+import cs3.cs2.cs.searchengine.indexer.S3Client;
 
 public class DocSampleMapper extends Mapper<LongWritable,Text,Text,Text>{
 	private S3Client s3client=new S3Client();

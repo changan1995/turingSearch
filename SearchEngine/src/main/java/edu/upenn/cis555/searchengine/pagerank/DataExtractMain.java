@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.pagerank;
+package cs3.cs2.cs.searchengine.pagerank;
 
 import org.apache.hadoop.util.ToolRunner;
 

@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.servlet;
+package cs3.cs2.cs.searchengine.servlet;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -11,7 +11,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
-import edu.upenn.cis555.searchengine.jettyserver.MinimalJettyServer;
+import cs3.cs2.cs.searchengine.jettyserver.MinimalJettyServer;
 
 public class Cache {
 
@@ -23,7 +23,7 @@ public class Cache {
 			.build();*/
 
 	// public AmazonS3 s3=AmazonS3ClientBuilder.defaultClient();
-	public static String bucketName = "cis455-crawler-changanw-2";
+	public static String bucketName = "turingSearch-crawler-changanw-2";
 	public String envDirectory = "test3/";
 
 	public String getContent(String url) {

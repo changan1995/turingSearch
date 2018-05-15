@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>edu.upenn.cis555</groupId>
+  <groupId>cs3.cs2.cis555</groupId>
   <artifactId>SearchEngine</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -176,7 +176,7 @@
               <goal>java</goal>
               </goals>
               <configuration>
-              <mainClass>edu.upenn.cis555.searchengine.jettyserver.MinimalJettyServer</mainClass>
+              <mainClass>cs3.cs2.cs.searchengine.jettyserver.MinimalJettyServer</mainClass>
               <arguments>
               <argument>./dic.txt</argument>
               </arguments>
@@ -188,7 +188,7 @@
               <goal>java</goal>
               </goals>
               <configuration>
-              <mainClass>edu.upenn.cis555.searchengine.jettyserver.MinimalJettyServer</mainClass>
+              <mainClass>cs3.cs2.cs.searchengine.jettyserver.MinimalJettyServer</mainClass>
               <arguments>
               <argument>./dic2.txt</argument>
               </arguments>

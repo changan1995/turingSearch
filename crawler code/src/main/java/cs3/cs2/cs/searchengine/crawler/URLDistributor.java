@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.crawler;
+package cs3.cs2.cs.searchengine.crawler;
 
 import static org.asynchttpclient.Dsl.post;
 
@@ -13,8 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.asynchttpclient.Request;
 
-import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
-import edu.upenn.cis555.searchengine.crawler.structure.URLList;
+import cs3.cs2.cs.searchengine.crawler.storage.DBWrapper;
+import cs3.cs2.cs.searchengine.crawler.structure.URLList;
 
 public class URLDistributor{
 	// private static final long serialVersionUID = -1715283408490447605L;

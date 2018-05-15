@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.crawler.storage;
+package cs3.cs2.cs.searchengine.crawler.storage;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +18,8 @@ import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
 
-import edu.upenn.cis555.searchengine.crawler.URLFrontier;
-import edu.upenn.cis555.searchengine.crawler.Crawler;
+import cs3.cs2.cs.searchengine.crawler.URLFrontier;
+import cs3.cs2.cs.searchengine.crawler.Crawler;
 
 import com.sleepycat.bind.ByteArrayBinding;
 import com.sleepycat.bind.EntryBinding;

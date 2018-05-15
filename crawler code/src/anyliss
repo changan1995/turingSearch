@@ -11,13 +11,13 @@
 finished
 0gets
 0release
-downloading http://crawltest.cis.upenn.edu:80/
+downloading http://crawltest.cis.cs2.edu:80/
 4gets Exception in thread "pool-1-thread-4"
 6gets
 8gets
 9gets java.lang.NullPointerException
 
-9release        at edu.upenn.cis555.searchengine.crawler.CrawlerWorker.run(CrawlerWorker.java:205)
+9release        at cs3.cs2.cs.searchengine.crawler.CrawlerWorker.run(CrawlerWorker.java:205)
 
 5gets   at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
 5release
@@ -35,23 +35,23 @@ downloading http://crawltest.cis.upenn.edu:80/
 6release
 4release
 0release
-downloading http://crawltest.cis.upenn.edu/misc/eurofxref-daily.xml
-downloading http://crawltest.cis.upenn.edu/cnn/
+downloading http://crawltest.cis.cs2.edu/misc/eurofxref-daily.xml
+downloading http://crawltest.cis.cs2.edu/cnn/
 9gets
 9release
-downloading http://crawltest.cis.upenn.edu/bbc/
-downloading http://crawltest.cis.upenn.edu/cnn/index.html
-downloading http://crawltest.cis.upenn.edu/international/
-downloading http://crawltest.cis.upenn.edu/marie/
+downloading http://crawltest.cis.cs2.edu/bbc/
+downloading http://crawltest.cis.cs2.edu/cnn/index.html
+downloading http://crawltest.cis.cs2.edu/international/
+downloading http://crawltest.cis.cs2.edu/marie/
 5gets
 5release
-downloading http://crawltest.cis.upenn.edu/nytimes/
-downloading http://crawltest.cis.upenn.edu/cnn/cnn_world.rss.xml
+downloading http://crawltest.cis.cs2.edu/nytimes/
+downloading http://crawltest.cis.cs2.edu/cnn/cnn_world.rss.xml
 1gets
 1release
 2gets
 2release
-downloading http://crawltest.cis.upenn.edu/misc/weather.xml
+downloading http://crawltest.cis.cs2.edu/misc/weather.xml
 0gets
 0release
 9gets
@@ -108,5 +108,5 @@ downloading http://crawltest.cis.upenn.edu/misc/weather.xml
 5release
 1gets
 1release
-not modified http://crawltest.cis.upenn.edu/misc/weather.xml
-downloading http://crawltest.cis.upenn.edu/misc/moreweather.xml
+not modified http://crawltest.cis.cs2.edu/misc/weather.xml
+downloading http://crawltest.cis.cs2.edu/misc/moreweather.xml

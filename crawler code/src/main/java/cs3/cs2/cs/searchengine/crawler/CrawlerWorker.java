@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.crawler;
+package cs3.cs2.cs.searchengine.crawler;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,12 +16,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 // import org.mockito.internal.matchers.Null;
 
-import edu.upenn.cis555.searchengine.crawler.info.RobotsTxtInfo;
-import edu.upenn.cis555.searchengine.crawler.storage.DB;
-// import edu.upenn.cis555.searchengine.crawler.hw1.BlockingQueue;
-// import edu.upenn.cis555.searchengine.crawler.hw1.HttpServer;
-import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
-import edu.upenn.cis555.searchengine.crawler.storage.Entry;
+import cs3.cs2.cs.searchengine.crawler.info.RobotsTxtInfo;
+import cs3.cs2.cs.searchengine.crawler.storage.DB;
+// import cs3.cs2.cs.searchengine.crawler.hw1.BlockingQueue;
+// import cs3.cs2.cs.searchengine.crawler.hw1.HttpServer;
+import cs3.cs2.cs.searchengine.crawler.storage.DBWrapper;
+import cs3.cs2.cs.searchengine.crawler.storage.Entry;
 
 public class CrawlerWorker implements Runnable {
 	

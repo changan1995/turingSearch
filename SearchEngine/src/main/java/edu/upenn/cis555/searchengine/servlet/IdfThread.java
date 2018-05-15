@@ -1,6 +1,6 @@
-package edu.upenn.cis555.searchengine.servlet;
+package cs3.cs2.cs.searchengine.servlet;
 
-import edu.upenn.cis555.searchengine.jettyserver.MinimalJettyServer;
+import cs3.cs2.cs.searchengine.jettyserver.MinimalJettyServer;
 
 public class IdfThread extends Thread {
 

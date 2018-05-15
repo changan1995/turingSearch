@@ -13,7 +13,7 @@
     
    <servlet>
      <servlet-name>search</servlet-name>
-     <servlet-class>edu.upenn.cis555.searchengine.servlet.SearchServlet</servlet-class> 
+     <servlet-class>cs3.cs2.cs.searchengine.servlet.SearchServlet</servlet-class> 
    </servlet> 
    
    <servlet-mapping>

@@ -113,13 +113,13 @@
   </component>
   <component name="RunManager">
     <configuration name="Crawler" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="edu.upenn.cis555.searchengine.crawler.Crawler" />
+      <option name="MAIN_CLASS_NAME" value="cs3.cs2.cs.searchengine.crawler.Crawler" />
       <module name="searchengine" />
       <option name="PROGRAM_PARAMETERS" value="./config.txt 0 ./seedPage" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="edu.upenn.cis555.searchengine.crawler.*" />
+          <option name="PATTERN" value="cs3.cs2.cs.searchengine.crawler.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>

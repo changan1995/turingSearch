@@ -1,12 +1,12 @@
-package edu.upenn.cis555.searchengine.crawler;
+package cs3.cs2.cs.searchengine.crawler;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import edu.upenn.cis555.searchengine.crawler.info.RobotsTxtInfo;
-import edu.upenn.cis555.searchengine.crawler.structure.URLEntry;
+import cs3.cs2.cs.searchengine.crawler.info.RobotsTxtInfo;
+import cs3.cs2.cs.searchengine.crawler.structure.URLEntry;
 
 public class RobotsRule {
 	public static Map<String, RobotsTxtInfo> robotLst;

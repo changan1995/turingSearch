@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.servlet;
+package cs3.cs2.cs.searchengine.servlet;
 
 import java.util.Comparator;
 import java.util.Map;

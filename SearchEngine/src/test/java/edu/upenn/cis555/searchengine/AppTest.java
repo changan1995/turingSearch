@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine;
+package cs3.cs2.cs.searchengine;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

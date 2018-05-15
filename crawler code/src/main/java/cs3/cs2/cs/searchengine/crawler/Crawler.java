@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.crawler;
+package cs3.cs2.cs.searchengine.crawler;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,8 +22,8 @@ import com.google.common.hash.Funnels;
 
 import org.apache.log4j.Logger;
 
-import edu.upenn.cis555.searchengine.crawler.info.RobotsTxtInfo;
-import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
+import cs3.cs2.cs.searchengine.crawler.info.RobotsTxtInfo;
+import cs3.cs2.cs.searchengine.crawler.storage.DBWrapper;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -138,7 +138,7 @@ public class Crawler {
 		 * arg0 url to start arg1 the directory holds db environment arg2 int MB of
 		 * document arg3 maximum number arg4 hostname for monitoring //todo
 		 */
-		String hostname = "cis455.cis.upenn.edu";
+		String hostname = "turingSearch.cis.cs2.edu";
 		try {
 			host = InetAddress.getByName(hostname);
 			try {
@@ -213,7 +213,7 @@ public class Crawler {
 		// String dbDirectory = args[1];
 		// maxFileSize = Integer.parseInt(args[2]) * 1024 * 1024;
 		// int maxFileNumber = 100;
-		// String hostname = "cis455.cis.upenn.edu";
+		// String hostname = "turingSearch.cis.cs2.edu";
 		// if (args.length > 3) {
 		// maxFileNumber = Integer.parseInt(args[3]);
 		// ;

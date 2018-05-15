@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.crawler.info;
+package cs3.cs2.cs.searchengine.crawler.info;
 
 public class URLInfo {
 	private String hostName;
@@ -105,7 +105,7 @@ public class URLInfo {
 	
 	
 	public static void main(String[] args) {
-		URLInfo ui = new URLInfo("http://crawltest.cis.upenn.edu/misc");
+		URLInfo ui = new URLInfo("http://crawltest.cis.cs2.edu/misc");
         System.out.println(ui.getHostName());//baidu.com
 		System.out.println(ui.getUrlNoPort());//80
 		System.out.println(ui.getFilePath());// /cat.jpeg

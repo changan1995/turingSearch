@@ -1,11 +1,11 @@
-package edu.upenn.cis555.searchengine.crawler.storage;
+package cs3.cs2.cs.searchengine.crawler.storage;
 
 
 // import org.w3c.dom.Document;
 
-import edu.upenn.cis555.searchengine.crawler.Utilities;
-import edu.upenn.cis555.searchengine.crawler.info.URLInfo;
-// import edu.upenn.cis455.hw1.HttpServer;
+import cs3.cs2.cs.searchengine.crawler.Utilities;
+import cs3.cs2.cs.searchengine.crawler.info.URLInfo;
+// import cs3.cs2.turingSearch.hw1.HttpServer;
 
 import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;

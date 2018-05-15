@@ -6,25 +6,25 @@
             "type": "java",
             "name": "Spellcheck",
             "request": "launch",
-            "mainClass": "edu.upenn.cis555.searchengine.servlet.SymSpell",
+            "mainClass": "cs3.cs2.cs.searchengine.servlet.SymSpell",
             "args": "happpy"
         },{
             "type": "java",
             "name": "Launch server",
             "request": "launch",
-            "mainClass": "edu.upenn.cis555.searchengine.jettyserver.MinimalJettyServer",
+            "mainClass": "cs3.cs2.cs.searchengine.jettyserver.MinimalJettyServer",
             "args": "./dic.txt"
         },{
             "type": "java",
             "name": "EbayAPI",
             "request": "launch",
-            "mainClass": "edu.upenn.cis555.searchengine.servlet.extraapi.EbayDriver",
+            "mainClass": "cs3.cs2.cs.searchengine.servlet.extraapi.EbayDriver",
             "args": ""
         },{
             "type": "java",
             "name": "MAPAPI",
             "request": "launch",
-            "mainClass": "edu.upenn.cis555.searchengine.servlet.extraapi.Map",
+            "mainClass": "cs3.cs2.cs.searchengine.servlet.extraapi.Map",
             "args": ""
         },
         {

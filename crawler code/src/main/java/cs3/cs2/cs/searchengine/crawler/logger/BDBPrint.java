@@ -1,11 +1,11 @@
-//package edu.upenn.cis555.searchengine.crawler.logger;
+//package cs3.cs2.cs.searchengine.crawler.logger;
 //
 //
 //import java.util.List;
 //
-//import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
-//import edu.upenn.cis555.searchengine.crawler.storage.Doc;
-//import edu.upenn.cis555.searchengine.crawler.storage.DocDB;
+//import cs3.cs2.cs.searchengine.crawler.storage.DBWrapper;
+//import cs3.cs2.cs.searchengine.crawler.storage.Doc;
+//import cs3.cs2.cs.searchengine.crawler.storage.DocDB;
 //
 //public class BDBPrint{
 //    public static void main(String args[]){

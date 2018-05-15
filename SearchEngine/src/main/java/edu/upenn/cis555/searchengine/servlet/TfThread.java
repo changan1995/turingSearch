@@ -1,11 +1,11 @@
-package edu.upenn.cis555.searchengine.servlet;
+package cs3.cs2.cs.searchengine.servlet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.upenn.cis555.searchengine.jettyserver.MinimalJettyServer;
+import cs3.cs2.cs.searchengine.jettyserver.MinimalJettyServer;
 
 public class TfThread extends Thread{
 	

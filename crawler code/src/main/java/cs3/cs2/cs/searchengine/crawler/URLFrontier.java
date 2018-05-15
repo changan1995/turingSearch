@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.crawler;
+package cs3.cs2.cs.searchengine.crawler;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import edu.upenn.cis555.searchengine.crawler.storage.DBWrapper;
+import cs3.cs2.cs.searchengine.crawler.storage.DBWrapper;
 
 public class URLFrontier {
 	

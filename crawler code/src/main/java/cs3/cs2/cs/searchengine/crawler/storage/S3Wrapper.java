@@ -1,6 +1,6 @@
 // // Copyright 2012-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // // Licensed under the Apache License, Version 2.0.
-// package edu.upenn.cis555.searchengine.crawler.storage;
+// package cs3.cs2.cs.searchengine.crawler.storage;
 
 // import java.io.File;
 // import java.text.SimpleDateFormat;
@@ -64,7 +64,7 @@
 //         book1.price = 10;
 //         book1.productCategory = "Book";
 //         book1.title = "My book created in batch write";
-//         book1.setContentLink(mapper.createS3Link("cis455-crawler-changanw", "resource/meiliangxin.jpeg"));
+//         book1.setContentLink(mapper.createS3Link("turingSearch-crawler-changanw", "resource/meiliangxin.jpeg"));
 //         book1.getContentLink().uploadFrom(new File("./resource/meiliangxin.jpeg"));
 
 //         Book book2 = new Book();
@@ -75,7 +75,7 @@
 //         book2.price = 20;
 //         book2.productCategory = "Book";
 //         book2.title = "My second book created in batch write";
-//         book2.setContentLink(mapper.createS3Link("cis455-crawler-changanw", "resource/meiliangxin.jpeg"));
+//         book2.setContentLink(mapper.createS3Link("turingSearch-crawler-changanw", "resource/meiliangxin.jpeg"));
 //         book2.getContentLink().uploadFrom(new File("./resource/sample.txt"));
         
 

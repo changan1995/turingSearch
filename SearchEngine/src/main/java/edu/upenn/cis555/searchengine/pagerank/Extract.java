@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.pagerank;
+package cs3.cs2.cs.searchengine.pagerank;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -29,7 +29,7 @@ public class Extract extends Configured implements Tool {
 	private static class ExtractMapper extends Mapper<LongWritable, Text, Text, Text> {
 		
 		// s3 bucket
-		private static String bucketName = "cis455-crawler-changanw-2";
+		private static String bucketName = "turingSearch-crawler-changanw-2";
 		private String envDirectory = "test3/";
 		private AmazonS3 s3;
 		

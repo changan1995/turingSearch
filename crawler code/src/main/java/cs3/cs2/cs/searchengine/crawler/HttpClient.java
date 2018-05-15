@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.crawler;
+package cs3.cs2.cs.searchengine.crawler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.log4j.Logger;
 
-import edu.upenn.cis555.searchengine.crawler.info.URLInfo;;
+import cs3.cs2.cs.searchengine.crawler.info.URLInfo;;
 
 public class HttpClient {
 

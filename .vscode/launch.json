@@ -6,7 +6,7 @@
             "type": "java",
             "name": "0worker",
             "request": "launch",
-            "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
+            "mainClass": "cs3.cs2.cs.searchengine.crawler.Crawler",
             "args":"./config.txt 0 5 10 0 ./seedPage"
             // config.txt WokerIndex threadnum hosttoQueue currentNum SeedPage
         },{
@@ -14,35 +14,35 @@
             "name": "1worker",
             "request": "launch",
             "externalConsole": true,
-            "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
+            "mainClass": "cs3.cs2.cs.searchengine.crawler.Crawler",
             "args":"./config.txt 1 5 10 0"
             
         },{
             "type": "java",
             "name": "2worker",
             "request": "launch","externalConsole": true,
-            "mainClass": "edu.upenn.cis555.searchengine.crawler.Crawler",
+            "mainClass": "cs3.cs2.cs.searchengine.crawler.Crawler",
             "args":"./config.txt 2 5 10 0"
             
         },{
             "type": "java",
             "name": "httpclienttest",
             "request": "launch","externalConsole": true,
-            "mainClass": "edu.upenn.cis555.searchengine.crawler.HttpClient",
+            "mainClass": "cs3.cs2.cs.searchengine.crawler.HttpClient",
             "args":"./config.txt 1 ./seedPage"
             
         },{
             "type": "java",
             "name": "removedb",
             "request": "launch","externalConsole": true,
-            "mainClass": "edu.upenn.cis555.searchengine.crawler.storage.DBdelete",
+            "mainClass": "cs3.cs2.cs.searchengine.crawler.storage.DBdelete",
             "args":"0"
             
         },{
             "type": "java",
             "name": "regextest",
             "request": "launch","externalConsole": true,
-            "mainClass": "edu.upenn.cis555.RegexTest",
+            "mainClass": "cs3.cs2.cs.RegexTest",
             "args":"1"
             
         }

@@ -1,4 +1,4 @@
-package edu.upenn.cis555.searchengine.servlet.extraapi;
+package cs3.cs2.cs.searchengine.servlet.extraapi;
 
 
 import java.io.ByteArrayInputStream;
@@ -13,7 +13,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import edu.upenn.cis555.searchengine.servlet.extraapi.URLReader;
+import cs3.cs2.cs.searchengine.servlet.extraapi.URLReader;
 
 /**
  *
