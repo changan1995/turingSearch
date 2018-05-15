@@ -1,3 +1,0 @@
-localhost:5001 50
-localhost:5002 70
-localhost:5003 100

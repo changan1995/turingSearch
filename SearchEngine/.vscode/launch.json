@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "type": "java",
+            "name": "Spellcheck",
+            "request": "launch",
+            "mainClass": "edu.upenn.cis555.searchengine.servlet.SymSpell",
+            "args": "happpy"
+        },{
+            "type": "java",
+            "name": "Launch server",
+            "request": "launch",
+            "mainClass": "edu.upenn.cis555.searchengine.jettyserver.MinimalJettyServer",
+            "args": "./dic.txt"
+        },{
+            "type": "java",
+            "name": "EbayAPI",
+            "request": "launch",
+            "mainClass": "edu.upenn.cis555.searchengine.servlet.extraapi.EbayDriver",
+            "args": ""
+        },{
+            "type": "java",
+            "name": "MAPAPI",
+            "request": "launch",
+            "mainClass": "edu.upenn.cis555.searchengine.servlet.extraapi.Map",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Attach)",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": 0
+        }
+    ]
+}

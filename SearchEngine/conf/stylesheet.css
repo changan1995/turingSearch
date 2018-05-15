@@ -1,0 +1,43 @@
+.center1{ text-align: center;
+margin-top:100px;}
+
+.center2{text-align:center;}
+
+/*style of text*/
+h1{ color: tomato; font-size:100px}
+h2{ color: orange; font-size:100px}
+h3{ color: DodgerBlue; font-size:100px}
+h4{ color: MediumSeaGreen; font-size:100px}
+
+span.tomato{ 
+text-align:center; color:tomato; 
+font-size: 100px; 
+/*font-family: "Comic Sans MS", cursive, sans-serif;*/
+font-family: fantasy;
+font-weight: bold;
+text-shadow:2px 2px;}
+span.orange{ color:orange; font-size: 100px; text-align:center; font-family: "Comic Sans MS", cursive, sans-serif;}
+span.blue{ color:DodgerBlue; font-size: 100px; text-align:center; font-family: "Comic Sans MS", cursive, sans-serif;}
+span.green{ color:MediumSeaGreen; font-size: 100px; text-align:center; font-family: "Comic Sans MS", cursive, sans-serif;}
+span.grey{ text-align:center; color:Gray; font-size: 100px; font-family: "Comic Sans MS", cursive, sans-serif;}
+span.blue2{ text-align:center; color:SlateBlue; font-size: 100px; font-family: "Comic Sans MS", cursive, sans-serif;}
+span.violet{ text-align:center; color:Violet; font-size: 100px; font-family: "Comic Sans MS", cursive, sans-serif;}
+
+#borderimg1{
+border: 70px solid transparent;
+border-image: url(/conf/borderimg.jpg) 20% round;}
+
+input[type=text]{width: 40%; padding: 1px 5px; margin-top: 1px; }
+
+#bordertry1{
+border: 70px solid transparent;
+border-image: url(/conf/border.jpg) 20% round;}
+
+#borderimg2{
+border: 30px solid transparent;
+border-image: url(/conf/borderimg.jpg) 20% round;}
+
+#search{width: 8%; margin-top: 1px;
+border-radius: 3px; cursor: pointer;}
+
+img{ display:block; margin-left: auto; margin-right:auto; margin-top:80px; width: 350px;}

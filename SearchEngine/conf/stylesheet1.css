@@ -1,0 +1,49 @@
+.center1{ text-align: center;
+margin-top:100px;}
+
+.center2{text-align:center;}
+
+.oneline1{display:inline-block;}
+.oneline2{display:inline;}
+
+img.logo{position:absolute; top:0; display:inline-block; width: 150px; margin-top:20px;}
+
+#borderimg1{
+display:inline;
+border: 20px solid transparent;
+border-image: url(/conf/borderimg.jpg) 20% round;}
+
+input[type=text]{position:absolute; top:5px; left: 165px; display:inline; width: 35%; padding: 1px 5px; margin-top: 0px;}
+
+#search{display:inline-block; position: absolute; top:22px; left:850px; width: 8%;
+border-radius: 3px; cursor: pointer;}
+
+#totalresults{position:absolute; left:183px; top: 90px; font-size:12px; color:b8b894; font-family:Sans-serif;}
+
+#noresults1{position:absolute; left:183px; top: 90px; font-size:15px; color:Gray; font-family:Sans-serif;}
+#noresults2{position:absolute; left:183px; top: 120px; font-size:15px; color:Gray; font-family:Sans-serif;}
+#checkspell{position: relative;; left:700px; top: 70px; font-size:15px; color:Gray; font-family:Sans-serif;}
+#correct{position:absolute; left:183px; top: 65px; font-style: oblique; font-size:15px; color:Gray; font-family:Sans-serif;}
+/* #map{position:relative; top:80px; height: 400px; width: 100%;} */
+
+
+#whole{width: 580px; position:relative; left:183px; top:100px; font-family:Sans-serif;}
+
+#title{font-size:20px; font-family:Sans-serif;}
+
+#link{font-size:14px; color:006600; font-family:Sans-serif;}
+
+.btn {background-color: inherit;border: none;color: 006600;padding: 0px 0px; cursor: pointer;}
+.dropdown{position:absolute; display:inline-block;}
+.dropdown-content{display:none; position:absolute; background-color:#f1f1f1;min-width:60px;z-index:1;}
+.dropdown-content a {color: black;padding: 4px 6px;text-decoration: none;display: block;}
+.dropdown-content a:hover {background-color: #ddd}
+.dropdown:hover .dropdown-content {display: block}
+#text{font-size: 12px; color: 808080; font-family:Sans-serif; overflow: hidden; text-overflow: ellipsis;}
+
+#showmap{position:absolute;left: 680px;top:14px;}
+#maptext{position:absolute;left:700px;top:16px;color:SaddleBrown;font-family:Sans-serif;font-size:15px;}
+#restaurant{position:absolute;left:680px;top:34px;}
+#foodtext{position:absolute;left:700px;top:36px;color:SaddleBrown; font-size:15px; font-family:Sans-serif;}
+
+#yelp{width:300px; height:800px; overflow: scroll; position:absolute; left:850px; top:120px; font-family:Sans-serif;}
