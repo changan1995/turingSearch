@@ -10,9 +10,9 @@ The whole system is capable of, as it is designed for, processing thousands time
 
 [Mojiang Jia](mailtomojjia@seas.upenn.edu) PageRank, Ranking.
 
-[Yitong Long](mailto:yitongl@seas.upenn.edu) Indexer.
+[Yi Guo](mailto:guoyi1@seas.upenn.edu) Indexer.
 
-[Yi Guo](mailto:guoyi1@seas.upenn.edu) User Interface, Yelp support.
+[Yitong Long](mailto:yitongl@seas.upenn.edu) User Interface, Yelp support.
 
 # Introduction
 
